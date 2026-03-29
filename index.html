@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webnestic Tech Up</title>
+
+<!-- Razorpay -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#0b1320,#020617);
+  color:white;
+}
+
+/* HEADER */
+header{
+  text-align:center;
+  padding:15px;
+  background:linear-gradient(45deg,#ff9800,#ff5722);
+  font-size:26px;
+  font-weight:bold;
+}
+
+/* NEWS */
+.news{
+  background:#ff9800;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.news span{
+  display:inline-block;
+  padding:10px;
+  animation:scroll 12s linear infinite;
+  font-weight:bold;
+}
+@keyframes scroll{
+  0%{transform:translateX(100%)}
+  100%{transform:translateX(-100%)}
+}
+
+/* COURSE LINE */
+.course-line{
+  text-align:center;
+  padding:10px;
+  font-weight:bold;
+  color:#00ffcc;
+}
+
+/* FORM */
+.form-box{
+  max-width:420px;
+  margin:25px auto;
+  padding:25px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 25px rgba(255,152,0,0.5);
+}
+
+.input-box{
+  position:relative;
+  margin:18px 0;
+}
+
+.input-box input,
+.input-box select{
+  width:90%;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #555;
+  background:transparent;
+  color:white;
+}
+
+.input-box label{
+  position:absolute;
+  top:12px;
+  left:10px;
+  color:#aaa;
+  transition:0.3s;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label{
+  top:-8px;
+  font-size:12px;
+  color:#ff9800;
+  background:#0b1320;
+  padding:0 5px;
+}
+
+.btn{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(45deg,#ff9800,#ff5722);
+  border:none;
+  color:white;
+  border-radius:8px;
+  margin-top:15px;
+  cursor:pointer;
+}
+
+/* TEACHER */
+.teacher{
+  text-align:center;
+  padding:25px;
+}
+.teacher img{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  border:3px solid orange;
+}
+
+/* CONTACT */
+.contact-box{
+  margin:10px;
+  padding:20px;
+  border-radius:15px;
+  background:linear-gradient(45deg,#ff9800,#ff5722);
+  text-align:center;
+}
+
+footer{
+  text-align:center;
+  padding:10px;
+}
+
+/* POPUP */
+.popup{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.popup-box{
+  background:white;
+  color:black;
+  padding:25px;
+  border-radius:12px;
+  text-align:center;
+  width:85%;
+  max-width:320px;
+}
+
+.popup-box button{
+  margin-top:15px;
+  padding:10px 20px;
+  background:#ff5722;
+  border:none;
+  color:white;
+  border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<header>WEBNESTIC TECH UP</header>
+
+<div class="news">
+<span>🔥 Admission Open | All Courses ₹50 | Limited Seats | Hurry Up 🚀</span>
+</div>
+
+<!-- FORM -->
+<div class="form-box">
+<h2>🚀 Register Now</h2>
+
+<form id="form">
+
+<div class="input-box">
+<input type="text" id="name" required>
+<label>Student Name</label>
+</div>
+
+<div class="input-box">
+<input type="text" id="father" required>
+<label>Father Name</label>
+</div>
+
+<div class="input-box">
+<input type="tel" id="phone" required>
+<label>Mobile Number</label>
+</div>
+
+<div class="input-box">
+<input type="date" id="dob" required>
+</div>
+
+<div class="input-box">
+<input type="email" id="email" required>
+<label>Email</label>
+</div>
+
+<div class="input-box">
+<select id="gender" required>
+<option value="">Select Gender</option>
+<option>Male</option>
+<option>Female</option>
+</select>
+</div>
+
+<div class="course-line">
+AI | PYTHON | ROBOTICS | CSS | JAVASCRIPT | JAVA
+</div>
+
+<button class="btn">Pay ₹50 & Join</button>
+
+</form>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+  <div class="popup-box">
+    <h2>📢 Important Notice</h2>
+    <p>📅 Classes Start: <b>1 September</b></p>
+    <p>💻 Mode: <b>Online Classes</b></p>
+    <p>⏳ Duration: <b>6 Months</b></p>
+    <p>💰 Fee: <b>₹50 / Month</b></p>
+    <p>⚡ Limited Seats – Apply Fast!</p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+</div>
+
+<!-- TEACHER -->
+<div class="teacher">
+<img src="https://via.placeholder.com/120">
+<h3>Er. Upesh Kumar</h3>
+<p>Expert in AI & Web Development</p>
+</div>
+
+<img src="poster.jpg" style="width:100%;">
+
+<!-- CONTACT -->
+<div class="contact-box">
+<h2>📍 Contact</h2>
+<p>Address: Banda Powayan, Shahjahanpur</p>
+<p>Mobile: 9473549700</p>
+</div>
+
+<footer>© 2026 Webnestic Tech Up</footer>
+
+<!-- ✅ Firebase + Payment Script -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+document.getElementById("form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let name = document.getElementById("name").value;
+  let father = document.getElementById("father").value;
+  let phone = document.getElementById("phone").value;
+  let dob = document.getElementById("dob").value;
+  let email = document.getElementById("email").value;
+  let gender = document.getElementById("gender").value;
+
+  var options = {
+    key:"YOUR_RAZORPAY_KEY",
+    amount:5000,
+    currency:"INR",
+    name:"Webnestic Tech Up",
+
+    handler: async function(){
+      await addDoc(collection(db,"students"),{
+        name,father,phone,dob,email,gender,
+        payment:"success",
+        date:new Date()
+      });
+
+      alert("Payment Successful ✅");
+
+      let msg = `Hello Sir, I am ${name}. Payment done. I want to join class.`;
+
+      setTimeout(()=>{
+        window.location.href = "https://wa.me/919473549700?text=" + encodeURIComponent(msg);
+      },2000);
+    }
+  };
+
+  new Razorpay(options).open();
+});
+
+window.closePopup = function(){
+  document.getElementById("popup").style.display="none";
+};
+</script>
+
+</body>
+</html>
