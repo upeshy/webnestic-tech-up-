@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - Webnestic</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#020617;
+  color:white;
+  padding:15px;
+}
+
+h1{
+  text-align:center;
+  color:#ff9800;
+}
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+}
+
+th,td{
+  border:1px solid #444;
+  padding:10px;
+  text-align:center;
+}
+
+th{
+  background:#ff9800;
+  color:black;
+}
+
+button{
+  padding:6px 10px;
+  background:red;
+  border:none;
+  color:white;
+  cursor:pointer;
+  border-radius:5px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📊 Student Admin Panel</h1>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Father</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Gender</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="data"></tbody>
+</table>
+
+<!-- Firebase Script -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// 🔥 SAME CONFIG DALNA
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const table = document.getElementById("data");
+
+// LOAD DATA
+async function loadData(){
+  table.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db,"students"));
+
+  querySnapshot.forEach((docSnap)=>{
+    const d = docSnap.data();
+
+    table.innerHTML += `
+      <tr>
+        <td>${d.name}</td>
+        <td>${d.father}</td>
+        <td>${d.phone}</td>
+        <td>${d.email}</td>
+        <td>${d.gender}</td>
+        <td>
+          <button onclick="deleteStudent('${docSnap.id}')">Delete</button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+// DELETE
+window.deleteStudent = async function(id){
+  if(confirm("Delete this student?")){
+    await deleteDoc(doc(db,"students",id));
+    loadData();
+  }
+}
+
+// LOAD ON START
+loadData();
+
+</script>
+
+</body>
+</html>
