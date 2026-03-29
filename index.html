@@ -117,12 +117,36 @@ header{
 }
 
 /* CONTACT */
+/* CONTACT */
 .contact-box{
-  margin:10px;
+  margin:15px;
   padding:20px;
-  border-radius:15px;
-  background:linear-gradient(45deg,#ff9800,#ff5722);
+  border-radius:12px;
+  background:#111;            /* Dark black */
+  color:#fff;                 /* White text */
   text-align:center;
+  border:1px solid #333;
+  box-shadow:0 2px 8px rgba(0,0,0,0.5);
+  transition:0.3s;
+}
+
+/* Hover effect (light & clean) */
+.contact-box:hover{
+  transform:translateY(-5px);
+  box-shadow:0 4px 12px rgba(255,255,255,0.1);
+}
+
+/* Heading style */
+.contact-box h2{
+  margin-bottom:10px;
+  font-weight:600;
+  color:#fff;
+}
+
+/* Text */
+.contact-box p{
+  margin:5px 0;
+  color:#ccc;
 }
 
 footer{
