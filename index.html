@@ -522,13 +522,12 @@ document.getElementById("demoForm").addEventListener("submit", async function(e)
   let name = document.getElementById("d_name").value;
   let phone = document.getElementById("d_phone").value;
   let email = document.getElementById("d_email").value;
-  let course = document.getElementById("d_course").value;
+  
 
   await addDoc(collection(db,"demo_students"),{
     name,
     phone,
     email,
-    course,
     type:"demo",
     date:new Date()
   });
