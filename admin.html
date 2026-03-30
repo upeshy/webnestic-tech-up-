@@ -58,7 +58,16 @@ img{max-width:100%;border-radius:10px}
 </head>
 
 <body>
-
+<h2>🎓 Demo Students</h2>
+<table id="demoTable">
+<tr>
+<th>Name</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Course</th>
+<th>Date</th>
+</tr>
+</table>
 <h1>📊 Student Admin Panel</h1>
 
 <table>
@@ -110,7 +119,22 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const table = document.getElementById("data");
+async function loadDemo(){
+  const querySnapshot = await getDocs(collection(db,"demo_students"));
+  let table = document.getElementById("demoTable");
 
+  querySnapshot.forEach(doc=>{
+    let d = doc.data();
+    let row = `<tr>
+      <td>${d.name}</td>
+      <td>${d.phone}</td>
+      <td>${d.email}</td>
+      <td>${d.course}</td>
+      <td>${new Date(d.date.seconds*1000).toLocaleString()}</td>
+    </tr>`;
+    table.innerHTML += row;
+  });
+}
 // LOAD DATA
 async function loadData(){
   table.innerHTML = "";
@@ -176,7 +200,7 @@ window.deleteStudent = async function(id){
 
 // LOAD ON START
 loadData();
-
+loadDemo();
 </script>
 
 </body>
