@@ -275,7 +275,7 @@ footer{
 <header>WEBNESTIC TECH UP</header>
 
 <div class="news">
-<span>🔥 Admission Open | All Courses ₹50 | Limited Seats | Hurry Up 🚀</span>
+<span>🔥 Admission Open | All Courses ₹100 | Limited Seats | Hurry Up 🚀</span>
 </div>
 <section class="about">
   <h2>📖 About Us</h2>
@@ -362,7 +362,7 @@ AI | PYTHON | ROBOTICS | CSS | JAVASCRIPT | JAVA COMPLETED COURSE
     <p>📅 Classes Start: <b>1 September</b></p>
     <p>💻 Mode: <b>Online Classes</b></p>
     <p>⏳ Duration: <b>6 Months</b></p>
-    <p>💰 Fee: <b>₹50 / Month</b></p>
+    <p>💰 Fee: <b>₹100 / Month</b></p>
     <p>⚡ Limited Seats – Apply Fast!</p>
     <button onclick="closePopup()">OK</button>
   </div>
@@ -490,29 +490,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-// DEMO FORM SUBMIT
-document.getElementById("demoForm").addEventListener("submit", async function(e){
-  e.preventDefault();
 
-  let name = document.getElementById("d_name").value;
-  let phone = document.getElementById("d_phone").value;
-  let email = document.getElementById("d_email").value;
-  
-
-  await addDoc(collection(db,"demo_students"),{
-    name,
-    phone,
-    email,
-    type:"demo",
-    date:new Date()
-  });
-
-  alert("Demo Registration Successful ✅");
-
-  let msg = `Hello Sir, I am ${name}. I registered for FREE demo class.`;
-
-  window.location.href = "https://wa.me/919473549700?text=" + encodeURIComponent(msg);
-});
 
   document.getElementById("form").addEventListener("submit", function(e){
   e.preventDefault();
