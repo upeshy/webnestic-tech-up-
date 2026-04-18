@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>GCIT Admin Panel</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+body{
+  font-family:Arial;
+  background:#0b1320;
+  color:white;
+  text-align:center;
+  padding:20px;
+}
+
+input{
+  padding:10px;
+  margin:8px;
+  width:250px;
+  border-radius:6px;
+  border:none;
+}
+
+button{
+  padding:12px 20px;
+  margin:10px;
+  background:linear-gradient(45deg,#ff9800,#ff5722);
+  border:none;
+  color:white;
+  cursor:pointer;
+  border-radius:6px;
+}
+
+/* CLOSE BUTTON */
+.no-print{
+  position:absolute;
+  top:10px;
+  right:15px;
+  font-size:20px;
+  color:red;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.hide{ display:none !important; }
+
+/* CERTIFICATE */
+#certificate{
+  width:1000px;
+  height:600px;
+  display:none;
+}
+
+.cert{
+  width:100%;
+  height:100%;
+  background:linear-gradient(135deg,#fff,#f9f3e7);
+  border:15px solid #c9a227;
+  position:relative;
+  padding:60px 40px;
+  box-sizing:border-box;
+  overflow:hidden;
+}
+
+/* DESIGN */
+.cert::before{
+  content:"";
+  position:absolute;
+  top:0;
+  right:0;
+  width:250px;
+  height:250px;
+  background:linear-gradient(45deg,#ffd700,#8b0000);
+  border-bottom-left-radius:200px;
+}
+
+.cert::after{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:250px;
+  height:250px;
+  background:linear-gradient(45deg,#8b0000,#ffd700);
+  border-top-right-radius:200px;
+}
+
+/* LOGO */
+.logo{
+  position:absolute;
+  top:40px;
+  left:40px;
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  background:black;
+  color:#ffd700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:13px;
+  font-weight:bold;
+  border:5px solid gold;
+}
+
+/* TEXT */
+.cert h1{
+  font-size:60px;
+  color:#6b0000;
+}
+
+.cert h2{
+  color:#6b0000;
+}
+
+.name{
+  font-size:48px;
+  margin:20px 0;
+  font-weight:bold;
+  color:#8b0000;
+}
+
+.desc{
+  width:75%;
+  margin:auto;
+  font-size:18px;
+  color:#333;
+}
+
+/* STUDENT ID */
+.student-id{
+  margin-top:10px;
+  font-size:18px;
+  color:#222;
+}
+
+/* SIGNATURE AREA */
+.sign-area{
+  position:absolute;
+  bottom:40px;
+  width:100%;
+  display:flex;
+  justify-content:space-around;
+}
+
+.sign-box{
+  text-align:center;
+}
+
+.sign-box hr{
+  width:180px;
+  border:1px solid black;
+}
+
+/* ID CARD */
+#idcard{
+  width:350px;
+  height:520px;
+  display:none;
+}
+
+.id-box{
+  width:100%;
+  height:100%;
+  border-radius:20px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 0 20px rgba(0,0,0,0.5);
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* HEADER */
+.id-top{
+  width:100%;
+  background:#4b2c91;
+  color:white;
+  padding:15px;
+  text-align:center;
+  font-weight:bold;
+  font-size:14px;
+}
+
+/* PHOTO */
+.photo-wrap{
+  margin-top:15px;   /* 👈 FIX (पहले -40px था) */
+}
+
+.photo-wrap img{
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  border:5px solid orange;
+  object-fit:cover;
+}
+
+/* NAME */
+.student-name{
+  text-align:center;
+  color:#ff9800;
+  margin:10px 0;
+  font-size:18px;
+}
+
+/* DETAILS */
+.details{
+  width:100%;
+  padding:10px 20px;
+  font-size:14px;
+  color:black;   /* 👈 TEXT BLACK FIX */
+}
+
+.details p{
+  margin:6px 0;
+  color:black;   /* 👈 DOUBLE FIX */
+}
+
+/* SIGN */
+.id-sign{
+  text-align:center;
+  margin-top:10px;
+  color:black;
+}
+
+.id-sign hr{
+  width:120px;
+  border:1px solid black;
+}
+
+/* FOOTER */
+.id-footer{
+  width:100%;
+  margin-top:auto;   /* 👈 ALWAYS BOTTOM */
+  background:#4b2c91;
+  color:white;
+  text-align:center;
+  padding:10px;
+}
+
+/* CLOSE FIX */
+.id-close{
+  position:absolute;
+  top:10px;
+  right:15px;
+  z-index:10;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🎓 GCIT Admin Panel</h2>
+
+<input type="text" id="name" placeholder="Student Name"><br>
+<input type="text" id="course" placeholder="Course"><br>
+<input type="text" id="id" placeholder="Student ID"><br>
+<input type="file" id="photoInput"><br>
+
+  <input type="text" id="father" placeholder="Father Name"><br>
+<input type="text" id="mother" placeholder="Mother Name"><br>
+<input type="text" id="class" placeholder="Class"><br>
+<input type="text" id="dob" placeholder="DOB"><br>
+<input type="text" id="mobile" placeholder="Mobile"><br>
+<input type="text" id="address" placeholder="Address"><br>
+<button onclick="generateCertificate()">🎓 Generate Certificate</button>
+<button onclick="generateID()">🪪 Generate ID Card</button>
+
+<br>
+
+<button id="downloadCertBtn" style="display:none" onclick="downloadCert()">⬇ Download Certificate</button>
+<button id="downloadIDBtn" style="display:none" onclick="downloadID()">⬇ Download ID Card</button>
+
+<!-- CERTIFICATE -->
+<div id="certificate">
+  <div class="cert">
+
+    <div class="no-print" id="certClose" onclick="closeCertificate()">❌</div>
+
+    <div class="logo">GCIT<br>FOUNDATION</div>
+
+    <h1>CERTIFICATE</h1>
+    <h2>OF ACHIEVEMENT</h2>
+
+    <p>This Certificate Is Proudly Presented To</p>
+
+    <h2 id="c_name" class="name"></h2>
+
+    <p class="desc">
+      Successfully completed <b id="c_course"></b>
+    </p>
+
+    <!-- STUDENT ID -->
+    <div class="student-id">
+  Student ID: <b id="c_id"></b><br>
+  Serial No: <b id="c_serial"></b><br>
+  Year: <b id="c_year"></b>
+</div>
+
+    <!-- SIGNATURES -->
+    <div class="sign-area">
+      <div class="sign-box">
+        <hr>
+        Student Signature
+      </div>
+
+      <div class="sign-box">
+        <hr>
+        Director Signature
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="idcard">
+  <div class="id-box">
+
+    <div class="no-print id-close" onclick="closeID()">❌</div>
+
+    <!-- HEADER -->
+    <div class="id-top">
+      GCIT FOUNDATION
+    </div>
+
+    <!-- PHOTO -->
+    <div class="photo-wrap">
+      <img id="photo" src="">
+    </div>
+
+    <!-- NAME -->
+    <h3 id="i_name" class="student-name"></h3>
+
+    <!-- DETAILS -->
+    <div class="details">
+      <p><b>Father:</b> <span id="i_father"></span></p>
+      <p><b>Mother:</b> <span id="i_mother"></span></p>
+      <p><b>Class:</b> <span id="i_class"></span></p>
+      <p><b>DOB:</b> <span id="i_dob"></span></p>
+      <p><b>Mobile:</b> <span id="i_mobile"></span></p>
+      <p><b>Address:</b> <span id="i_address"></span></p>
+      <p><b>Serial:</b> <span id="i_serial"></span></p>
+    </div>
+
+    <!-- SIGN -->
+    <div class="id-sign">
+      <hr>
+      Signature
+    </div>
+
+    <!-- FOOTER -->
+    <div class="id-footer">
+      ☎ <span id="i_mobile2"></span>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const { jsPDF } = window.jspdf;
+
+let certPDF = null;
+let idPDF = null;
+
+// PHOTO
+function loadPhoto(callback){
+  let file = document.getElementById("photoInput").files[0];
+  if(!file){
+    alert("Upload photo first");
+    return;
+  }
+
+  let reader = new FileReader();
+  reader.onload = function(){
+    document.getElementById("photo").src = reader.result;
+    callback();
+  }
+  reader.readAsDataURL(file);
+}
+// SERIAL FUNCTION
+function getNextSerial(type){
+  let key = type + "_serial";
+  let current = localStorage.getItem(key);
+
+  if(!current){
+    current = 1;
+  }else{
+    current = parseInt(current) + 1;
+  }
+
+  localStorage.setItem(key, current);
+  return current.toString().padStart(4,'0'); // 0001 format
+}
+// CERTIFICATE
+function generateCertificate(){
+  let name = nameInput();
+  let course = courseInput();
+  let id = idInput();
+
+  if(!name || !course || !id){
+    alert("Fill all fields");
+    return;
+  }
+
+  document.getElementById("c_name").innerText = name;
+  document.getElementById("c_course").innerText = course;
+  document.getElementById("c_id").innerText = id;
+  let serial = getNextSerial("cert");
+let year = new Date().getFullYear();
+
+document.getElementById("c_serial").innerText = serial;
+document.getElementById("c_year").innerText = year;
+
+  let cert = document.getElementById("certificate");
+  cert.style.display = "block";
+
+  document.getElementById("certClose").classList.add("hide");
+
+    html2canvas(cert,{scale:2}).then(canvas=>{  
+    let img = canvas.toDataURL("image/png");  
+    certPDF = new jsPDF('landscape','mm','a4');  
+    certPDF.addImage(img,'PNG',5,5,287,200);  
+  
+    document.getElementById("downloadCertBtn").style.display = "inline-block";  
+    document.getElementById("certClose").classList.remove("hide");  
+  });
+}
+
+// ID CARD
+function generateID(){
+  let name = nameInput();
+
+  let father = document.getElementById("father").value;
+  let mother = document.getElementById("mother").value;
+  let cls = document.getElementById("class").value;
+  let dob = document.getElementById("dob").value;
+  let mobile = document.getElementById("mobile").value;
+  let address = document.getElementById("address").value;
+  
+
+  if(!name || !father || !mobile){
+    alert("Fill all fields");
+    return;
+  }
+
+  loadPhoto(function(){
+
+    // DATA SET
+    document.getElementById("i_name").innerText = name;
+    document.getElementById("i_father").innerText = father;
+    document.getElementById("i_mother").innerText = mother;
+    document.getElementById("i_class").innerText = cls;
+    document.getElementById("i_dob").innerText = dob;
+    document.getElementById("i_mobile").innerText = mobile;
+    document.getElementById("i_mobile2").innerText = mobile;
+    document.getElementById("i_address").innerText = address;
+    let idSerial = getNextSerial("id");
+    document.getElementById("i_serial").innerText = idSerial;
+
+    let card = document.getElementById("idcard");
+    card.style.display = "block";
+
+    // CLOSE BUTTON HIDE
+    document.querySelector(".id-close").classList.add("hide");
+
+    // 🔥 IMPORTANT DELAY (FIX)
+    setTimeout(()=>{
+
+      html2canvas(card,{
+  scale:3,
+  useCORS:true
+}).then(canvas=>{
+
+  let img = canvas.toDataURL("image/png");
+
+  // ✅ YAHAN CHANGE KIYA
+  idPDF = new jsPDF('p','mm',[54,85.6]);
+
+  // SIZE bhi adjust karo
+  idPDF.addImage(img,'PNG',0,0,54,85.6);
+
+  document.getElementById("downloadIDBtn").style.display = "inline-block";
+
+});
+
+    },500); // 👈 DELAY बढ़ा दिया (IMPORTANT)
+
+  });
+}
+
+// DOWNLOAD
+function downloadCert(){
+  if(certPDF){
+    certPDF.save(nameInput()+"_certificate.pdf");
+  }
+}
+
+function downloadID(){
+  if(idPDF){
+    idPDF.save(nameInput()+"_idcard.pdf");
+  }
+}
+
+// CLOSE
+function closeCertificate(){
+  document.getElementById("certificate").style.display = "none";
+}
+
+function closeID(){
+  document.getElementById("idcard").style.display = "none";
+}
+
+// INPUT
+function nameInput(){ return document.getElementById("name").value; }
+function courseInput(){ return document.getElementById("course").value; }
+function idInput(){ return document.getElementById("id").value; }
+</script>
+
+</body>
+</html>
