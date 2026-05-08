@@ -2,445 +2,65 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Webnestic Tech Up</title>
+<meta http-equiv="refresh" content="0; url=https://wa.me/919473549700?text=Hello%20I%20want%20to%20grow%20my%20business%20online">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<title>Redirecting...</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+window.location.href = "https://wa.me/919473549700?text=Hello%20I%20want%20to%20grow%20my%20business%20online";
+</script>
 
 <style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
-}
-
 body{
-  background:linear-gradient(135deg,#f0f4ff,#f6fff8);
-  padding:25px 15px;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+font-family:Arial,sans-serif;
+background:#f5f5f5;
+margin:0;
 }
 
-/* MAIN */
-.main-container{
-  max-width:950px;
-  margin:auto;
+.loader-box{
+text-align:center;
 }
 
-/* TOP HEADING */
-.top-heading{
-  text-align:center;
-  margin-bottom:30px;
+.loader{
+width:60px;
+height:60px;
+border:6px solid #ddd;
+border-top:6px solid #25D366;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
 }
 
-.top-heading h1{
-  font-size:42px;
-  font-weight:800;
-  color:#111;
-  margin-bottom:12px;
-  line-height:1.3;
+@keyframes spin{
+100%{
+transform:rotate(360deg);
+}
 }
 
-.top-heading p{
-  color:#555;
-  font-size:17px;
-  line-height:1.9;
-  max-width:750px;
-  margin:auto;
+h2{
+margin-top:20px;
+color:#111;
 }
 
-/* WHATSAPP BOX */
-.whatsapp-box{
-  background:url('https://i.ibb.co/2kR5zqX/whatsapp-bg.png');
-  border-radius:28px;
-  overflow:hidden;
-  box-shadow:0 12px 40px rgba(0,0,0,0.12);
-  border:1px solid rgba(255,255,255,0.4);
+p{
+color:#666;
 }
-
-/* HEADER */
-.whatsapp-header{
-  background:#075E54;
-  color:#fff;
-  padding:18px 22px;
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
-.whatsapp-header img{
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  border:3px solid #fff;
-  object-fit:cover;
-}
-
-.header-text h2{
-  font-size:22px;
-  font-weight:700;
-}
-
-.header-text span{
-  font-size:13px;
-  opacity:0.9;
-}
-
-/* CHAT */
-.chat-area{
-  padding:25px 18px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-}
-
-.message{
-  max-width:85%;
-  padding:15px 18px;
-  border-radius:18px;
-  font-size:15px;
-  line-height:1.9;
-  position:relative;
-  animation:fadeIn .5s ease;
-}
-
-.received{
-  background:#fff;
-  align-self:flex-start;
-  border-top-left-radius:5px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.08);
-}
-
-.sent{
-  background:#DCF8C6;
-  align-self:flex-end;
-  border-top-right-radius:5px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.08);
-}
-
-.message-time{
-  display:block;
-  text-align:right;
-  font-size:11px;
-  margin-top:8px;
-  color:#777;
-}
-
-.feature-list{
-  margin-top:12px;
-  padding-left:18px;
-}
-
-.feature-list li{
-  margin-bottom:10px;
-}
-
-.highlight{
-  color:#00a86b;
-  font-weight:700;
-}
-
-/* CTA */
-.cta-box{
-  margin-top:35px;
-  background:linear-gradient(135deg,#00b894,#00cec9);
-  padding:35px 25px;
-  border-radius:28px;
-  text-align:center;
-  color:#fff;
-  box-shadow:0 12px 35px rgba(0,0,0,0.15);
-}
-
-.cta-box h2{
-  font-size:34px;
-  margin-bottom:14px;
-  line-height:1.4;
-}
-
-.cta-box p{
-  font-size:16px;
-  line-height:1.9;
-  margin-bottom:28px;
-}
-
-/* BUTTONS */
-.button-group{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:15px;
-}
-
-.whatsapp-btn,
-.website-btn{
-  text-decoration:none;
-  padding:15px 28px;
-  border-radius:60px;
-  font-size:16px;
-  font-weight:600;
-  transition:0.3s;
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-}
-
-/* WhatsApp */
-.whatsapp-btn{
-  background:#fff;
-  color:#0b8457;
-}
-
-.whatsapp-btn:hover{
-  background:#111;
-  color:#fff;
-  transform:translateY(-4px);
-}
-
-/* Website */
-.website-btn{
-  background:#111;
-  color:#fff;
-}
-
-.website-btn:hover{
-  background:#fff;
-  color:#111;
-  transform:translateY(-4px);
-}
-
-/* SERVICE BOX */
-.service-box{
-  margin-top:30px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
-}
-
-.service-card{
-  background:#fff;
-  padding:22px;
-  border-radius:22px;
-  text-align:center;
-  box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  transition:0.3s;
-}
-
-.service-card:hover{
-  transform:translateY(-5px);
-}
-
-.service-card h3{
-  margin-top:10px;
-  font-size:18px;
-  color:#111;
-}
-
-.service-card p{
-  margin-top:8px;
-  color:#666;
-  font-size:14px;
-  line-height:1.7;
-}
-
-/* ANIMATION */
-@keyframes fadeIn{
-  from{
-    opacity:0;
-    transform:translateY(15px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-/* MOBILE */
-@media(max-width:768px){
-
-  .top-heading h1{
-    font-size:30px;
-  }
-
-  .message{
-    max-width:100%;
-    font-size:14px;
-  }
-
-  .cta-box h2{
-    font-size:26px;
-  }
-
-  .button-group{
-    flex-direction:column;
-  }
-
-  .whatsapp-btn,
-  .website-btn{
-    justify-content:center;
-    width:100%;
-  }
-
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="main-container">
+<div class="loader-box">
 
-<!-- TOP -->
-<div class="top-heading">
+<div class="loader"></div>
 
-  <h1>🚀 Grow Your Business Online</h1>
+<h2>Redirecting to WhatsApp...</h2>
 
-  <p>
-    Aaj ke digital time me har business ko online hona bahut zaroori hai.
-    Website, Google Business, SEO aur WhatsApp Marketing se aap daily new customers aur leads paa sakte hain.
-  </p>
-
-</div>
-
-<!-- WHATSAPP BOX -->
-<div class="whatsapp-box">
-
-  <!-- HEADER -->
-  <div class="whatsapp-header">
-
-    <img src="https://cdn-icons-png.flaticon.com/512/219/219983.png">
-
-    <div class="header-text">
-      <h2>Webnestic Tech Up</h2>
-      <span>🟢 Online Now</span>
-    </div>
-
-  </div>
-
-  <!-- CHAT -->
-  <div class="chat-area">
-
-    <div class="message received">
-      Namaskar Sir / Ma’am 🙏<br><br>
-
-      Agar aapka business online nahi hai to aap bahut bade customers lose kar rahe hain.
-
-      <span class="message-time">10:30 AM</span>
-    </div>
-
-    <div class="message sent">
-      Online business se kya fayda hota hai?
-
-      <span class="message-time">10:31 AM</span>
-    </div>
-
-    <div class="message received">
-
-      Online business se aapko milta hai:
-
-      <ul class="feature-list">
-        <li>✅ Daily New Customers</li>
-        <li>✅ Google Visibility</li>
-        <li>✅ WhatsApp Leads</li>
-        <li>✅ Brand Trust</li>
-        <li>✅ More Sales</li>
-        <li>✅ 24×7 Online Presence</li>
-      </ul>
-
-      <span class="message-time">10:32 AM</span>
-
-    </div>
-
-    <div class="message sent">
-      Online business setup kaise hota hai?
-
-      <span class="message-time">10:33 AM</span>
-    </div>
-
-    <div class="message received">
-
-      Online business setup ke important parts:
-
-      <ul class="feature-list">
-        <li>🌐 Professional Website</li>
-        <li>📍 Google Business Profile</li>
-        <li>📲 WhatsApp Business Setup</li>
-        <li>📸 Instagram & Facebook Branding</li>
-        <li>📢 Google Ads & Meta Ads</li>
-        <li>🚀 SEO & Google Ranking</li>
-      </ul>
-
-      <span class="message-time">10:34 AM</span>
-
-    </div>
-
-    <div class="message received">
-
-      Hum aapko <span class="highlight">FREE</span> me pura process samjhayenge.
-
-      <br><br>
-
-      Agar aap apne business ko professionally grow karna chahte hain to abhi contact kare.
-       <a href="https://wa.me/919473549700" class="whatsapp-btn" target="_blank">
-      💬 Chat on WhatsApp
-       </a>
-      <span class="message-time">10:35 AM</span>
-
-    </div>
-
-  </div>
-
-</div>
-
-<!-- CTA -->
-<div class="cta-box">
-
-  <h2>🔥 Start Your Digital Journey Today</h2>
-
-  <p>
-    Website • SEO • Google Business • WhatsApp Marketing • Ads • Social Media Branding
-  </p>
-
-  <div class="button-group">
-
-    <a href="https://wa.me/919473549700" class="whatsapp-btn" target="_blank">
-      💬 Chat on WhatsApp
-    </a>
-
-    <a href="https://webnestic-tech-up.vercel.app/websites.html" class="website-btn" target="_blank">
-      🌐 Visit Website
-    </a>
-
-  </div>
-
-</div>
-
-<!-- SERVICES -->
-<div class="service-box">
-
-  <div class="service-card">
-    <h3>🌐 Website Development</h3>
-    <p>Professional business websites with modern design.</p>
-  </div>
-
-  <div class="service-card">
-    <h3>📍 Google Business</h3>
-    <p>Google Maps visibility & local customer reach.</p>
-  </div>
-
-  <div class="service-card">
-    <h3>🚀 SEO Ranking</h3>
-    <p>Google search ranking and organic traffic growth.</p>
-  </div>
-
-  <div class="service-card">
-    <h3>📢 Ads Management</h3>
-    <p>Google Ads & Meta Ads for more leads and sales.</p>
-  </div>
-
-</div>
+<p>Please wait...</p>
 
 </div>
 
