@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>local dukan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Poppins",sans-serif;
+}
+
+/* ===== BODY ===== */
+body{
+  min-height:100vh;
+  background:radial-gradient(circle at top,#020617,#020617,#0f172a);
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding:50px 0;
+  color:#e5e7eb;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.container{
+  width:90%;
+  max-width:500px;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  padding:35px;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(2,6,23,0.35);
+  text-align:center;
+}
+
+/* ===== LOGO ===== */
+.logo-text-only{
+  display:inline-block;
+  font-size:20px;
+  font-weight:700;
+  padding:6px 26px;
+  border-radius:10px;
+  background:#facc15;
+  color:#020617;
+  box-shadow:0 4px 12px rgba(0,0,0,0.25);
+  margin-bottom:25px;
+}
+
+/* ===== NAV BUTTONS ===== */
+.nav-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.nav-buttons button{
+  padding:14px 20px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:700;
+  color:#e5e7eb;
+  background:#0f172a;          /* 🔥 MARKET LEVEL */
+  border:1px solid #1e293b;
+  transition:0.3s;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:16px;
+}
+
+.nav-buttons button:hover{
+  background:#020617;
+  box-shadow:0 0 18px rgba(56,189,248,0.45);
+  transform:scale(1.05);
+}
+
+/* ===== OVERLAY ===== */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,23,0.7);
+  backdrop-filter:blur(4px);
+  z-index:9;
+  display:none;
+}
+
+/* ===== PANEL ===== */
+.panel{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:100%;
+  max-width:380px;
+  max-height:90vh;
+  background:#020617;
+  border:1px solid #1e293b;
+  border-radius:18px;
+  padding:20px;
+  display:none;
+  z-index:60;
+}
+
+/* ===== CLOSE ===== */
+.close-btn{
+  cursor:pointer;
+  font-weight:700;
+  font-size:18px;
+  color:#94a3b8;
+}
+
+/* ===== TABS ===== */
+.tabs{
+  display:flex;
+  margin:15px 0;
+  border-radius:12px;
+  overflow:hidden;
+  background:#020617;
+  border:1px solid #1e293b;
+}
+
+.tab{
+  width:50%;
+  padding:12px;
+  cursor:pointer;
+  color:#cbd5e1;
+  font-weight:600;
+}
+
+.tab.active{
+  background:#1e293b;
+  color:#38bdf8;
+}
+
+/* ===== FORMS ===== */
+form{
+  display:none;
+  max-height:300px;
+  overflow-y:auto;
+}
+
+form.active{
+  display:block;
+}
+
+/* ===== INPUTS ===== */
+input, select{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:12px;
+  border:1px solid #334155;
+  background:#020617;
+  color:#e5e7eb;
+  font-size:15px;
+}
+
+input::placeholder{
+  color:#94a3b8;
+}
+
+input:focus{
+  border-color:#38bdf8;
+  box-shadow:0 0 10px rgba(56,189,248,0.5);
+}
+
+/* ===== SUBMIT BUTTON ===== */
+button.submit{
+  width:100%;
+  padding:14px;
+  margin-top:18px;
+  border-radius:14px;
+  border:none;
+  background:#38bdf8;
+  color:#020617;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button.submit:hover{
+  background:#0ea5e9;
+  box-shadow:0 10px 25px rgba(56,189,248,0.6);
+}
+
+/* SCROLL */
+form::-webkit-scrollbar{
+  width:6px;
+}
+form::-webkit-scrollbar-thumb{
+  background:#38bdf8;
+  border-radius:6px;
+}
+</style>  </head>  
+<body>  <div class="container">  
+    <h1 class="logo-text-only">🏠local dukan</h1>  
+    <div class="nav-buttons">  
+          
+        <button onclick="showPanel('retailer')"><i class="fas fa-cart-shopping" style="color:#ffea00;"></i> your signup</button>  
+        <button onclick="showPanel('delivery')"><i class="fas fa-motorcycle" style="color:#00ff88;"></i> Delivery Boy</button>  
+          <div class="overlay" onclick="closePopup()"></div>
+    </div>  
+<!-- RETAILER -->  
+<div id="retailer" class="panel" style="display:none;"> 
+  <div class="popup-header">
+  <span class="close-btn" onclick="closePopup()">✖</span>
+</div>
+    <div class="tabs">  
+        <div class="tab active" onclick="switchTab('retailer','signup')">Sign-Up</div>  
+        <div class="tab" onclick="switchTab('retailer','login')">Login</div>  
+    </div>  
+    <form id="retailer-signup" class="active">  
+        <input type="text" placeholder="Name">  
+        <input type="text" placeholder="Mobile Number">  
+        <input type="text" placeholder="Shop Current Location">  
+        <input type="password" placeholder="Password">  
+        <input type="password" placeholder="Confirm Password">  
+        <button type="button" class="submit">Create Account</button> 
+      <p style="margin-top:15px;font-size:14px;opacity:0.8">
+  Already have an account?
+  <span style="color:#00eaff;cursor:pointer;font-weight:600"
+        onclick="switchTab('retailer','login')">
+    Login here
+  </span>
+</p>
+    </form>  
+    <form id="retailer-login">  
+        <input type="text" placeholder="Mobile Number">  
+        <input type="password" placeholder="Password">  
+        <button type="button" class="submit">Login</button>  
+    </form>  
+</div>  
+
+<!-- DELIVERY BOY -->  
+<div id="delivery" class="panel" style="display:none;"> 
+ <div class="popup-header">
+  <span class="close-btn" onclick="closePopup()">✖</span>
+</div> 
+    <div class="tabs">  
+        <div class="tab active" onclick="switchTab('delivery','signup')">Sign-Up</div>  
+        <div class="tab" onclick="switchTab('delivery','login')">Login</div>  
+    </div>  
+    <form id="delivery-signup" class="active">  
+        <input type="text" placeholder="Name">  
+        <input type="text" placeholder="Mobile Number">  
+        <input type="text" placeholder="Alternate Mobile (optional)">  
+        <input type="text" placeholder="Current Live Location">  
+        <input type="password" placeholder="Password">  
+        <input type="password" placeholder="Confirm Password">  
+        <select>  
+            <option>2-Wheeler</option>  
+            <option>3-Wheeler</option>  
+            <option>4-Wheeler</option>  
+        </select>  
+        <input type="text" placeholder="Vehicle Model">  
+        <input type="text" placeholder="Vehicle Number">  
+        <button type="button" class="submit">Create Account</button> 
+      <p style="margin-top:15px;font-size:14px;opacity:0.8">
+  Already have an account?
+  <span style="color:#00eaff;cursor:pointer;font-weight:600"
+        onclick="switchTab('delivery','login')">
+    Login here
+  </span>
+      </p>
+    </form>  
+    <form id="delivery-login">  
+        <input type="text" placeholder="Mobile Number">  
+        <input type="password" placeholder="Password">  
+        <button type="button" class="submit">Login</button>  
+    </form>  
+</div>  
+
+
+
+</div>  <script type="module">
+    if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/firebase-messaging-sw.js")
+    .then(() => console.log("✅ FCM Service Worker registered"))
+    .catch(err => console.error("❌ SW register error", err));
+    }
+/* ================= FIREBASE ================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBioiLSE3HyZh49yJv93MwnQFrmAm6wJ5g",
+  authDomain: "shop-ab586.firebaseapp.com",
+  projectId: "shop-ab586",
+  messagingSenderId: "603669325846",
+  appId: "1:603669325846:web:00f3ccff7fa977bf542d37"
+};
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+const VAPID_KEY = "BFcKfbosO2sXWogZ5fBBt31vEkw_1iwgQWVrZjAJ90pXdhdFBSbXM_Oppuoxm-QIidekMzIQdcl3XrJy0ltkC8s";
+
+/* ================= SERVER ================= */
+const SERVER_URL = "https://local-dukan.onrender.com";
+async function requestNotificationPermission() {
+  if (!("Notification" in window)) {
+    alert("This browser does not support notifications");
+    return false;
+  }
+
+  const permission = await Notification.requestPermission();
+
+  if (permission === "granted") {
+    console.log("✅ Notification permission granted");
+    return true;
+  } else {
+    console.warn("❌ Notification permission denied");
+    return false;
+  }
+    }
+/* ================= UI ================= */
+
+
+window.showPanel = function(panelId, tab = 'signup') {
+  document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
+
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+
+  panel.style.display = 'block';
+  document.querySelector('.overlay').style.display = 'block';
+
+  window.switchTab(panelId, tab);
+};
+
+window.closePopup = function() {
+  document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
+  document.querySelector('.overlay').style.display = 'none';
+};
+
+window.switchTab = function(panel, tab) {
+  const signupForm = document.getElementById(panel + '-signup');
+  const loginForm  = document.getElementById(panel + '-login');
+
+  if (!signupForm || !loginForm) return;
+
+  signupForm.classList.toggle('active', tab === 'signup');
+  loginForm.classList.toggle('active', tab === 'login');
+
+  document
+    .querySelectorAll('#' + panel + ' .tab')
+    .forEach((t, i) =>
+      t.classList.toggle('active', i === (tab === 'signup' ? 0 : 1))
+    );
+};
+
+/* ================= FCM TOKEN ================= */
+async function getFCMToken(){
+  try{
+    const permission = await Notification.requestPermission();
+    if(permission !== "granted") return null;
+
+    const token = await getToken(messaging,{ vapidKey: VAPID_KEY });
+    return token;
+  }catch(err){
+    console.log("FCM error",err);
+    return null;
+  }
+}
+
+(function autoLoginCheck() {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  if (token && role) {
+    // ✅ Already logged in → direct dashboard
+    window.location.href = role + ".html";
+  }
+})();
+    
+/* ================= SIGNUP ================= */
+async function signupUser(type,data){
+  try{
+    const res = await fetch(`${SERVER_URL}/api/signup`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({...data,role:type})
+    });
+    const json = await res.json();
+    if(json.success){
+      localStorage.setItem("token",json.token);
+      localStorage.setItem("userId",json.userId);
+      localStorage.setItem("role",type);
+      alert(type+" signup success");
+      window.location.href = type+".html";
+    }else alert(json.message);
+  }catch(err){ alert("Server error: "+err.message); }
+}
+
+/* ================= LOGIN + FCM ================= */
+async function loginUser(type,mobile,password){
+  try{
+    const res = await fetch(`${SERVER_URL}/api/login`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({mobile,password,role:type})
+    });
+    const json = await res.json();
+    if(!json.success) return alert(json.message);
+
+    localStorage.setItem("token",json.token);
+    localStorage.setItem("userId",json.userId);
+    localStorage.setItem("role",type);
+
+    /* 🔥 FCM TOKEN SEND */
+    const fcmToken = await getFCMToken();
+    if(fcmToken){
+      await fetch(`${SERVER_URL}/api/notifications/saveToken`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          userId: json.userId,
+          role: type,
+          fcmToken
+        })
+      });
+    }
+
+    window.location.href = type+".html";
+  }catch(err){ alert("Server error: "+err.message); }
+}
+
+/* ================= BUTTON HANDLERS ================= */
+["retailer", "delivery"].forEach(type => {
+
+  const signupBtn = document.querySelector(`#${type}-signup .submit`);
+  if (signupBtn) {
+    signupBtn.onclick = () => {
+      let data = {};
+
+      document.querySelectorAll(`#${type}-signup input, #${type}-signup select`)
+        .forEach(i => {
+          const key = i.placeholder
+            ? i.placeholder.replace(/ /g, "_").toLowerCase()
+            : "vehicle";
+
+          data[key] = i.value;
+        });
+
+      if (data.password !== data.confirm_password) {
+        alert("Password mismatch");
+        return;
+      }
+
+      signupUser(type, data);
+    };
+  }
+
+  const loginBtn = document.querySelector(`#${type}-login .submit`);
+  if (loginBtn) {
+    loginBtn.onclick = () => {
+      const inputs = document.querySelectorAll(`#${type}-login input`);
+      loginUser(type, inputs[0].value, inputs[1].value);
+    };
+  }
+
+});
+</script>  </body>  
+</html>

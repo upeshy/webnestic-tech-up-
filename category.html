@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Category Products</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;font-family:Poppins,sans-serif}
+body{margin:0;background:#f3f6fb}
+
+.main{
+  padding:16px;
+  max-width:900px;
+  margin:auto;
+}
+
+.header{
+  background:#fff;
+  padding:14px;
+  border-radius:14px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.back-btn{
+  background:#2563eb;
+  color:#fff;
+  border:none;
+  padding:7px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-top:8px;
+  font-size:13px;
+}
+
+/* 🔥 FIXED 3 PRODUCTS PER ROW */
+.products-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+
+/* 🔥 PRODUCT CARD */
+.product-card{
+  background:#fff;
+  border-radius:14px;
+  padding:6px;
+  text-align:center;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  transition:.2s;
+  display:flex;
+  flex-direction:column;
+}
+
+.product-card:hover{
+  transform:translateY(-4px);
+}
+
+/* 🔥 IMAGE PERFECT FIT */
+.product-card img{
+  width:100%;
+  height:85px;
+  object-fit:contain;
+  background:#f8fafc;
+  border-radius:10px;
+}
+
+/* 🔥 TEXT */
+.product-card h4{
+  font-size:12px;
+  margin:4px 0 2px;
+  line-height:1.2;
+}
+
+.price{
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+
+
+/* 🔥 ACTION BUTTONS */
+.product-actions{
+  gap:4px;
+}
+
+button.success,
+button.delete{
+  padding:4px 6px;
+  font-size:10px;
+  border-radius:6px;
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+}
+
+.modal-content{
+  background:#fff;
+  padding:18px;
+  width:90%;
+  max-width:500px;
+  border-radius:16px;
+  max-height:85vh;
+  overflow:auto;
+}
+
+/* SLIDER */
+.slider{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  gap:10px;
+  margin-top:10px;
+}
+
+.slider img{
+  width:100%;
+  border-radius:10px;
+  scroll-snap-align:center;
+  flex-shrink:0;
+}
+
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin:8px 0;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#cbd5e1;
+}
+
+.dot.active{
+  background:#2563eb;
+}
+
+/* 🔥 FORCE 3 EVEN ON SMALL MOBILE */
+@media(max-width:480px){
+  .products-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="main">
+  <div class="header" style="position:relative">
+  <h3 id="catTitle">Category</h3>
+
+  <!-- 🔍 Search Icon -->
+  <i class="bi bi-search"
+     onclick="toggleSearch()"
+     style="position:absolute;right:16px;top:18px;font-size:18px;cursor:pointer;color:#2563eb">
+  </i>
+
+  <!-- 🔎 Search Box -->
+  <input id="searchBox"
+         type="text"
+         placeholder="Search product..."
+         onkeyup="searchProduct(this.value)"
+         style="
+           display:none;
+           margin-top:10px;
+           width:100%;
+           padding:8px 12px;
+           border-radius:10px;
+           border:1px solid #cbd5e1;
+           font-size:13px;
+         ">
+
+  <button class="back-btn" onclick="goBack()">⬅ Back</button>
+</div>
+
+  <div id="products" class="products-grid"></div>
+</div>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div class="modal" id="productDetailModal">
+  <div class="modal-content">
+    <h3 id="d_name"></h3>
+    <div class="slider" id="d_images"></div>
+    <div class="dots" id="d_dots"></div>
+    <p id="d_price"></p>
+    <p id="d_detail"></p>
+    <button onclick="closeAll()">Close</button>
+  </div>
+</div>
+
+<!-- EDIT PRODUCT MODAL -->
+<div class="modal" id="editProductModal">
+  <div class="modal-content">
+    <h3>Edit Product</h3>
+    <input id="edit_name" placeholder="Product Name">
+    <input id="edit_price" type="number" placeholder="Price">
+    <textarea id="edit_detail" placeholder="Detail"></textarea>
+    <input type="file" id="edit_images" multiple>
+    <div id="edit_images_preview" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    <button onclick="updateProduct()">Update</button>
+    <button onclick="closeAll()">Cancel</button>
+  </div>
+</div>
+<script src="https://local-dukan.onrender.com/socket.io/socket.io.js"></script>
+<script>
+const API="https://local-dukan.onrender.com";
+const TOKEN=localStorage.getItem("token");
+const WID=localStorage.getItem("userId");
+const ROLE=localStorage.getItem("role");
+
+if(!TOKEN || !WID || ROLE!=="wholesaler"){ alert("Login again"); location.href="index.html"; }
+
+const params = new URLSearchParams(window.location.search);
+const category = params.get("cat") || "Other";
+document.getElementById("catTitle").innerText = category;
+
+const productsEl = document.getElementById("products");
+const productDetailModal = document.getElementById("productDetailModal");
+const d_name = document.getElementById("d_name");
+const d_images = document.getElementById("d_images");
+const d_dots = document.getElementById("d_dots");
+const d_price = document.getElementById("d_price");
+const d_detail = document.getElementById("d_detail");
+let editProductId = null;
+let allCategoryProducts = [];
+function goBack(){ window.history.back(); }
+function closeAll(){ document.querySelectorAll(".modal").forEach(m=>m.style.display="none"); }
+
+async function loadCategoryProducts(){
+  const res = await fetch(`${API}/api/products/wholesaler/${WID}`);
+  const d = await res.json();
+
+  allCategoryProducts = (d.products || []).filter(
+    p => (p.category || "Other") === category
+  );
+
+  renderProducts(allCategoryProducts);
+}
+
+  function renderProducts(list){
+  if(!list.length){
+    productsEl.innerHTML = "<p>No products found</p>";
+    return;
+  }
+
+  productsEl.innerHTML = list.map(p=>`
+    <div class="product-card" onclick="openProductDetail('${p._id}')">
+      <img src="${p.images?.[0] || ''}">
+      <h4>${p.productName}</h4>
+      <div class="price">₹${p.price}</div>
+      <div class="product-actions">
+        <button class="success"
+          onclick="event.stopPropagation();openEditProduct('${p._id}')">
+          <i class="bi bi-pencil"></i>
+        </button>
+        <button class="delete"
+          onclick="event.stopPropagation();deleteProduct('${p._id}')">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+  `).join("");
+  }
+function toggleSearch(){
+  const box = document.getElementById("searchBox");
+  box.style.display = box.style.display === "none" ? "block" : "none";
+  box.focus();
+}
+
+function searchProduct(text){
+  const keyword = text.toLowerCase();
+  const filtered = allCategoryProducts.filter(p =>
+    p.productName.toLowerCase().includes(keyword)
+  );
+  renderProducts(filtered);
+  }
+// Product Detail Modal
+async function openProductDetail(id){
+  productDetailModal.style.display = "flex";
+  const res = await fetch(`${API}/api/products/${id}`);
+  const data = await res.json();
+  if(!data.success) return;
+  const p = data.product;
+  d_name.innerText = p.productName;
+  d_price.innerText = "₹" + p.price;
+  d_detail.innerText = p.detail || "";
+  d_images.innerHTML = (p.images || []).map(img => `<img src="${img}">`).join("");
+  d_dots.innerHTML = (p.images || []).map((_,i)=>`<div class="dot ${i===0?'active':''}"></div>`).join("");
+  d_images.onscroll = () => {
+    const index = Math.round(d_images.scrollLeft / d_images.clientWidth);
+    [...d_dots.children].forEach((d,i)=>d.classList.toggle("active", i===index));
+  };
+}
+
+// Edit Product
+async function openEditProduct(id){
+  editProductId = id;
+  const res = await fetch(`${API}/api/products/${id}`);
+  const data = await res.json();
+  if(!data.success){ alert("Failed to load product"); return; }
+  const p = data.product;
+
+  edit_name.value = p.productName;
+  edit_price.value = p.price;
+  edit_detail.value = p.detail || "";
+
+  const box = edit_images_preview;
+  box.innerHTML = "";
+  (p.images || []).forEach(img=>{
+    const i = document.createElement("img");
+    i.src = img;
+    i.style.width = "70px";
+    i.style.borderRadius = "6px";
+    box.appendChild(i);
+  });
+  document.getElementById("editProductModal").style.display = "flex";
+}
+
+// Update Product
+async function updateProduct(){
+  if(!editProductId) return alert("No product selected");
+  const files = [...edit_images.files];
+  let images = [];
+  for(const file of files){
+    const base64 = await new Promise(res=>{
+      const r = new FileReader();
+      r.onload=()=>res(r.result);
+      r.readAsDataURL(file);
+    });
+    images.push(base64);
+  }
+  await fetch(`${API}/api/products/${editProductId}`,{
+    method:"PUT",
+    headers:{"Content-Type":"application/json","Authorization":"Bearer "+TOKEN},
+    body:JSON.stringify({
+      productName: edit_name.value,
+      price: edit_price.value,
+      detail: edit_detail.value,
+      ...(images.length && {images})
+    })
+  });
+  editProductId = null;
+  closeAll();
+  loadCategoryProducts();
+}
+
+// Delete Product
+async function deleteProduct(id){
+  if(!confirm("Delete this product?")) return;
+  await fetch(`${API}/api/products/${id}`,{ method:"DELETE", headers:{"Authorization":"Bearer "+TOKEN} });
+  loadCategoryProducts();
+}
+
+loadCategoryProducts();
+</script>
+</body>
+</html>
