@@ -1,0 +1,2366 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Local Dukan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://unpkg.com/swiper@10/swiper-bundle.min.css" rel="stylesheet">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+    *{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:#f5f5f5;
+color:#222;
+padding-bottom:90px;
+}
+
+/* Header */
+
+.header{
+position:sticky;
+top:0;
+background:#fff;
+display:flex;
+align-items:center;
+gap:15px;
+padding:12px 15px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+z-index:1000;
+}
+
+.backBtn{
+width:40px;
+height:40px;
+border:none;
+background:#f2f2f2;
+border-radius:50%;
+font-size:20px;
+cursor:pointer;
+}
+
+.title{
+font-size:18px;
+font-weight:700;
+flex:1;
+}
+
+.headerIcons{
+display:flex;
+gap:12px;
+font-size:22px;
+}
+
+/* Image Slider */
+
+.slider{
+width:100%;
+height:360px;
+display:flex;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+background:#fff;
+scroll-behavior:smooth;
+}
+
+.slider::-webkit-scrollbar{
+display:none;
+}
+
+.slider img{
+min-width:100%;
+height:360px;
+object-fit:contain;
+scroll-snap-align:start;
+background:#fff;
+}
+
+/* Dots */
+
+.dots{
+display:flex;
+justify-content:center;
+gap:8px;
+padding:10px;
+background:#fff;
+}
+
+.dot{
+width:8px;
+height:8px;
+background:#ccc;
+border-radius:50%;
+}
+
+.dot.active{
+background:#ff3f6c;
+}
+
+/* Product Card */
+
+.card{
+background:#fff;
+margin-top:8px;
+padding:16px;
+border-radius:15px 15px 0 0;
+}
+
+.name{
+font-size:22px;
+font-weight:700;
+line-height:1.4;
+}
+
+.ratingBox{
+display:flex;
+align-items:center;
+gap:8px;
+margin-top:10px;
+}
+
+.rating{
+background:#0f9d58;
+color:#fff;
+padding:3px 10px;
+border-radius:5px;
+font-size:14px;
+}
+
+.reviewCount{
+font-size:14px;
+color:#666;
+}
+
+.priceRow{
+display:flex;
+align-items:center;
+gap:10px;
+margin-top:15px;
+}
+
+.price{
+font-size:30px;
+font-weight:700;
+color:#111;
+}
+
+.oldPrice{
+font-size:18px;
+color:#888;
+text-decoration:line-through;
+}
+
+.discount{
+font-size:18px;
+font-weight:bold;
+color:#0f9d58;
+}
+
+/* Offer */
+
+.offer{
+margin-top:12px;
+background:#e8f5e9;
+padding:10px;
+border-radius:8px;
+font-size:15px;
+color:#0f9d58;
+font-weight:600;
+}
+/* ================= Seller Card ================= */
+
+.sellerCard{
+background:#fff;
+margin-top:10px;
+padding:16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-radius:12px;
+}
+
+.sellerLeft{
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.sellerTitle{
+font-size:13px;
+color:#777;
+}
+
+.sellerName{
+font-size:18px;
+font-weight:700;
+}
+
+.sellerRating{
+display:inline-block;
+background:#0f9d58;
+color:#fff;
+padding:4px 10px;
+border-radius:5px;
+font-size:14px;
+}
+
+.visitBtn{
+padding:10px 18px;
+border:none;
+border-radius:8px;
+background:#ff3f6c;
+color:#fff;
+font-weight:600;
+cursor:pointer;
+}
+
+/* ================= Delivery ================= */
+
+.deliveryBox{
+background:#fff;
+margin-top:10px;
+padding:15px;
+border-radius:12px;
+}
+
+.deliveryTitle{
+font-size:17px;
+font-weight:700;
+margin-bottom:12px;
+}
+
+.delivery{
+font-size:15px;
+color:#444;
+line-height:1.8;
+}
+
+.deliveryPrice{
+font-size:20px;
+font-weight:bold;
+color:#009688;
+margin-top:10px;
+}
+
+/* Vehicle */
+
+select{
+width:100%;
+height:48px;
+margin-top:15px;
+padding:10px;
+border:1px solid #ddd;
+border-radius:10px;
+font-size:15px;
+outline:none;
+background:#fff;
+}
+
+/* ================= Description ================= */
+
+.descCard{
+background:#fff;
+margin-top:10px;
+padding:16px;
+border-radius:12px;
+}
+
+.descTitle{
+font-size:18px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.desc{
+font-size:15px;
+line-height:1.8;
+color:#555;
+}
+
+/* ================= Action Buttons ================= */
+
+.actionRow{
+display:flex;
+gap:12px;
+margin-top:20px;
+}
+
+.shareBtn,
+.wishBtn{
+flex:1;
+height:48px;
+border:none;
+border-radius:10px;
+background:#ececec;
+font-size:18px;
+cursor:pointer;
+}
+
+.shareBtn:hover,
+.wishBtn:hover{
+background:#ddd;
+}
+
+/* ================= Bottom Buttons ================= */
+
+.bottomBar{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#fff;
+display:flex;
+gap:10px;
+padding:10px;
+box-shadow:0 -2px 10px rgba(0,0,0,.1);
+z-index:999;
+}
+
+.cartBtn{
+flex:1;
+height:50px;
+border:none;
+border-radius:10px;
+background:#ff9800;
+color:#fff;
+font-size:17px;
+font-weight:700;
+cursor:pointer;
+}
+
+.buyBtn{
+flex:1;
+height:50px;
+border:none;
+border-radius:10px;
+background:#ff3f6c;
+color:#fff;
+font-size:17px;
+font-weight:700;
+cursor:pointer;
+}
+
+.cartBtn:hover{
+background:#f57c00;
+}
+
+.buyBtn:hover{
+background:#e91e63;
+}
+/* ================= Related Products ================= */
+
+.section{
+background:#fff;
+margin-top:12px;
+padding:15px;
+border-radius:12px;
+}
+
+.section h3{
+font-size:20px;
+font-weight:700;
+margin-bottom:15px;
+}
+
+.relatedGrid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.relatedCard{
+background:#fff;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+cursor:pointer;
+transition:.25s;
+position:relative;
+}
+
+.relatedCard:hover{
+transform:translateY(-4px);
+box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.relatedCard img{
+width:100%;
+height:180px;
+object-fit:cover;
+background:#fafafa;
+transition:.3s;
+}
+
+.relatedCard:hover img{
+transform:scale(1.05);
+}
+
+.relatedInfo{
+padding:10px;
+}
+
+.relatedName{
+font-size:15px;
+font-weight:600;
+height:40px;
+overflow:hidden;
+}
+
+.relatedPrice{
+font-size:19px;
+font-weight:bold;
+margin-top:6px;
+color:#009688;
+}
+
+.relatedOldPrice{
+font-size:13px;
+text-decoration:line-through;
+color:#888;
+margin-left:6px;
+}
+
+.relatedDiscount{
+color:#0f9d58;
+font-size:13px;
+font-weight:600;
+margin-left:6px;
+}
+
+/* ================= Discount Badge ================= */
+
+.discountBadge{
+position:absolute;
+top:10px;
+left:10px;
+background:#ff3f6c;
+color:#fff;
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+}
+
+/* ================= Wishlist Icon ================= */
+
+.wishlist{
+position:absolute;
+top:10px;
+right:10px;
+width:38px;
+height:38px;
+border-radius:50%;
+background:#fff;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:18px;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
+cursor:pointer;
+transition:.25s;
+}
+
+.wishlist:hover{
+background:#ff3f6c;
+color:#fff;
+}
+
+/* ================= Image Zoom ================= */
+
+.slider img{
+transition:.35s;
+cursor:zoom-in;
+}
+
+.slider img:hover{
+transform:scale(1.08);
+}
+
+/* ================= Buttons Animation ================= */
+
+button{
+transition:.25s;
+}
+
+button:active{
+transform:scale(.95);
+}
+
+/* ================= Fade Animation ================= */
+
+.fade{
+animation:fade .35s ease;
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(15px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* ================= Responsive ================= */
+
+@media(max-width:768px){
+
+.slider{
+height:300px;
+}
+
+.slider img{
+height:300px;
+}
+
+.relatedGrid{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.name{
+font-size:20px;
+}
+
+.price{
+font-size:26px;
+}
+
+.bottomBar{
+padding:8px;
+}
+
+.cartBtn,
+.buyBtn{
+height:48px;
+font-size:16px;
+}
+
+}
+
+@media(max-width:480px){
+
+.relatedGrid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.relatedCard img{
+height:150px;
+}
+
+.price{
+font-size:24px;
+}
+
+.name{
+font-size:18px;
+}
+
+}
+
+/* ================= Loading Skeleton ================= */
+
+.skeleton{
+background:linear-gradient(
+90deg,
+#eee 25%,
+#f5f5f5 50%,
+#eee 75%
+);
+background-size:400% 100%;
+animation:loading 1.3s infinite;
+}
+
+@keyframes loading{
+
+0%{
+background-position:100% 0;
+}
+
+100%{
+background-position:-100% 0;
+}
+
+}
+    
+</style>
+</head>
+<body>
+    <!-- ================= HEADER ================= -->
+
+<header class="header">
+
+    <button class="backBtn" onclick="history.back()">
+        <i class="bi bi-arrow-left"></i>
+    </button>
+
+    <div class="title">
+        Product Details
+    </div>
+
+    <div class="headerIcons">
+
+        <i class="bi bi-search"></i>
+
+        <i class="bi bi-share"
+           onclick="shareProduct()"></i>
+
+        <i class="bi bi-heart"
+           id="wishIcon"
+           onclick="toggleWishlist()"></i>
+
+        <i class="bi bi-cart3"
+           onclick="location.href='cart.html'"></i>
+
+    </div>
+
+</header>
+
+<!-- ================= IMAGE SLIDER ================= -->
+
+<div class="slider fade"
+     id="imageSlider">
+
+</div>
+
+<div class="dots"
+     id="sliderDots">
+
+</div>
+
+<!-- ================= PRODUCT ================= -->
+
+<div class="card fade">
+
+    <div class="name"
+         id="pName">
+    </div>
+
+    <div class="ratingBox">
+
+        <span class="rating"
+              id="pRating">
+
+            ⭐ 4.5
+
+        </span>
+
+        <span class="reviewCount"
+              id="reviewCount">
+
+            124 Ratings
+
+        </span>
+
+    </div>
+
+    <div class="priceRow">
+
+        <span class="price"
+              id="pPrice">
+
+        </span>
+
+        <span class="oldPrice"
+              id="pOldPrice">
+
+        </span>
+
+        <span class="discount"
+              id="pDiscount">
+
+        </span>
+
+    </div>
+
+    <div class="offer">
+
+        🚚 Free Delivery above ₹500
+
+    </div>
+
+</div>
+<!-- ================= SELLER DETAILS ================= -->
+
+<div class="sellerCard fade">
+
+    <div class="sellerLeft">
+
+        <div class="sellerTitle">
+            Sold By
+        </div>
+
+        <div class="sellerName"
+             id="pShop">
+
+            Local Dukan
+
+        </div>
+
+        <div class="sellerRating">
+
+            ⭐ 4.7 Seller Rating
+
+        </div>
+
+    </div>
+
+    <button class="visitBtn"
+            onclick="visitSeller()">
+
+        Visit Shop
+
+    </button>
+
+</div>
+
+<!-- ================= DELIVERY ================= -->
+
+<div class="deliveryBox fade">
+
+    <div class="deliveryTitle">
+
+        🚚 Delivery Information
+
+    </div>
+
+    <select id="vehicleType"
+            onchange="updateDelivery()">
+
+        <option value="">
+            Select Vehicle
+        </option>
+
+        <option value="two_wheeler">
+            🏍️ Two Wheeler
+        </option>
+
+        <option value="three_wheeler">
+            🛺 Three Wheeler
+        </option>
+
+        <option value="four_wheeler">
+            🚗 Four Wheeler
+        </option>
+
+    </select>
+
+    <div class="delivery"
+         id="deliveryBox">
+
+        Select vehicle to calculate delivery charge.
+
+    </div>
+
+</div>
+
+<!-- ================= PRODUCT DESCRIPTION ================= -->
+
+<div class="descCard fade">
+
+    <div class="descTitle">
+
+        📄 Product Details
+
+    </div>
+
+    <div class="desc"
+         id="pDesc">
+
+    </div>
+
+</div>
+
+<!-- ================= PRODUCT FEATURES ================= -->
+
+<div class="descCard fade">
+
+    <div class="descTitle">
+
+        ✔ Highlights
+
+    </div>
+
+    <ul style="line-height:2;color:#555;padding-left:18px;">
+
+        <li>Premium Quality Product</li>
+
+        <li>Easy Return Policy</li>
+
+        <li>Fast Delivery Available</li>
+
+        <li>Cashless Secure Payment</li>
+
+        <li>100% Genuine Product</li>
+
+    </ul>
+
+</div>
+
+<!-- ================= SHARE & WISHLIST ================= -->
+
+<div class="card">
+
+    <div class="actionRow">
+
+        <button class="shareBtn"
+                onclick="shareProduct()">
+
+            <i class="bi bi-share-fill"></i>
+            Share
+
+        </button>
+
+        <button class="wishBtn"
+                onclick="toggleWishlist()">
+
+            <i class="bi bi-heart-fill"></i>
+            Wishlist
+
+        </button>
+
+    </div>
+
+</div>
+    <!-- ================= RATINGS ================= -->
+
+<div class="section fade">
+
+    <h3>
+        ⭐ Ratings & Reviews
+    </h3>
+
+    <div style="display:flex;align-items:center;gap:15px;">
+
+        <div style="font-size:42px;font-weight:bold;color:#0f9d58;">
+            4.5
+        </div>
+
+        <div>
+
+            <div style="color:#0f9d58;">
+                ★★★★★
+            </div>
+
+            <small id="reviewCount">
+                245 Ratings • 86 Reviews
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= CUSTOMER REVIEWS ================= -->
+
+<div class="section fade">
+
+    <h3>
+        Customer Reviews
+    </h3>
+
+    <div id="reviewList">
+
+        <div style="border-bottom:1px solid #eee;padding:12px 0;">
+
+            <b>Rahul Kumar</b>
+
+            <div style="color:#0f9d58;">
+                ★★★★★
+            </div>
+
+            <p style="margin-top:8px;">
+                Excellent product. Quality is very good.
+            </p>
+
+        </div>
+
+        <div style="border-bottom:1px solid #eee;padding:12px 0;">
+
+            <b>Aman Singh</b>
+
+            <div style="color:#0f9d58;">
+                ★★★★☆
+            </div>
+
+            <p style="margin-top:8px;">
+                Delivery was fast and packaging was nice.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= RELATED PRODUCTS ================= -->
+
+<div class="section fade">
+
+    <h3>
+
+        🛍 Related Products
+
+    </h3>
+
+    <div class="relatedGrid"
+         id="relatedProducts">
+
+    </div>
+
+</div>
+
+<!-- ================= BOTTOM BAR ================= -->
+
+<div class="bottomBar">
+
+    <button class="cartBtn"
+            onclick="addCurrentToCart()">
+
+        <i class="bi bi-cart-plus"></i>
+
+        Add to Cart
+
+    </button>
+
+    <button class="buyBtn"
+            onclick="buyCurrentProduct()">
+
+        <i class="bi bi-lightning-fill"></i>
+
+        Buy Now
+
+    </button>
+
+</div>
+
+<!-- ================= LOADING ================= -->
+
+<div id="loading"
+     style="display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(255,255,255,.85);
+            z-index:9999;
+            justify-content:center;
+            align-items:center;">
+
+    <div style="text-align:center;">
+
+        <div class="spinner-border text-success"></div>
+
+        <p style="margin-top:10px;">
+            Loading...
+        </p>
+
+    </div>
+
+</div>
+
+<!-- ================= IMAGE PREVIEW ================= -->
+
+<div id="imagePreview"
+     style="display:none;
+            position:fixed;
+            inset:0;
+            background:#000;
+            z-index:99999;
+            justify-content:center;
+            align-items:center;">
+
+    <img id="previewImage"
+         style="max-width:100%;
+                max-height:100%;">
+
+</div>
+    <!-- ================= SHARE MODAL ================= -->
+
+<div id="shareModal"
+     style="display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.45);
+            z-index:9999;
+            justify-content:center;
+            align-items:flex-end;">
+
+    <div style="
+        width:100%;
+        background:#fff;
+        border-radius:20px 20px 0 0;
+        padding:20px;">
+
+        <h3 style="margin-bottom:20px;">
+            Share Product
+        </h3>
+
+        <div style="
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:15px;
+            text-align:center;">
+
+            <div onclick="shareWhatsApp()">
+                <i class="bi bi-whatsapp"
+                   style="font-size:35px;color:#25D366;"></i>
+                <div>WhatsApp</div>
+            </div>
+
+            <div onclick="copyLink()">
+                <i class="bi bi-link-45deg"
+                   style="font-size:35px;color:#2196F3;"></i>
+                <div>Copy</div>
+            </div>
+
+            <div onclick="nativeShare()">
+                <i class="bi bi-share-fill"
+                   style="font-size:35px;color:#ff5722;"></i>
+                <div>Share</div>
+            </div>
+
+            <div onclick="closeShare()">
+                <i class="bi bi-x-circle"
+                   style="font-size:35px;color:#777;"></i>
+                <div>Close</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= SUCCESS TOAST ================= -->
+
+<div id="toast"
+     style="
+        position:fixed;
+        bottom:100px;
+        left:50%;
+        transform:translateX(-50%);
+        background:#222;
+        color:#fff;
+        padding:12px 18px;
+        border-radius:30px;
+        display:none;
+        z-index:99999;">
+
+    Success
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+
+<div style="
+padding:25px;
+text-align:center;
+color:#;
+font-size:14px;">
+
+Made with ❤️ by Local Dukan
+
+</div>
+
+<script>
+
+
+
+
+// =============================
+// PRODUCT PAGE - PART 1
+// Variables + Load Product +
+// Image Slider + Product Details
+// =============================
+
+const API = "https://local-dukan.onrender.com";
+
+const productId = new URLSearchParams(location.search).get("id");
+
+let selectedProduct = null;
+let relatedProducts = [];
+let currentImage = 0;
+
+// ---------------- DOM ----------------
+
+const imageSlider = document.getElementById("imageSlider");
+
+const pName = document.getElementById("pName");
+
+const pPrice = document.getElementById("pPrice");
+
+const pShop = document.getElementById("pShop");
+
+const pDesc = document.getElementById("pDesc");
+
+const deliveryBox =
+document.getElementById("deliveryBox");
+
+const vehicleType =
+document.getElementById("vehicleType");
+
+
+// ---------------- LOAD PRODUCT ----------------
+
+async function loadProduct(){
+
+    try{
+
+        const res = await fetch(
+            `${API}/api/products/${productId}`
+        );
+
+        const data = await res.json();
+
+        if(!data.success){
+
+            alert("Product not found");
+
+            history.back();
+
+            return;
+
+        }
+
+        selectedProduct = data.product;
+
+        renderProduct();
+
+        loadRelatedProducts(
+            selectedProduct.category
+        );
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        alert("Server Error");
+
+    }
+
+}
+
+
+// ---------------- RENDER PRODUCT ----------------
+
+function renderProduct(){
+
+    if(!selectedProduct) return;
+
+    renderImages();
+
+    pName.innerText =
+    selectedProduct.productName || "";
+
+    const price =
+    Number(selectedProduct.price || 0);
+
+    const oldPrice =
+    Math.round(price*1.30);
+
+    const discount =
+    Math.round(
+        ((oldPrice-price)/oldPrice)*100
+    );
+
+    pPrice.innerHTML =
+
+    `
+
+    <div style="display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;">
+
+        <span
+        style="font-size:28px;
+        color:#009688;
+        font-weight:bold;">
+
+        ₹${price}
+
+        </span>
+
+        <span
+        style="text-decoration:line-through;
+        color:#888;">
+
+        ₹${oldPrice}
+
+        </span>
+
+        <span
+        style="color:green;
+        font-weight:bold;">
+
+        ${discount}% OFF
+
+        </span>
+
+    </div>
+
+    `;
+
+    pShop.innerHTML =
+
+    `
+    🏪
+    ${selectedProduct.shopName || "Local Shop"}
+    `;
+
+    pDesc.innerHTML =
+
+    selectedProduct.detail ||
+
+    "No description available.";
+
+}
+
+
+// ---------------- IMAGE SLIDER ----------------
+
+function renderImages(){
+
+    const images =
+    selectedProduct.images || [];
+
+    if(images.length==0){
+
+        imageSlider.innerHTML =
+
+        `
+
+        <img
+        src="https://via.placeholder.com/600x600?text=No+Image">
+
+        `;
+
+        return;
+
+    }
+
+    imageSlider.innerHTML =
+
+    images.map(img=>`
+
+        <img
+
+        src="${img}"
+
+        onclick="zoomImage('${img}')"
+
+        >
+
+    `).join("");
+
+}
+
+
+// ---------------- IMAGE AUTO SLIDER ----------------
+
+setInterval(()=>{
+
+    if(!selectedProduct) return;
+
+    const imgs =
+    imageSlider.querySelectorAll("img");
+
+    if(imgs.length<=1) return;
+
+    currentImage++;
+
+    if(currentImage>=imgs.length){
+
+        currentImage=0;
+
+    }
+
+    imageSlider.scrollTo({
+
+        left:
+        imageSlider.clientWidth*
+        currentImage,
+
+        behavior:"smooth"
+
+    });
+
+},3000);
+
+
+// ---------------- IMAGE ZOOM ----------------
+
+function zoomImage(src){
+
+    window.open(src,"_blank");
+
+}
+
+
+// ---------------- DELIVERY RESET ----------------
+
+function resetDelivery(){
+
+    if(vehicleType)
+
+        vehicleType.value="";
+
+    if(deliveryBox)
+
+        deliveryBox.innerHTML="";
+
+}
+
+
+// ---------------- VEHICLE CHANGE ----------------
+
+if(vehicleType){
+
+vehicleType.addEventListener(
+
+"change",
+
+()=>{
+
+updateDelivery();
+
+}
+
+);
+
+}
+
+
+// ---------------- LOAD ----------------
+
+window.onload=function(){
+
+loadProduct();
+
+};
+
+// ======================================
+// PRODUCT PAGE - PART 2
+// Related Products
+// Wishlist
+// Share
+// Rating
+// Reviews
+// Seller Details
+// ======================================
+
+// ---------- Seller Details ----------
+
+function loadSellerDetails(){
+
+    if(!selectedProduct) return;
+
+    if(document.getElementById("sellerName"))
+        document.getElementById("sellerName").innerHTML=
+        "🏪 "+(selectedProduct.shopName||"Local Shop");
+
+    if(document.getElementById("sellerMobile"))
+        document.getElementById("sellerMobile").innerHTML=
+        "📞 "+(selectedProduct.mobile||"Not Available");
+
+    if(document.getElementById("sellerAddress"))
+        document.getElementById("sellerAddress").innerHTML=
+        "📍 "+(selectedProduct.address||"Not Available");
+
+}
+
+// ---------- Rating ----------
+
+function loadRating(){
+
+    if(!document.getElementById("ratingBox")) return;
+
+    const rating=4.5;
+    const total=128;
+
+    document.getElementById("ratingBox").innerHTML=`
+
+        <div style="margin-top:15px;font-size:18px;">
+
+            ⭐⭐⭐⭐☆
+
+            <span style="font-weight:bold;">
+                ${rating}
+            </span>
+
+            <span style="color:#666;">
+                (${total} Ratings)
+            </span>
+
+        </div>
+
+    `;
+
+}
+
+// ---------- Reviews ----------
+
+function loadReviews(){
+
+    if(!document.getElementById("reviews")) return;
+
+    document.getElementById("reviews").innerHTML=`
+
+<div style="padding:10px;border-bottom:1px solid #eee;">
+⭐⭐⭐⭐⭐ Excellent Product
+</div>
+
+<div style="padding:10px;border-bottom:1px solid #eee;">
+⭐⭐⭐⭐ Good Packaging
+</div>
+
+<div style="padding:10px;">
+⭐⭐⭐⭐⭐ Fast Delivery
+</div>
+
+`;
+
+}
+
+// ---------- Wishlist ----------
+
+function toggleWishlist(){
+
+    if(!selectedProduct) return;
+
+    let wishlist=
+    JSON.parse(localStorage.getItem("wishlist")||"[]");
+
+    const exist=wishlist.find(p=>p._id===selectedProduct._id);
+
+    if(exist){
+
+        wishlist=
+        wishlist.filter(p=>p._id!==selectedProduct._id);
+
+        alert("❤️ Removed from Wishlist");
+
+    }else{
+
+        wishlist.push(selectedProduct);
+
+        alert("❤️ Added to Wishlist");
+
+    }
+
+    localStorage.setItem(
+        "wishlist",
+        JSON.stringify(wishlist)
+    );
+
+}
+
+// ---------- Share ----------
+
+async function shareProduct(){
+
+    if(!selectedProduct) return;
+
+    if(navigator.share){
+
+        await navigator.share({
+
+            title:selectedProduct.productName,
+
+            text:selectedProduct.productName,
+
+            url:location.href
+
+        });
+
+    }else{
+
+        navigator.clipboard.writeText(location.href);
+
+        alert("Product link copied");
+
+    }
+
+}
+
+// ---------- Related Products ----------
+
+async function loadRelatedProducts(category){
+
+    try{
+
+        const res=await fetch(
+
+`${API}/api/products/category/${encodeURIComponent(category)}`
+
+        );
+
+        const data=await res.json();
+
+        if(!data.success) return;
+
+        relatedProducts=
+        data.products.filter(
+
+p=>p._id!==selectedProduct._id
+
+        );
+
+        renderRelatedProducts();
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+    }
+
+}
+
+// ---------- Render Related ----------
+
+function renderRelatedProducts(){
+
+    const box=
+    document.getElementById("relatedProducts");
+
+    if(!box) return;
+
+    box.innerHTML=
+    relatedProducts.map(p=>{
+
+        const img=
+        p.images?.[0]||"";
+
+        const price=
+        Number(p.price);
+
+        return`
+
+<div class="relatedCard"
+
+onclick="location.href='product.html?id=${p._id}'">
+
+<img src="${img}">
+
+<div class="relatedInfo">
+
+<div style="font-size:15px;
+font-weight:600;">
+
+${p.productName}
+
+</div>
+
+<div style="color:#777;
+font-size:13px;">
+
+${p.category||""}
+
+</div>
+
+<div class="relatedPrice">
+
+₹${price}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+// ---------- Search ----------
+
+function searchRelated(){
+
+    const q=
+document.getElementById("searchInput")
+.value
+.toLowerCase();
+
+    const cards=
+document.querySelectorAll(".relatedCard");
+
+    relatedProducts.forEach((p,i)=>{
+
+        if(
+
+p.productName.toLowerCase().includes(q)||
+
+(p.category||"")
+.toLowerCase()
+.includes(q)
+
+        ){
+
+            cards[i].style.display="block";
+
+        }else{
+
+            cards[i].style.display="none";
+
+        }
+
+    });
+
+}
+
+// ---------- After Product Load ----------
+
+setTimeout(()=>{
+
+    loadSellerDetails();
+
+    loadRating();
+
+    loadReviews();
+
+},500);
+
+//==============================
+// CART + DELIVERY
+//==============================
+
+let cart =
+JSON.parse(localStorage.getItem("cart") || "[]");
+
+let currentRetailerLoc = null;
+let currentWholesalerLoc = null;
+let lastDeliveryCharge = 0;
+
+//----------------------------
+// Add To Cart
+//----------------------------
+
+async function addCurrentToCart(){
+
+    if(!selectedProduct) return;
+
+    const retailerId =
+    localStorage.getItem("userId");
+
+    if(!retailerId){
+
+        alert("Please Login");
+
+        return;
+
+    }
+
+    try{
+
+        const res = await fetch(
+        `${API}/api/cart/save`,{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                retailerId,
+
+                item:{
+
+                    productId:selectedProduct._id,
+
+                    productName:selectedProduct.productName,
+
+                    price:selectedProduct.price,
+
+                    image:selectedProduct.images?.[0]||"",
+
+                    wholesalerId:selectedProduct.wholesalerId,
+
+                    shopName:selectedProduct.shopName,
+
+                    address:selectedProduct.address,
+
+                    mobile:selectedProduct.mobile
+
+                }
+
+            })
+
+        });
+
+        const data = await res.json();
+
+        if(data.success){
+
+            alert("🛒 Added To Cart");
+
+        }else{
+
+            alert("Failed");
+
+        }
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+    }
+
+}
+
+//==============================
+// LOCATION
+//==============================
+
+function normalizeLocation(loc){
+
+    if(!loc) return null;
+
+    const lat =
+    Number(loc.lat || loc.latitude);
+
+    const lng =
+    Number(loc.lng || loc.longitude);
+
+    if(!lat || !lng) return null;
+
+    return{
+
+        lat,
+
+        lng
+
+    };
+
+}
+
+//----------------------------
+
+async function ensureRetailerLocation(){
+
+    const profile=
+
+    JSON.parse(
+
+    localStorage.getItem("retailerProfile")
+
+    || "{}"
+
+    );
+
+    let loc=
+
+    profile.location ||
+
+    JSON.parse(
+
+    localStorage.getItem("retailer_location")
+
+    ||"null"
+
+    );
+
+    loc=
+
+    normalizeLocation(loc);
+
+    if(loc){
+
+        currentRetailerLoc=loc;
+
+        return loc;
+
+    }
+
+    return null;
+
+}
+
+//==============================
+// DELIVERY
+//==============================
+
+async function updateDelivery(){
+
+    if(!selectedProduct) return;
+
+    const vehicle=
+
+    document.getElementById("vehicleType")
+
+    .value;
+
+    if(!vehicle){
+
+        deliveryBox.innerHTML="";
+
+        return;
+
+    }
+
+    const retailer=
+
+    await ensureRetailerLocation();
+
+    if(!retailer){
+
+        deliveryBox.innerHTML=
+
+        "Retailer location missing";
+
+        return;
+
+    }
+
+    let wholesaler=null;
+
+    try{
+
+        const res=
+
+        await fetch(
+
+`${API}/api/wholesalers/profile/${selectedProduct.wholesalerId}`
+
+        );
+
+        const data=
+
+        await res.json();
+
+        wholesaler=
+
+        normalizeLocation(
+
+        data.profile.location
+
+        );
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+    }
+
+    if(!wholesaler){
+
+        deliveryBox.innerHTML=
+
+        "Wholesaler location missing";
+
+        return;
+
+    }
+
+    currentWholesalerLoc=
+
+    wholesaler;
+
+    calculateDelivery(
+
+        retailer,
+
+        wholesaler,
+
+        vehicle
+
+    );
+
+}
+
+//==============================
+
+async function calculateDelivery(
+
+retailer,
+
+wholesaler,
+
+vehicle
+
+){
+
+try{
+
+const res=
+
+await fetch(
+
+`${API}/api/delivery/calculate`,
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+orderAmount:Number(selectedProduct.price),
+
+vehicleType:vehicle,
+
+retailerLocation:retailer,
+
+wholesalerLocation:wholesaler
+
+})
+
+}
+
+);
+
+const data=
+
+await res.json();
+
+if(!data.success){
+
+deliveryBox.innerHTML=
+
+"Delivery unavailable";
+
+return;
+
+}
+
+lastDeliveryCharge=
+
+Number(data.retailerPays);
+
+const total=
+
+Number(selectedProduct.price)+
+
+lastDeliveryCharge;
+
+deliveryBox.innerHTML=`
+
+🚚 Delivery :
+₹${data.totalDelivery}<br>
+
+Retailer Pays :
+₹${data.retailerPays}<br>
+
+Distance :
+${data.distanceKm} KM<br>
+
+Time :
+${data.timeMinutes} Min<br>
+
+<hr>
+
+<b>Total :
+₹${total}</b>
+
+`;
+
+}
+
+catch(err){
+
+console.log(err);
+
+}
+
+}
+//=====================================
+// BUY NOW + RAZORPAY + VERIFY PAYMENT
+//=====================================
+
+let paying = false;
+
+//----------------------------
+// Buy Now
+//----------------------------
+
+async function buyCurrentProduct(){
+
+    if(paying) return;
+
+    if(!selectedProduct){
+        alert("Product not found");
+        return;
+    }
+
+    const vehicle =
+    document.getElementById("vehicleType").value;
+
+    if(!vehicle){
+        alert("Please Select Vehicle");
+        return;
+    }
+
+    if(!currentRetailerLoc){
+        alert("Retailer Location Missing");
+        return;
+    }
+
+    if(!currentWholesalerLoc){
+        alert("Wholesaler Location Missing");
+        return;
+    }
+
+    const totalAmount =
+    Number(selectedProduct.price) +
+    Number(lastDeliveryCharge);
+
+    createPayment(totalAmount,vehicle);
+
+}
+
+//----------------------------
+// Create Razorpay Order
+//----------------------------
+
+async function createPayment(amount,vehicle){
+
+try{
+
+paying=true;
+
+const res=await fetch(
+
+`${API}/api/orders/pay-and-create`,
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+amount,
+
+notes:{
+
+type:"direct",
+
+productId:selectedProduct._id,
+
+wholesalerId:selectedProduct.wholesalerId,
+
+retailerId:
+
+localStorage.getItem("userId"),
+
+vehicleType:vehicle,
+
+deliveryCharge:lastDeliveryCharge,
+
+retailerDeliveryPay:lastDeliveryCharge,
+
+wholesalerDeliveryPay:0,
+
+retailerLocation:
+
+JSON.stringify(currentRetailerLoc),
+
+wholesalerLocation:
+
+JSON.stringify(currentWholesalerLoc)
+
+}
+
+})
+
+}
+
+);
+
+const data=await res.json();
+
+if(!data.success){
+
+paying=false;
+
+alert("Payment Failed");
+
+return;
+
+}
+
+openRazorpay(data);
+
+}
+
+catch(err){
+
+console.log(err);
+
+paying=false;
+
+}
+
+}
+
+//----------------------------
+// Razorpay Checkout
+//----------------------------
+
+function openRazorpay(data){
+
+const profile=
+
+JSON.parse(
+
+localStorage.getItem("retailerProfile")
+
+||"{}"
+
+);
+
+const options={
+
+key:data.key,
+
+amount:data.amount,
+
+currency:"INR",
+
+order_id:data.orderId,
+
+name:"Local Dukan",
+
+description:selectedProduct.productName,
+
+prefill:{
+
+name:profile.name||"",
+
+contact:profile.mobile||""
+
+},
+
+handler:function(response){
+
+verifyPayment(response);
+
+},
+
+modal:{
+
+ondismiss(){
+
+paying=false;
+
+alert("Payment Cancelled");
+
+}
+
+}
+
+};
+
+const rzp=
+
+new Razorpay(options);
+
+rzp.open();
+
+}
+
+//----------------------------
+// Verify Payment
+//----------------------------
+
+async function verifyPayment(response){
+
+try{
+
+const res=
+
+await fetch(
+
+`${API}/api/orders/verify-payment`,
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+razorpay_order_id:
+
+response.razorpay_order_id,
+
+razorpay_payment_id:
+
+response.razorpay_payment_id,
+
+razorpay_signature:
+
+response.razorpay_signature
+
+})
+
+}
+
+);
+
+const data=
+
+await res.json();
+
+paying=false;
+
+if(data.success){
+
+paymentSuccess();
+
+}else{
+
+alert("Verification Failed");
+
+}
+
+}
+
+catch(err){
+
+console.log(err);
+
+paying=false;
+
+}
+
+}
+function showToast(msg){
+
+    const t=document.getElementById("toast");
+
+    t.innerHTML=msg;
+
+    t.style.display="block";
+
+    setTimeout(()=>{
+
+        t.style.display="none";
+
+    },2000);
+
+}
+
+function shareProduct(){
+
+    document.getElementById("shareModal").style.display="flex";
+
+}
+
+function closeShare(){
+
+    document.getElementById("shareModal").style.display="none";
+
+}
+
+function copyLink(){
+
+    navigator.clipboard.writeText(location.href);
+
+    showToast("Link Copied");
+
+}
+
+async function nativeShare(){
+
+    if(navigator.share){
+
+        await navigator.share({
+
+            title:selectedProduct.productName,
+
+            text:selectedProduct.productName,
+
+            url:location.href
+
+        });
+
+    }
+
+}
+
+function shareWhatsApp(){
+
+    window.open(
+
+        "https://wa.me/?text="+
+
+        encodeURIComponent(location.href)
+
+    );
+
+}
+
+document.getElementById("imagePreview")
+.onclick=function(){
+
+    this.style.display="none";
+
+}
+//----------------------------
+// Payment Success
+//----------------------------
+
+function paymentSuccess(){
+
+alert("✅ Order Placed Successfully");
+
+localStorage.removeItem("cart");
+
+window.location.href="orders.html";
+
+}
+
+//----------------------------
+// Retry
+//----------------------------
+
+function retryPayment(){
+
+paying=false;
+
+buyCurrentProduct();
+
+}
+ </script>
+
+</body>
+</html>
