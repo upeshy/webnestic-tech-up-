@@ -1413,7 +1413,10 @@ let selectedProduct = null;
 let cart = [];
 let cartDeliveryCharge = 0;
 let currentWholesalerId = null;
-
+let page = 1;
+let loading = false;
+let hasMore = true;
+let allProducts = [];
   // DOM elements
 const dImages = document.getElementById("dImages");
 const dDots   = document.getElementById("dDots");
@@ -1494,10 +1497,7 @@ async function ensureRetailerLocation() {
 
   return null;
   }
-    let page = 1;
-let loading = false;
-let hasMore = true;
-let allProducts = [];
+    
 // ------------------- PRODUCTS -------------------
 async function loadProducts() {
 
