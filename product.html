@@ -1403,7 +1403,11 @@ async function buyCurrentProduct() {
     }
 
     
-    
+
+    if (!currentWholesalerLoc) {
+        alert("Wholesaler Location Missing");
+        return;
+    }
 
     // Product ID
     localStorage.setItem(
@@ -1412,10 +1416,16 @@ async function buyCurrentProduct() {
     );
 
     // Retailer Location
-    
+    localStorage.setItem(
+        "checkoutRetailerLocation",
+        JSON.stringify(currentRetailerLoc)
+    );
 
     // Wholesaler Location
-    
+    localStorage.setItem(
+        "checkoutWholesalerLocation",
+        JSON.stringify(currentWholesalerLoc)
+    );
 
     // Delivery Charge
     localStorage.setItem(
