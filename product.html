@@ -1435,7 +1435,22 @@ function loadReviews(){
 `;
 
 }
+function buyCurrentProduct() {
 
+    if (!selectedProduct) return;
+
+    localStorage.setItem(
+        "checkoutProductId",
+        selectedProduct._id
+    );
+
+    localStorage.setItem(
+        "checkoutWholesalerId",
+        selectedProduct.wholesalerId
+    );
+
+    window.location.href = "checkout.html";
+}
 // ---------- Wishlist ----------
 
 function toggleWishlist(){
