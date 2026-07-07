@@ -1435,20 +1435,50 @@ function loadReviews(){
 `;
 
 }
-function buyCurrentProduct() {
+async function buyCurrentProduct() {
 
-    if (!selectedProduct) return;
+    if (!selectedProduct) {
+        alert("Product not found");
+        return;
+    }
 
+    if (!currentRetailerLoc) {
+        alert("Retailer Location Missing");
+        return;
+    }
+
+    if (!currentWholesalerLoc) {
+        alert("Wholesaler Location Missing");
+        return;
+    }
+
+    // Checkout Data Save
     localStorage.setItem(
         "checkoutProductId",
         selectedProduct._id
     );
 
     localStorage.setItem(
-        "checkoutWholesalerId",
-        selectedProduct.wholesalerId
+        "checkoutVehicleType",
+        document.getElementById("vehicleType").value
     );
 
+    localStorage.setItem(
+        "checkoutRetailerLocation",
+        JSON.stringify(currentRetailerLoc)
+    );
+
+    localStorage.setItem(
+        "checkoutWholesalerLocation",
+        JSON.stringify(currentWholesalerLoc)
+    );
+
+    localStorage.setItem(
+        "checkoutDeliveryCharge",
+        lastDeliveryCharge
+    );
+
+    // Checkout Page Open
     window.location.href = "checkout.html";
 }
 // ---------- Wishlist ----------
@@ -2016,40 +2046,7 @@ let paying = false;
 // Buy Now
 //----------------------------
 
-async function buyCurrentProduct(){
 
-    if(paying) return;
-
-    if(!selectedProduct){
-        alert("Product not found");
-        return;
-    }
-
-    const vehicle =
-    document.getElementById("vehicleType").value;
-
-    if(!vehicle){
-        alert("Please Select Vehicle");
-        return;
-    }
-
-    if(!currentRetailerLoc){
-        alert("Retailer Location Missing");
-        return;
-    }
-
-    if(!currentWholesalerLoc){
-        alert("Wholesaler Location Missing");
-        return;
-    }
-
-    const totalAmount =
-    Number(selectedProduct.price) +
-    Number(lastDeliveryCharge);
-
-    createPayment(totalAmount,vehicle);
-
-}
 
 //----------------------------
 // Create Razorpay Order
