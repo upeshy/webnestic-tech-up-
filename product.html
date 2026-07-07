@@ -1452,33 +1452,31 @@ async function buyCurrentProduct() {
         return;
     }
 
-    // Checkout Data Save
+    // Product ID
     localStorage.setItem(
         "checkoutProductId",
         selectedProduct._id
     );
 
-    localStorage.setItem(
-        "checkoutVehicleType",
-        document.getElementById("vehicleType").value
-    );
-
+    // Retailer Location
     localStorage.setItem(
         "checkoutRetailerLocation",
         JSON.stringify(currentRetailerLoc)
     );
 
+    // Wholesaler Location
     localStorage.setItem(
         "checkoutWholesalerLocation",
         JSON.stringify(currentWholesalerLoc)
     );
 
+    // Delivery Charge
     localStorage.setItem(
         "checkoutDeliveryCharge",
         lastDeliveryCharge
     );
 
-    // Checkout Page Open
+    // Checkout Page
     window.location.href = "checkout.html";
 }
 // ---------- Wishlist ----------
