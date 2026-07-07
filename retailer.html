@@ -1159,7 +1159,119 @@
     border-radius:50%;
     animation:spin .8s linear infinite;
 }
+.profile-sheet{
+max-width:420px;
+padding:18px;
+border-radius:20px;
+background:#f7f8fa;
+}
 
+.profile-card{
+display:flex;
+align-items:center;
+gap:15px;
+margin-bottom:15px;
+}
+
+.profile-avatar{
+width:70px;
+height:70px;
+border-radius:50%;
+background:#009688;
+color:#fff;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:42px;
+}
+
+.profile-user{
+flex:1;
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.wallet-card{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#009688;
+color:#fff;
+padding:16px;
+border-radius:15px;
+margin-bottom:15px;
+}
+
+.wallet-title{
+font-size:18px;
+font-weight:bold;
+}
+
+.wallet-sub{
+font-size:13px;
+opacity:.9;
+}
+
+.coin-value{
+font-size:26px;
+font-weight:bold;
+}
+
+.refer-card{
+background:#fff;
+padding:15px;
+border-radius:15px;
+margin-bottom:15px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.refer-title{
+font-size:18px;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.refer-code{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+background:#eef7ff;
+border-radius:10px;
+margin:10px 0;
+}
+
+.copy-btn,
+.share-btn{
+border:none;
+background:#009688;
+color:#fff;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.profile-menu{
+margin-top:18px;
+}
+
+.menu-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+background:#fff;
+border-radius:12px;
+margin-bottom:10px;
+cursor:pointer;
+font-weight:500;
+box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.menu-item:hover{
+background:#f2f2f2;
+}
 
     </style>
 </head>
@@ -1327,37 +1439,197 @@
     </div>
 
     <!-- Profile Modal -->
-    <div class="modal" id="profileModal">
-        <div class="modal-sheet">
-            <div class="modal-header">
-                <h2 class="modal-title">👤 Profile</h2>
-                <button class="close-btn" onclick="closeAll()">
-                    <i class="bi bi-x"></i>
-                </button>
-            </div>
+    <!-- ================= PROFILE MODAL ================= -->
+<div class="modal" id="profileModal">
 
-            <input id="profileName" class="profile-input" placeholder="Shop/Short Address">
-            <input id="profileMobile" class="profile-input" placeholder="Mobile Number">
+  <div class="modal-sheet profile-sheet">
 
-            <div class="location-group">
-                <label class="location-label">📍 Current Location (Lat, Lng)</label>
-                <input id="profileLocation" class="location-read" placeholder="Fetching..." readonly>
-                <small class="location-timer" id="locationTimer"></small>
-            </div>
+    <div class="modal-header">
+      <h2 class="modal-title">👤 My Account</h2>
 
-            <button class="location-btn" onclick="getRetailerLocation()">
-                <i class="bi bi-geo-alt"></i> Set Location
-            </button>
-
-            <button id="adminHelpBtn" class="admin-btn" onclick="contactAdminForLocation()">
-                🆘 Admin Help
-            </button>
-
-            <div style="flex: 1;"></div>
-
-            <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
-        </div>
+      <button class="close-btn" onclick="closeAll()">
+        <i class="bi bi-x"></i>
+      </button>
     </div>
+
+    <!-- USER INFO -->
+    <div class="profile-card">
+
+      <div class="profile-avatar">
+        <i class="bi bi-person-circle"></i>
+      </div>
+
+      <div class="profile-user">
+
+        <input id="profileName"
+               class="profile-input"
+               placeholder="Shop Name">
+
+        <input id="profileMobile"
+               class="profile-input"
+               placeholder="Mobile Number">
+
+      </div>
+
+    </div>
+
+    <!-- COIN WALLET -->
+
+    <div class="wallet-card">
+
+      <div class="wallet-left">
+        <div class="wallet-title">
+          💰 Local Coin Wallet
+        </div>
+
+        <div class="wallet-sub">
+          1 Coin = ₹1
+        </div>
+      </div>
+
+      <div class="wallet-right">
+
+        <div class="coin-value">
+          🪙
+          <span id="coinBalance">
+            100
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- REFER -->
+
+    <div class="refer-card">
+
+      <div class="refer-title">
+        🎁 Refer & Earn
+      </div>
+
+      <p class="refer-text">
+        Invite your friends and earn
+        <b>100 Coins</b>.
+      </p>
+
+      <div class="refer-code">
+
+        <span id="referralCode">
+          UPESH1001
+        </span>
+
+        <button class="copy-btn"
+                onclick="copyReferral()">
+
+          Copy
+
+        </button>
+
+      </div>
+
+      <button class="share-btn"
+              onclick="shareReferral()">
+
+        📤 Share Now
+
+      </button>
+
+    </div>
+
+    <!-- LOCATION -->
+
+    <div class="location-group">
+
+      <label>
+        📍 Current Location
+      </label>
+
+      <input id="profileLocation"
+             class="location-read"
+             readonly>
+
+      <small id="locationTimer"
+             class="location-timer">
+      </small>
+
+      <button class="location-btn"
+              onclick="getRetailerLocation()">
+
+        <i class="bi bi-geo-alt"></i>
+
+        Set Location
+
+      </button>
+
+    </div>
+
+    <!-- MENU -->
+
+    <div class="profile-menu">
+
+      <div class="menu-item"
+           onclick="openOrderStatus()">
+
+        📦
+        My Orders
+
+        <i class="bi bi-chevron-right"></i>
+
+      </div>
+
+      <div class="menu-item"
+           onclick="openWishlist()">
+
+        ❤️
+        Wishlist
+
+        <i class="bi bi-chevron-right"></i>
+
+      </div>
+
+      <div class="menu-item"
+           onclick="openNotifications()">
+
+        🔔
+        Notifications
+
+        <i class="bi bi-chevron-right"></i>
+
+      </div>
+
+      <div class="menu-item"
+           onclick="openCoinHistory()">
+
+        🪙
+        Coin History
+
+        <i class="bi bi-chevron-right"></i>
+
+      </div>
+
+      <div class="menu-item"
+           onclick="contactAdminForLocation()">
+
+        🆘
+        Help & Support
+
+        <i class="bi bi-chevron-right"></i>
+
+      </div>
+
+    </div>
+
+    <button class="btn-primary"
+            onclick="saveProfile()">
+
+      Save Profile
+
+    </button>
+
+  </div>
+
+</div>
 
     <!-- Order Status Modal -->
     <div class="modal" id="orderStatusModal">
