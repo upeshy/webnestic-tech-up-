@@ -3658,12 +3658,14 @@ async function openRetailerProfile() {
   profileModal.style.display = "flex";
 
   const retailerId = localStorage.getItem("userId");
+
   if (!retailerId) {
     alert("🔐 Login required");
     return;
   }
 
   try {
+
     const res = await fetch(
       `${API}/api/retailers/profile/${retailerId}`
     );
@@ -3673,53 +3675,76 @@ async function openRetailerProfile() {
     if (data.success && data.profile) {
 
       /* ===== BASIC PROFILE ===== */
-      profileName.value   = data.profile.name || "";
+      profileName.value = data.profile.name || "";
       profileMobile.value = data.profile.mobile || "";
 
-      /* ===== LOCATION (ONLY SERVER DATA) ===== */
+      /* ===== COIN WALLET ===== */
+      document.getElementById("coinBalance").innerText =
+        data.profile.coins || 0;
+
+      document.getElementById("referralCode").innerText =
+        data.profile.referralCode || "";
+
+      /* ===== LOCATION ===== */
       if (
-        data.profile.location?.lat &&
-        data.profile.location?.lng
+        data.profile.location &&
+        data.profile.location.lat != null &&
+        data.profile.location.lng != null
       ) {
+
         profileLocation.value =
-          Number(data.profile.location.lat).toFixed(6) + ", " +
+          Number(data.profile.location.lat).toFixed(6) +
+          ", " +
           Number(data.profile.location.lng).toFixed(6);
+
       } else {
+
         profileLocation.value = "";
+
       }
 
-      /* ===== LOCATION TIMER (ONLY SERVER BASED) ===== */
-      if (data.profile?.locationMeta?.firstSetAt) {
+      /* ===== LOCATION TIMER ===== */
+      if (data.profile.locationMeta?.firstSetAt) {
+
         updateLocationTimer(
           data.profile.locationMeta.firstSetAt,
           data.profile.locationMeta.locked
         );
+
       } else {
-        const timerEl = document.getElementById("locationTimer");
-        if (timerEl) timerEl.innerText = "";
+
+        document.getElementById("locationTimer").innerText = "";
+
       }
 
-      /* ===== UI CACHE (OPTIONAL) ===== */
+      /* ===== CACHE ===== */
       localStorage.setItem(
         "retailerProfile",
         JSON.stringify(data.profile)
       );
 
     } else {
+
       profileName.value = "";
       profileMobile.value = "";
       profileLocation.value = "";
 
-      const timerEl = document.getElementById("locationTimer");
-      if (timerEl) timerEl.innerText = "";
+      document.getElementById("coinBalance").innerText = "0";
+      document.getElementById("referralCode").innerText = "";
+
+      document.getElementById("locationTimer").innerText = "";
+
     }
 
   } catch (err) {
-    console.error("REAL ERROR 👉", err);
-    alert("❌ Server error");
-  }
-}
 
+    console.error("REAL ERROR 👉", err);
+
+    alert("❌ Server error");
+
+  }
+
+}
 /* ================= SAVE PROFILE ================= */
 async function saveProfile() {
 
