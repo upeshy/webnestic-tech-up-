@@ -1571,16 +1571,7 @@ async function loadProducts() {
 }
 
 window.addEventListener("load", loadProducts);
-window.addEventListener("scroll", () => {
 
-  if (
-    window.innerHeight + window.scrollY >=
-    document.body.offsetHeight - 300
-  ) {
-    loadProducts();
-  }
-
-});
 function renderAllProducts(products){
 
     const container = document.getElementById("allProducts");
