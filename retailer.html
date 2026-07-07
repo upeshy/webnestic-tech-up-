@@ -1563,8 +1563,7 @@ async function loadProducts() {
         </div>
       `).join("");
 
-    renderAllProducts(allProducts.slice(0, 20));
-
+    renderAllProducts(data.products);
   } catch (err) {
 
     console.error("Load Products Error:", err);
