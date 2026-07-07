@@ -1499,19 +1499,16 @@ async function ensureRetailerLocation() {
   }
     
 // ------------------- PRODUCTS -------------------
+// ------------------- PRODUCTS -------------------
 async function loadProducts() {
-
-  if (loading || !hasMore) return;
-
-  loading = true;
 
   document.getElementById("loader").style.display = "block";
 
   try {
 
-    console.log("Loading page:", page);
+    console.log("Loading products...");
 
-    const res = await fetch(`${API}/api/products/all?page=${page}`, {
+    const res = await fetch(`${API}/api/products/all`, {
       cache: "no-store"
     });
 
@@ -1521,50 +1518,61 @@ async function loadProducts() {
 
     const data = await res.json();
 
-    if (!data.success) return;
+    console.log(data);
 
-    // 🔥 New products add
-    allProducts.push(...data.products);
+    if (!data.success) {
+      document.getElementById("categories").innerHTML =
+        "<p>No Products Found</p>";
+      return;
+    }
+
+    allProducts = data.products || [];
+
+    // ✅ SessionStorage safe
+  //  try {
+    //  sessionStorage.setItem(
+       // "nearbyProducts",
+       // JSON.stringify(allProducts)
+  //    );
+  //  } catch (e) {
+   //   console.warn("SessionStorage Full. Skipping save.");
+   // }
 
     window.allProducts = allProducts;
 
-    // 🔥 Categories only once
-    if (page === 1) {
-
-      const categoryMap = {};
-
-      allProducts.forEach(p => {
-        const cat = (p.category || "Other").trim();
-        categoryMap[cat] = true;
-      });
-
+    if (allProducts.length === 0) {
       document.getElementById("categories").innerHTML =
-        Object.keys(categoryMap).map(cat => `
-          <div class="category-card"
-               onclick="openCategory('${encodeURIComponent(cat)}')">
-            <div class="category-icon">
-              <i class="bi bi-box-seam"></i>
-            </div>
-            <div class="category-name">${cat}</div>
-          </div>
-        `).join("");
+        "<p>No Products Found</p>";
+      document.getElementById("allProducts").innerHTML = "";
+      return;
     }
 
-    renderAllProducts(data.products);
+    const categoryMap = {};
 
-    hasMore = data.hasMore;
+    allProducts.forEach(p => {
+      const cat = (p.category || "Other").trim();
+      categoryMap[cat] = true;
+    });
 
-    page++;
+    document.getElementById("categories").innerHTML =
+      Object.keys(categoryMap).map(cat => `
+        <div class="category-card"
+             onclick="openCategory('${encodeURIComponent(cat)}')">
+          <div class="category-icon">
+            <i class="bi bi-box-seam"></i>
+          </div>
+          <div class="category-name">${cat}</div>
+        </div>
+      `).join("");
+
+    renderAllProducts(allProducts.slice(0, 20));
 
   } catch (err) {
 
-    console.error(err);
-
+    console.error("Load Products Error:", err);
     alert(err.message);
 
   } finally {
-
-    loading = false;
 
     document.getElementById("loader").style.display = "none";
 
