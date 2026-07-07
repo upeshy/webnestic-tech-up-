@@ -1769,6 +1769,232 @@ async function ensureRetailerLocation() {
 
   return null;
   }
+
+
+/* ===========================
+   COIN + REFER SYSTEM
+=========================== */
+
+// Signup bonus
+const SIGNUP_BONUS = 100;
+
+// Referral reward
+const REFERRAL_REWARD = 100;
+
+// Load profile
+async function loadCoinProfile() {
+
+  const retailerId = localStorage.getItem("userId");
+  if (!retailerId) return;
+
+  try {
+
+    const res = await fetch(
+      `${API}/api/retailers/profile/${retailerId}`
+    );
+
+    const data = await res.json();
+
+    if (!data.success) return;
+
+    document.getElementById("coinBalance").innerText =
+      data.profile.coins || 0;
+
+    document.getElementById("referralCode").innerText =
+      data.profile.referralCode || "LOCAL100";
+
+  } catch (err) {
+
+    console.log(err);
+
+  }
+
+}
+
+/* ===========================
+   COPY REFERRAL
+=========================== */
+
+function copyReferral(){
+
+  const code =
+    document.getElementById("referralCode").innerText;
+
+  navigator.clipboard.writeText(code);
+
+  alert("Referral Code Copied");
+
+}
+
+/* ===========================
+   SHARE REFERRAL
+=========================== */
+
+async function shareReferral(){
+
+  const code =
+    document.getElementById("referralCode").innerText;
+
+  const text =
+
+`🛍️ Join Local Dukan
+
+🎁 Use my referral code
+
+${code}
+
+Signup now and get
+
+🪙 ${SIGNUP_BONUS} Coins
+
+I also get
+
+🪙 ${REFERRAL_REWARD} Coins.
+
+https://local-dukan.vercel.app`;
+
+  if(navigator.share){
+
+    try{
+
+      await navigator.share({
+
+        title:"Local Dukan",
+
+        text:text
+
+      });
+
+    }catch(e){}
+
+  }else{
+
+    window.open(
+
+      "https://wa.me/?text="+
+      encodeURIComponent(text)
+
+    );
+
+  }
+
+}
+
+/* ===========================
+   COIN HISTORY
+=========================== */
+
+async function openCoinHistory(){
+
+  try{
+
+    const retailerId =
+      localStorage.getItem("userId");
+
+    const res = await fetch(
+
+      `${API}/api/coins/history/${retailerId}`
+
+    );
+
+    const data = await res.json();
+
+    if(!data.success){
+
+      return alert("No history");
+
+    }
+
+    let html="";
+
+    data.history.forEach(h=>{
+
+      html +=
+
+      `
+      <div class="coin-row">
+
+        <div>
+
+          ${h.reason}
+
+        </div>
+
+        <div>
+
+          ${h.amount>0?"+":""}
+          ${h.amount}
+
+        </div>
+
+      </div>
+      `;
+
+    });
+
+    document.getElementById("coinHistoryBody").innerHTML =
+      html;
+
+    document.getElementById("coinHistoryModal")
+      .style.display="flex";
+
+  }catch(err){
+
+    console.log(err);
+
+  }
+
+}
+
+/* ===========================
+   CLOSE COIN HISTORY
+=========================== */
+
+function closeCoinHistory(){
+
+ document.getElementById("coinHistoryModal")
+ .style.display="none";
+
+}
+
+/* ===========================
+   WALLET REFRESH
+=========================== */
+
+async function refreshCoins(){
+
+  const retailerId =
+    localStorage.getItem("userId");
+
+  if(!retailerId) return;
+
+  const res = await fetch(
+
+    `${API}/api/retailers/profile/${retailerId}`
+
+  );
+
+  const data = await res.json();
+
+  if(data.success){
+
+    document.getElementById("coinBalance").innerText =
+      data.profile.coins || 0;
+
+  }
+
+}
+
+/* ===========================
+   LOAD
+=========================== */
+
+window.addEventListener("load",()=>{
+
+  loadCoinProfile();
+
+});
+    
 // ------------------- PRODUCTS -------------------
 
 
