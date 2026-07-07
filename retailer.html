@@ -1576,34 +1576,24 @@ async function loadProducts() {
   }
 }
 
-window.addEventListener("load", loadProducts);
-    window.addEventListener("scroll", () => {
+window.addEventListener("scroll", () => {
 
-  if (loading || !hasMore) return;
+    if (loading || !hasMore) return;
 
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
-    page++;
-    loadProducts();
-  }
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+        loadProducts();
+    }
 
 });
-
 function renderAllProducts(products){
 
     const container = document.getElementById("allProducts");
 
-    if(page === 2){
-        container.innerHTML = "";
-    }
-
     if(!products || !products.length){
-        if(page === 2){
-            container.innerHTML = "<p>No Products Found</p>";
-        }
         return;
     }
 
-    const html = products.map(p=>{
+    const html = products.map(p => {
 
         const img = p.images?.[0] || "https://via.placeholder.com/300";
         const price = Number(p.price || 0);
@@ -1614,27 +1604,23 @@ function renderAllProducts(products){
         <div class="product-card">
 
             <div class="product-image-wrapper">
-
                 <img src="${img}"
                      class="product-image"
                      loading="lazy"
                      onclick="openProduct('${p._id}')">
 
-                <div class="product-badge">
-                    ${discount}% OFF
-                </div>
+                <div class="product-badge">${discount}% OFF</div>
 
                 <button class="wishlist-icon">
                     <i class="bi bi-heart-fill"></i>
                 </button>
-
             </div>
 
             <div class="product-info">
 
                 <div class="product-title"
                      onclick="openProduct('${p._id}')">
-                    ${p.productName}
+                     ${p.productName}
                 </div>
 
                 <div class="product-rating">
@@ -1642,24 +1628,12 @@ function renderAllProducts(products){
                     <span class="rating-count">(125)</span>
                 </div>
 
-                <small style="color:#6b7280;">
-                    ${p.category || "General"}
-                </small>
+                <small>${p.category || "General"}</small>
 
                 <div class="product-price">
-
-                    <span class="price-current">
-                        ₹${price}
-                    </span>
-
-                    <span class="price-original">
-                        ₹${oldPrice}
-                    </span>
-
-                    <span class="price-discount">
-                        ${discount}% OFF
-                    </span>
-
+                    <span class="price-current">₹${price}</span>
+                    <span class="price-original">₹${oldPrice}</span>
+                    <span class="price-discount">${discount}% OFF</span>
                 </div>
 
                 <div class="product-buttons">
@@ -1678,9 +1652,7 @@ function renderAllProducts(products){
 
             </div>
 
-        </div>
-        `;
-
+        </div>`;
     }).join("");
 
     container.insertAdjacentHTML("beforeend", html);
