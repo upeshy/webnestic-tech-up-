@@ -188,6 +188,10 @@ document.getElementById("catTitle").innerText = category || "Category Products";
 // ---------------- PRODUCTS ----------------
 async function loadProducts() {
 
+  if (loading || !hasMore) return;
+
+  loading = true;
+
   try {
 
     let products = [];
@@ -195,11 +199,15 @@ async function loadProducts() {
     // ✅ Manual Wholesaler ID
     if (wid) {
 
-      const res = await fetch(`${API}/api/products/wholesaler/${wid}`);
+      const res = await fetch(
+        `${API}/api/products/wholesaler/${wid}?page=${page}`
+      );
+
       const data = await res.json();
 
-      if (data.success && data.products) {
-        products = data.products;
+      if (data.success) {
+        products = data.products || [];
+        hasMore = data.hasMore;
       }
 
     }
@@ -207,39 +215,56 @@ async function loadProducts() {
     // ✅ Nearby Mode
     else {
 
-      products = JSON.parse(
-        sessionStorage.getItem("nearbyProducts") || "[]"
+      const res = await fetch(
+        `${API}/api/products/all?page=${page}`
       );
+
+      const data = await res.json();
+
+      if (data.success) {
+
+        products = (data.products || []).filter(p => {
+
+          const dbCat = (p.category || "")
+            .toLowerCase()
+            .trim();
+
+          const urlCat = decodeURIComponent(category || "")
+            .toLowerCase()
+            .trim();
+
+          return dbCat === urlCat;
+
+        });
+
+        hasMore = data.hasMore;
+      }
 
     }
 
-    // ✅ Category Filter
-    allProducts = products.filter(p => {
+    allProducts.push(...products);
 
-      const dbCat = (p.category || "")
-        .toLowerCase()
-        .trim();
+    renderProducts(products);
 
-      const urlCat = decodeURIComponent(category || "")
-        .toLowerCase()
-        .trim();
-
-      return dbCat === urlCat;
-
-    });
-
-    renderProducts(allProducts);
+    page++;
 
   } catch (e) {
 
     console.error("Products load error", e);
 
-    document.getElementById("products").innerHTML =
-      "<p style='text-align:center'>No products found</p>";
+    if (page === 1) {
+      document.getElementById("products").innerHTML =
+        "<p style='text-align:center'>No products found</p>";
+    }
+
+  } finally {
+
+    loading = false;
 
   }
 
 }
+  window.addEventListener("load", loadProducts);
 window.addEventListener("scroll", () => {
 
   if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 300){
