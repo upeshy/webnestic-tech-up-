@@ -1584,22 +1584,17 @@ window.addEventListener("scroll", () => {
 
 });    
     
+
 function renderAllProducts(products){
 
     const container = document.getElementById("allProducts");
 
-    if(page === 2){
-        container.innerHTML = "";
-    }
-
     if(!products || !products.length){
-        if(page === 2){
-            container.innerHTML = "<p>No Products Found</p>";
-        }
+        container.innerHTML = "<p>No Products Found</p>";
         return;
     }
 
-    const html = products.map(p=>{
+    container.innerHTML = products.map(p=>{
 
         const img = p.images?.[0] || "https://via.placeholder.com/300";
         const price = Number(p.price || 0);
@@ -1613,7 +1608,6 @@ function renderAllProducts(products){
 
                 <img src="${img}"
                      class="product-image"
-                     loading="lazy"
                      onclick="openProduct('${p._id}')">
 
                 <div class="product-badge">
@@ -1643,7 +1637,6 @@ function renderAllProducts(products){
                 </small>
 
                 <div class="product-price">
-
                     <span class="price-current">
                         ₹${price}
                     </span>
@@ -1655,7 +1648,6 @@ function renderAllProducts(products){
                     <span class="price-discount">
                         ${discount}% OFF
                     </span>
-
                 </div>
 
                 <div class="product-buttons">
@@ -1678,8 +1670,6 @@ function renderAllProducts(products){
         `;
 
     }).join("");
-
-    container.insertAdjacentHTML("beforeend", html);
 }
 function openProduct(id){
     window.location.href = `product.html?id=${id}`;
