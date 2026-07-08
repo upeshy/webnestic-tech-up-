@@ -330,7 +330,7 @@ font-size:17px;
 
         <input
             type="checkbox"
-            id="useCoins">
+            id="coinUsed">
 
         Use Coins
 
@@ -706,8 +706,8 @@ function calculateTotal() {
     document.getElementById("summaryDelivery").innerText =
         deliveryCharge;
 
-document.getElementById("summaryCoin").innerText =
-"-" + coinUsed;
+document.getElementById("coinUsed").innerText =
+coinUsed;
 
 document.getElementById("finalAmount").innerText =
 finalAmount;
