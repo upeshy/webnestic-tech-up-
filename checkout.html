@@ -579,97 +579,97 @@ function getCurrentLocation(){
     }
  /* ================= DELIVERY ================= */
 
-async function calculateDelivery() {
+async function calculateDelivery(){
 
-    if (!product) return;
+    if(!product) return;
 
-    if (!retailerLocation) {
-        document.getElementById("deliveryCharge").innerText = "0";
-        document.getElementById("summaryDelivery").innerText = "0";
-        document.getElementById("distance").innerText = "Location Required";
+    if(!retailerLocation){
+        document.getElementById("deliveryCharge").innerText="0";
+        document.getElementById("summaryDelivery").innerText="0";
+        document.getElementById("distance").innerText="Location Required";
         calculateTotal();
         return;
     }
 
-    if (!wholesalerLocation) {
-        document.getElementById("deliveryCharge").innerText = "0";
-        document.getElementById("summaryDelivery").innerText = "0";
-        document.getElementById("distance").innerText = "Wholesaler Missing";
+    if(!wholesalerLocation){
+        document.getElementById("deliveryCharge").innerText="0";
+        document.getElementById("summaryDelivery").innerText="0";
+        document.getElementById("distance").innerText="Wholesaler Missing";
         calculateTotal();
         return;
     }
 
-    try {
+    try{
 
         const res = await fetch(
-    `${API}/api/delivery/calculate`,
-    {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-            orderAmount:Number(product.price),
-            vehicleType:"two_wheeler",
-            retailerLocation,
-            wholesalerLocation
-        })
-    }
-);
+            `${API}/api/delivery/calculate`,
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+
+                    orderAmount:Number(product.price),
+
+                    vehicleType:"two_wheeler",
+
+                    retailerLocation,
+
+                    wholesalerLocation
+
+                })
+            }
+        );
+
         const data = await res.json();
 
-        console.log("Checkout API:", data);
+        console.log("Checkout API:",data);
 
-        if (!data.success) {
+        if(data.success !== true){
 
-            document.getElementById("deliveryCharge").innerText = "0";
-            document.getElementById("summaryDelivery").innerText = "0";
-            document.getElementById("distance").innerText = "Calculation Failed";
+            document.getElementById("deliveryCharge").innerText="0";
+            document.getElementById("summaryDelivery").innerText="0";
+            document.getElementById("distance").innerText="Calculation Failed";
 
-            deliveryCharge = 0;
+            deliveryCharge=0;
 
             calculateTotal();
 
             return;
-
         }
 
-        deliveryCharge = Number(data.retailerPays || 0);
+        deliveryCharge = Number(data.retailerPays);
 
         document.getElementById("deliveryCharge").innerText =
-            deliveryCharge;
+        deliveryCharge;
 
         document.getElementById("summaryDelivery").innerText =
-            deliveryCharge;
+        deliveryCharge;
 
         document.getElementById("distance").innerText =
-            Number(data.distanceKm || 0).toFixed(2) + " km";
+        Number(data.distanceKm).toFixed(2)+" km";
+
+        console.log("Delivery Charge =",deliveryCharge);
+
+        calculateTotal();
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        document.getElementById("deliveryCharge").innerText="0";
+        document.getElementById("summaryDelivery").innerText="0";
+        document.getElementById("distance").innerText="Server Error";
+
+        deliveryCharge=0;
 
         calculateTotal();
 
     }
 
-    catch (err) {
-
-        console.log(err);
-
-        document.getElementById("deliveryCharge").innerText = "0";
-        document.getElementById("summaryDelivery").innerText = "0";
-        document.getElementById("distance").innerText = "Server Error";
-
-        deliveryCharge = 0;
-
-        calculateTotal();
-
-    }
-
-             }
- /* ================= COINS ================= */
-
-document
-.getElementById("useCoins")
-.addEventListener("change", calculateTotal);
-
+}
 function calculateTotal() {
 
     if (!product) return;
@@ -1013,17 +1013,15 @@ document
 
 /* ================= AUTO LOAD ================= */
 
-window.onload = async()=>{
+window.onload = async () => {
 
     await loadProduct();
 
     await loadProfile();
 
-    if(retailerLocation){
+    await calculateDelivery();
 
-        calculateDelivery();
-
-    }
+    calculateTotal();
 
 };
 </script>
