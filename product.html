@@ -1073,59 +1073,45 @@ document.getElementById("vehicleType");
 
 
 // ---------------- LOAD PRODUCT ----------------
-async function loadProduct() {
+async function loadProduct(){
 
-    try {
+try{  
 
-        const res = await fetch(
-            `${API}/api/products/${productId}`
-        );
+    const res = await fetch(  
+        `${API}/api/products/${productId}`  
+    );  
 
-        const data = await res.json();
+    const data = await res.json();  
 
-        if (!data.success) {
+    if(!data.success){  
 
-            alert("Product not found");
-            history.back();
-            return;
+        alert("Product not found");  
 
-        }
+        history.back();  
 
-        selectedProduct = data.product;
+        return;  
 
-        // ✅ Load wholesaler location
-        const wRes = await fetch(
-            `${API}/api/wholesaler/${selectedProduct.wholesalerId}`
-        );
+    }  
 
-        const wData = await wRes.json();
+    selectedProduct = data.product;  
 
-        if (
-            wData.success &&
-            wData.wholesaler.location
-        ) {
+    renderProduct();  
 
-            currentWholesalerLoc =
-                wData.wholesaler.location;
+    loadRelatedProducts(  
+        selectedProduct.category  
+    );  
 
-        }
+}  
 
-        renderProduct();
+catch(err){  
 
-        loadRelatedProducts(
-            selectedProduct.category
-        );
+    console.log(err);  
 
-    } catch (err) {
-
-        console.log(err);
-
-        alert("Server Error");
-
-    }
+    alert("Server Error");  
 
 }
 
+}
 
 // ---------------- RENDER PRODUCT ----------------
 
