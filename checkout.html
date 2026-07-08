@@ -330,7 +330,7 @@ font-size:17px;
 
         <input
             type="checkbox"
-            id="usedCoin">
+            id="useCoins">
 
         Use Coins
 
@@ -694,43 +694,25 @@ function calculateTotal() {
         finalAmount = 0;
     }
 
-    // Product
-    if(document.getElementById("summaryProduct")){
-        document.getElementById("summaryProduct").innerText =
-        productPrice;
-    }
-
-    // Delivery
-    if(document.getElementById("summaryDelivery")){
-        document.getElementById("summaryDelivery").innerText =
-        deliveryCharge;
-    }
-
-    // Coin (New UI)
-    if(document.getElementById("coinUsed")){
-        document.getElementById("coinUsed").innerText =
+    document.getElementById("coinUsed").innerText =
         coinUsed;
-    }
 
-    // Coin (Old UI)
-    if(document.getElementById("summaryCoin")){
-        document.getElementById("summaryCoin").innerText =
+    document.getElementById("finalAmount").innerText =
+        finalAmount;
+
+    document.getElementById("summaryProduct").innerText =
+        productPrice;
+
+    document.getElementById("summaryDelivery").innerText =
+        deliveryCharge;
+
+    document.getElementById("summaryCoin").innerText =
         "-" + coinUsed;
-    }
 
-    // Final Amount (New UI)
-    if(document.getElementById("finalAmount")){
-        document.getElementById("finalAmount").innerText =
+    document.getElementById("summaryTotal").innerText =
         finalAmount;
-    }
 
-    // Final Amount (Old UI)
-    if(document.getElementById("summaryTotal")){
-        document.getElementById("summaryTotal").innerText =
-        finalAmount;
-    }
-
-}
+ }
  /* ================= PAYMENT ================= */
 
 async function startPayment() {
