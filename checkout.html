@@ -224,19 +224,15 @@ font-size:17px;
  </style>
 </head>
 <body>
-
 <!-- HEADER -->
 
 <div class="topbar">
 
-<button class="back-btn"
-onclick="history.back()">
+    <button class="back-btn" onclick="history.back()">
+        <i class="bi bi-arrow-left"></i>
+    </button>
 
-<i class="bi bi-arrow-left"></i>
-
-</button>
-
-<h2>Checkout</h2>
+    <h2>Checkout</h2>
 
 </div>
 
@@ -244,27 +240,24 @@ onclick="history.back()">
 
 <div class="card">
 
-<h3>
+    <h3>
+        <i class="bi bi-geo-alt-fill"></i>
+        Delivery Address
+    </h3>
 
-<i class="bi bi-geo-alt-fill"></i>
+    <textarea
+        id="address"
+        placeholder="Enter Delivery Address"></textarea>
 
-Delivery Address
+    <button
+        class="location-btn"
+        onclick="getCurrentLocation()">
 
-</h3>
+        <i class="bi bi-crosshair"></i>
 
-<textarea
-id="address"
-placeholder="Enter Delivery Address"></textarea>
+        Use Current Location
 
-<button
-class="location-btn"
-onclick="getCurrentLocation()">
-
-<i class="bi bi-crosshair"></i>
-
-Use Current Location
-
-</button>
+    </button>
 
 </div>
 
@@ -272,30 +265,21 @@ Use Current Location
 
 <div class="card">
 
-<h3>
+    <h3>Product Details</h3>
 
-Product Details
+    <div class="product-box">
 
-</h3>
+        <img id="productImg">
 
-<div class="product-box">
+        <div>
 
-<img
-id="productImg">
+            <h4 id="productName"></h4>
 
-<div>
+            <p>₹<span id="productPrice">0</span></p>
 
-<h4 id="productName"></h4>
+        </div>
 
-<p>
-
-₹<span id="productPrice"></span>
-
-</p>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 
@@ -303,51 +287,23 @@ id="productImg">
 
 <div class="card">
 
-<h3>
+    <h3>Delivery Details</h3>
 
-Delivery Details
+    <div class="row">
 
-</h3>
+        <span>Delivery Charge</span>
 
-<div class="row">
+        <b>₹<span id="deliveryCharge">0</span></b>
 
-<span>
+    </div>
 
-Delivery Charge
+    <div class="row">
 
-</span>
+        <span>Distance</span>
 
-<b>
+        <b><span id="distance">0 km</span></b>
 
-₹<span id="deliveryCharge">
-
-0
-
-</span>
-
-</b>
-
-</div>
-
-<div class="row">
-
-<span>
-
-Distance
-
-</span>
-
-<b>
-
-<span id="distance">
-
-0 km
-
-</span>
-
-</b>
-
-</div>
+    </div>
 
 </div>
 
@@ -355,43 +311,30 @@ Distance
 
 <div class="card">
 
-<h3>
+    <h3>🪙 Local Coin Wallet</h3>
 
-🪙 Local Coin Wallet
+    <div class="wallet">
 
-</h3>
+        <div>Available Coins</div>
 
-<div class="wallet">
+        <div>
 
-<div>
+            🪙
+            <span id="coinBalance">0</span>
 
-Available Coins
+        </div>
 
-</div>
+    </div>
 
-<div>
+    <label class="coin-check">
 
-🪙
+        <input
+            type="checkbox"
+            id="useCoins">
 
-<span id="coinBalance">
+        Use Coins
 
-0
-
-</span>
-
-</div>
-
-</div>
-
-<label class="coin-check">
-
-<input
-type="checkbox"
-id="useCoins">
-
-Use Coins
-
-</label>
+    </label>
 
 </div>
 
@@ -399,104 +342,61 @@ Use Coins
 
 <div class="card">
 
-<h3>
+    <h3>Payment Summary</h3>
 
-Payment Summary
+    <div class="row">
 
-</h3>
+        <span>Product Price</span>
 
-<div class="row">
+        <b>₹<span id="summaryProduct">0</span></b>
 
-<span>
+    </div>
 
-Product
+    <div class="row">
 
-</span>
+        <span>Delivery Charge</span>
 
-<b>
+        <b>₹<span id="summaryDelivery">0</span></b>
 
-₹<span id="summaryProduct">
+    </div>
 
-0
+    <div class="row">
 
-</span>
+        <span>Coin Discount</span>
 
-</b>
+        <b style="color:green;">
+            -₹<span id="coinUsed">0</span>
+        </b>
 
-</div>
+    </div>
 
-<div class="row">
+    <hr>
 
-<span>
+    <div class="row total">
 
-Delivery
+        <span>Total Payable</span>
 
-</span>
+        <b>
+            ₹<span id="finalAmount">0</span>
+        </b>
 
-<b>
-
-₹<span id="summaryDelivery">
-
-0
-
-</span>
-
-</b>
-
-</div>
-
-<div class="row">
-
-<span>
-
-Coin Discount
-
-</span>
-
-<b
-style="color:green">
-
--₹<span id="coinUsed">
-
-0
-
-</span>
-
-</b>
-
-</div>
-
-<hr>
-
-<div class="row total">
-
-<span>
-
-Total Pay
-
-</span>
-
-<b>
-
-₹<span id="finalAmount">
-
-0
-
-</span>
-
-</b>
-
-</div>
+    </div>
 
 </div>
 
 <button
-class="pay-btn"
-onclick="startPayment()">
+    id="payBtn"
+    class="pay-btn"
+    onclick="startPayment()">
 
-Proceed To Pay
+    Proceed To Pay
 
 </button>
+
+
+
+
+
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="checkout.js"></script>
