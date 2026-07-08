@@ -1073,10 +1073,9 @@ document.getElementById("vehicleType");
 
 
 // ---------------- LOAD PRODUCT ----------------
+async function loadProduct() {
 
-async function loadProduct(){
-
-    try{
+    try {
 
         const res = await fetch(
             `${API}/api/products/${productId}`
@@ -1084,17 +1083,32 @@ async function loadProduct(){
 
         const data = await res.json();
 
-        if(!data.success){
+        if (!data.success) {
 
             alert("Product not found");
-
             history.back();
-
             return;
 
         }
 
         selectedProduct = data.product;
+
+        // ✅ Load wholesaler location
+        const wRes = await fetch(
+            `${API}/api/wholesaler/${selectedProduct.wholesalerId}`
+        );
+
+        const wData = await wRes.json();
+
+        if (
+            wData.success &&
+            wData.wholesaler.location
+        ) {
+
+            currentWholesalerLoc =
+                wData.wholesaler.location;
+
+        }
 
         renderProduct();
 
@@ -1102,9 +1116,7 @@ async function loadProduct(){
             selectedProduct.category
         );
 
-    }
-
-    catch(err){
+    } catch (err) {
 
         console.log(err);
 
