@@ -424,13 +424,6 @@ let finalAmount = 0;
 
 /* ================= LOAD ================= */
 
-window.onload = async () => {
-
-    await loadProduct();
-
-    await loadProfile();
-
-};
 
 /* ================= PRODUCT ================= */
 
@@ -713,12 +706,11 @@ function calculateTotal() {
     document.getElementById("summaryDelivery").innerText =
         deliveryCharge;
 
-    document.getElementById("summaryCoin").innerText =
-        "-" + coinUsed;
+    document.getElementById("coinUsed").innerText =
+coinUsed;
 
-    document.getElementById("summaryTotal").innerText =
-        finalAmount;
-
+document.getElementById("finalAmount").innerText =
+finalAmount;
  }
  /* ================= PAYMENT ================= */
 
