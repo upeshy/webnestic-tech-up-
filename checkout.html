@@ -694,24 +694,43 @@ function calculateTotal() {
         finalAmount = 0;
     }
 
-    document.getElementById("coinUsed").innerText =
-        coinUsed;
-
-    document.getElementById("finalAmount").innerText =
-        finalAmount;
-
-    document.getElementById("summaryProduct").innerText =
+    // Product
+    if(document.getElementById("summaryProduct")){
+        document.getElementById("summaryProduct").innerText =
         productPrice;
+    }
 
-    document.getElementById("summaryDelivery").innerText =
+    // Delivery
+    if(document.getElementById("summaryDelivery")){
+        document.getElementById("summaryDelivery").innerText =
         deliveryCharge;
+    }
 
-document.getElementById("summaryCoin").innerText =
-"-" + coinUsed;
+    // Coin (New UI)
+    if(document.getElementById("coinUsed")){
+        document.getElementById("coinUsed").innerText =
+        coinUsed;
+    }
 
-document.getElementById("summaryTotal").innerText =
-finalAmount;
- }
+    // Coin (Old UI)
+    if(document.getElementById("summaryCoin")){
+        document.getElementById("summaryCoin").innerText =
+        "-" + coinUsed;
+    }
+
+    // Final Amount (New UI)
+    if(document.getElementById("finalAmount")){
+        document.getElementById("finalAmount").innerText =
+        finalAmount;
+    }
+
+    // Final Amount (Old UI)
+    if(document.getElementById("summaryTotal")){
+        document.getElementById("summaryTotal").innerText =
+        finalAmount;
+    }
+
+}
  /* ================= PAYMENT ================= */
 
 async function startPayment() {
