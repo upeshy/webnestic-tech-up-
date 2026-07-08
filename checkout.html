@@ -627,7 +627,7 @@ async function calculateDelivery() {
 
         }
 
-        deliveryCharge = Number(data.deliveryCharge || 0);
+        deliveryCharge = Number(data.retailerPays || 0);
 
         document.getElementById("deliveryCharge").innerText =
             deliveryCharge;
