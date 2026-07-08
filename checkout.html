@@ -469,8 +469,8 @@ async function loadProduct(){
         /* ===== LOAD WHOLESALER ===== */
 
         const wRes = await fetch(
-            `${API}/api/wholesaler/${product.wholesalerId}`
-        );
+    `${API}/api/wholesalers/profile/${product.wholesalerId}`
+     );
 
         const wData = await wRes.json();
 
@@ -595,26 +595,20 @@ async function calculateDelivery() {
     try {
 
         const res = await fetch(
-            `${API}/api/calculate-checkout`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-
-                    productId: product._id,
-
-                    retailerId: retailerId,
-
-                    retailerLocation,
-
-                    wholesalerLocation
-
-                })
-            }
-        );
-
+    `${API}/api/delivery/calculate`,
+    {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            orderAmount:Number(product.price),
+            vehicleType:"two_wheeler",
+            retailerLocation,
+            wholesalerLocation
+        })
+    }
+);
         const data = await res.json();
 
         console.log("Checkout API:", data);
