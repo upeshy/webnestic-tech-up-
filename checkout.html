@@ -507,9 +507,19 @@ const productId = localStorage.getItem("checkoutProductId");
 const retailerId = localStorage.getItem("userId");
 
 let product = null;
+
+let retailerProfile = null;
+
+let retailerLocation = null;
+
+let wholesalerLocation = null;
+
 let coinBalance = 0;
+
 let deliveryCharge = 0;
+
 let coinUsed = 0;
+
 let finalAmount = 0;
 
 /* ================= LOAD ================= */
@@ -519,8 +529,6 @@ window.onload = async () => {
     await loadProduct();
 
     await loadProfile();
-
-    calculateTotal();
 
 };
 
@@ -537,8 +545,11 @@ async function loadProduct(){
         const data = await res.json();
 
         if(!data.success){
-            alert("Product not found");
+
+            alert("Product Not Found");
+
             return;
+
         }
 
         product = data.product;
@@ -554,6 +565,26 @@ async function loadProduct(){
 
         document.getElementById("summaryProduct").innerText =
         product.price;
+
+        /* ===== LOAD WHOLESALER ===== */
+
+        const wRes = await fetch(
+            `${API}/api/wholesaler/${product.wholesalerId}`
+        );
+
+        const wData = await wRes.json();
+
+        if(wData.success){
+
+            wholesalerLocation =
+            wData.wholesaler.location;
+
+            console.log(
+                "Wholesaler Location",
+                wholesalerLocation
+            );
+
+        }
 
     }
 
@@ -577,16 +608,28 @@ async function loadProfile(){
 
         const data = await res.json();
 
-        if(!data.success) return;
+        if(!data.success){
+
+            return;
+
+        }
+
+        retailerProfile =
+        data.profile;
 
         coinBalance =
-        data.profile.coins || 0;
+        retailerProfile.coins || 0;
+
+        retailerLocation =
+        retailerProfile.location;
 
         document.getElementById("coinBalance").innerText =
         coinBalance;
 
         document.getElementById("address").value =
-        data.profile.address || "";
+        retailerProfile.address || "";
+
+        calculateDelivery();
 
     }
 
@@ -598,19 +641,456 @@ async function loadProfile(){
 
 }
 
-/* ================= LOCATION ================= */
+/* ================= CURRENT LOCATION ================= */
 
 function getCurrentLocation(){
 
     navigator.geolocation.getCurrentPosition(
 
+        async(position)=>{
+
+            retailerLocation={
+
+                lat:position.coords.latitude,
+
+                lng:position.coords.longitude
+
+            };
+
+            calculateDelivery();
+
+        },
+
+        ()=>{
+
+            alert("Location Permission Denied");
+
+        }
+
+    );
+
+    }
+ /* ================= DELIVERY ================= */
+
+async function calculateDelivery() {
+
+    if (!product) return;
+
+    if (!retailerLocation) {
+        document.getElementById("deliveryCharge").innerText = "0";
+        document.getElementById("summaryDelivery").innerText = "0";
+        document.getElementById("distance").innerText = "Location Required";
+        calculateTotal();
+        return;
+    }
+
+    if (!wholesalerLocation) {
+        document.getElementById("deliveryCharge").innerText = "0";
+        document.getElementById("summaryDelivery").innerText = "0";
+        document.getElementById("distance").innerText = "Wholesaler Missing";
+        calculateTotal();
+        return;
+    }
+
+    try {
+
+        const res = await fetch(
+            `${API}/api/calculate-checkout`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+
+                    productId: product._id,
+
+                    retailerId: retailerId,
+
+                    retailerLocation,
+
+                    wholesalerLocation
+
+                })
+            }
+        );
+
+        const data = await res.json();
+
+        console.log("Checkout API:", data);
+
+        if (!data.success) {
+
+            document.getElementById("deliveryCharge").innerText = "0";
+            document.getElementById("summaryDelivery").innerText = "0";
+            document.getElementById("distance").innerText = "Calculation Failed";
+
+            deliveryCharge = 0;
+
+            calculateTotal();
+
+            return;
+
+        }
+
+        deliveryCharge = Number(data.deliveryCharge || 0);
+
+        document.getElementById("deliveryCharge").innerText =
+            deliveryCharge;
+
+        document.getElementById("summaryDelivery").innerText =
+            deliveryCharge;
+
+        document.getElementById("distance").innerText =
+            Number(data.distanceKm || 0).toFixed(2) + " km";
+
+        calculateTotal();
+
+    }
+
+    catch (err) {
+
+        console.log(err);
+
+        document.getElementById("deliveryCharge").innerText = "0";
+        document.getElementById("summaryDelivery").innerText = "0";
+        document.getElementById("distance").innerText = "Server Error";
+
+        deliveryCharge = 0;
+
+        calculateTotal();
+
+    }
+
+             }
+ /* ================= COINS ================= */
+
+document
+.getElementById("useCoins")
+.addEventListener("change", calculateTotal);
+
+function calculateTotal() {
+
+    if (!product) return;
+
+    const productPrice =
+    Number(product.price || 0);
+
+    if (
+        document.getElementById("useCoins").checked
+    ) {
+
+        coinUsed = Math.min(
+            coinBalance,
+            productPrice + deliveryCharge
+        );
+
+    } else {
+
+        coinUsed = 0;
+
+    }
+
+    finalAmount =
+        productPrice +
+        deliveryCharge -
+        coinUsed;
+
+    if (finalAmount < 0) {
+        finalAmount = 0;
+    }
+
+    document.getElementById("coinUsed").innerText =
+        coinUsed;
+
+    document.getElementById("finalAmount").innerText =
+        finalAmount;
+
+    document.getElementById("summaryProduct").innerText =
+        productPrice;
+
+    document.getElementById("summaryDelivery").innerText =
+        deliveryCharge;
+
+    document.getElementById("summaryCoin").innerText =
+        "-" + coinUsed;
+
+    document.getElementById("summaryTotal").innerText =
+        finalAmount;
+
+ }
+ /* ================= PAYMENT ================= */
+
+async function startPayment() {
+
+    if (!product) {
+        alert("Product not loaded");
+        return;
+    }
+
+    if (!retailerLocation) {
+        alert("Please select your location");
+        return;
+    }
+
+    if (!wholesalerLocation) {
+        alert("Wholesaler location not found");
+        return;
+    }
+
+    const address =
+        document.getElementById("address").value.trim();
+
+    if (!address) {
+        alert("Please enter delivery address");
+        return;
+    }
+
+    try {
+
+        const res = await fetch(
+            `${API}/api/orders/pay-and-create`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    amount: finalAmount,
+
+                    notes: {
+
+                        type: "direct",
+
+                        productId: product._id,
+
+                        retailerId,
+
+                        wholesalerId: product.wholesalerId,
+
+                        address,
+
+                        useCoins:
+                        document.getElementById("useCoins").checked,
+
+                        coinUsed,
+
+                        deliveryCharge,
+
+                        retailerDeliveryPay:
+                        deliveryCharge,
+
+                        wholesalerDeliveryPay: 0
+
+                    }
+
+                })
+
+            }
+        );
+
+        const data = await res.json();
+
+        if (!data.success) {
+            alert("Payment Order Failed");
+            return;
+        }
+
+        const options = {
+
+            key: data.key,
+
+            amount: data.amount,
+
+            currency: "INR",
+
+            order_id: data.orderId,
+
+            name: "Local Dukan",
+
+            description: product.productName,
+
+            handler: verifyPayment,
+
+            theme: {
+                color: "#ff6b00"
+            }
+
+        };
+
+        const rzp =
+        new Razorpay(options);
+
+        rzp.open();
+
+    }
+
+    catch (err) {
+
+        console.log(err);
+
+        alert("Server Error");
+
+    }
+
+}
+
+/* ================= VERIFY PAYMENT ================= */
+
+async function verifyPayment(response) {
+
+    try {
+
+        const res = await fetch(
+
+            `${API}/api/orders/verify-payment`,
+
+            {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    razorpay_order_id:
+                    response.razorpay_order_id,
+
+                    razorpay_payment_id:
+                    response.razorpay_payment_id,
+
+                    razorpay_signature:
+                    response.razorpay_signature
+
+                })
+
+            }
+
+        );
+
+        const data = await res.json();
+
+        if (!data.success) {
+
+            alert("Payment Verification Failed");
+
+            return;
+
+        }
+
+        alert("✅ Order Placed Successfully");
+
+        localStorage.removeItem(
+            "checkoutProductId"
+        );
+
+        window.location.href =
+        "orders.html";
+
+    }
+
+    catch (err) {
+
+        console.log(err);
+
+        alert("Verification Error");
+
+    }
+
+ }
+ /* ================= ADDRESS ================= */
+
+async function saveAddress() {
+
+    const address =
+    document.getElementById("address").value.trim();
+
+    if (!address) {
+        alert("Enter delivery address");
+        return;
+    }
+
+    if (!retailerLocation) {
+        alert("Please select current location");
+        return;
+    }
+
+    try {
+
+        const res = await fetch(
+            `${API}/api/retailers/save-address`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+
+                    retailerId,
+
+                    address,
+
+                    location: retailerLocation
+
+                })
+            }
+        );
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            alert("✅ Address Saved");
+
+        } else {
+
+            alert("Failed to save address");
+
+        }
+
+    } catch (err) {
+
+        console.log(err);
+
+        alert("Server Error");
+
+    }
+
+}
+
+/* ================= CHANGE ADDRESS ================= */
+
+function changeAddress() {
+
+    document.getElementById("address")
+        .removeAttribute("readonly");
+
+    document.getElementById("address")
+        .focus();
+
+}
+
+/* ================= CURRENT LOCATION ================= */
+
+async function useCurrentLocation() {
+
+    navigator.geolocation.getCurrentPosition(
+
         async(pos)=>{
 
-            const lat = pos.coords.latitude;
+            retailerLocation = {
 
-            const lng = pos.coords.longitude;
+                lat: pos.coords.latitude,
 
-            calculateDelivery(lat,lng);
+                lng: pos.coords.longitude
+
+            };
+
+            await calculateDelivery();
 
         },
 
@@ -624,199 +1104,27 @@ function getCurrentLocation(){
 
 }
 
-/* ================= DELIVERY ================= */
-
-async function calculateDelivery(lat,lng){
-
-    try{
-
-        const res = await fetch(
-            `${API}/api/calculate-checkout`,
-            {
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":"application/json"
-                },
-
-                body:JSON.stringify({
-
-                    productId,
-
-                    retailerId,
-
-                    lat,
-
-                    lng
-
-                })
-
-            }
-        );
-
-        const data = await res.json();
-
-        if(!data.success) return;
-
-        deliveryCharge =
-        data.deliveryCharge;
-
-        document.getElementById("deliveryCharge").innerText =
-        deliveryCharge;
-
-        document.getElementById("summaryDelivery").innerText =
-        deliveryCharge;
-
-        document.getElementById("distance").innerText =
-        data.distanceKm+" km";
-
-        calculateTotal();
-
-    }
-
-    catch(err){
-
-        console.log(err);
-
-    }
-
-}
-
-/* ================= COINS ================= */
+/* ================= PLACE ORDER ================= */
 
 document
-.getElementById("useCoins")
-.addEventListener("change",calculateTotal);
+.getElementById("payBtn")
+.onclick = startPayment;
 
-function calculateTotal(){
+/* ================= AUTO LOAD ================= */
 
-    if(!product) return;
+window.onload = async()=>{
 
-    const price =
-    Number(product.price);
+    await loadProduct();
 
-    if(document.getElementById("useCoins").checked){
+    await loadProfile();
 
-        coinUsed =
-        Math.min(
+    if(retailerLocation){
 
-            coinBalance,
-
-            price + deliveryCharge
-
-        );
+        calculateDelivery();
 
     }
 
-    else{
-
-        coinUsed = 0;
-
-    }
-
-    finalAmount =
-    price +
-    deliveryCharge -
-    coinUsed;
-
-    document.getElementById("coinUsed").innerText =
-    coinUsed;
-
-    document.getElementById("finalAmount").innerText =
-    finalAmount;
-
-}
-
-/* ================= PAYMENT ================= */
-
-async function startPayment(){
-
-    try{
-
-        const res = await fetch(
-
-            `${API}/api/orders/pay-and-create`,
-
-            {
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":"application/json"
-                },
-
-                body:JSON.stringify({
-
-                    amount:finalAmount,
-
-                    notes:{
-
-                        type:"direct",
-
-                        productId,
-
-                        retailerId,
-
-                        useCoins:
-                        document.getElementById("useCoins").checked,
-
-                        coinUsed
-
-                    }
-
-                })
-
-            }
-
-        );
-
-        const data =
-        await res.json();
-
-        if(!data.success){
-
-            alert("Payment Failed");
-
-            return;
-
-        }
-
-        const options={
-
-            key:data.key,
-
-            amount:data.amount,
-
-            order_id:data.orderId,
-
-            name:"Local Dukan",
-
-            description:"Product Purchase",
-
-            handler:function(){
-
-                alert(
-                    "Payment Successful"
-                );
-
-                location.href="orders.html";
-
-            }
-
-        };
-
-        new Razorpay(options).open();
-
-    }
-
-    catch(err){
-
-        console.log(err);
-
-    }
-
-}
+};
 </script>
 </body>
 </html>
