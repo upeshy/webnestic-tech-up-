@@ -447,42 +447,50 @@ async function loadProduct(){
         if(!data.success){
 
             alert("Product Not Found");
-
             return;
 
         }
 
         product = data.product;
 
+        console.log("Product:", product);
+        console.log("WholesalerId:", product.wholesalerId);
+
         document.getElementById("productImg").src =
-        product.images?.[0] || "";
+            product.images?.[0] || "";
 
         document.getElementById("productName").innerText =
-        product.productName;
+            product.productName;
 
         document.getElementById("productPrice").innerText =
-        product.price;
+            product.price;
 
         document.getElementById("summaryProduct").innerText =
-        product.price;
+            product.price;
 
         /* ===== LOAD WHOLESALER ===== */
 
         const wRes = await fetch(
-    `${API}/api/wholesalers/profile/${product.wholesalerId}`
-     );
+            `${API}/api/wholesalers/profile/${product.wholesalerId}`
+        );
 
         const wData = await wRes.json();
+
+        console.log("Wholesaler API:", wData);
 
         if(wData.success){
 
             wholesalerLocation =
-            wData.wholesaler.location;
+                wData.profile?.location || null;
 
             console.log(
-                "Wholesaler Location",
+                "Wholesaler Location:",
                 wholesalerLocation
             );
+
+        }else{
+
+            console.log("Wholesaler API Failed");
 
         }
 
@@ -490,12 +498,11 @@ async function loadProduct(){
 
     catch(err){
 
-        console.log(err);
+        console.log("Load Product Error:", err);
 
     }
 
 }
-
 /* ================= PROFILE ================= */
 
 async function loadProfile(){
