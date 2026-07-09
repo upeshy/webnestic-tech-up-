@@ -739,7 +739,63 @@ async function startPayment() {
         return;
     }
 
+    const useCoins =
+        document.getElementById("useCoins").checked;
+
     try {
+
+        // ================= FULL COIN PAYMENT =================
+
+        if (useCoins && coinBalance >= finalAmount) {
+
+            const coinRes = await fetch(
+                `${API}/api/orders/pay-with-coins`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+
+                        retailerId,
+
+                        wholesalerId: product.wholesalerId,
+
+                        productId: product._id,
+
+                        address,
+
+                        vehicleType: "two_wheeler",
+
+                        deliveryCharge,
+
+                        retailerDeliveryPay: deliveryCharge,
+
+                        wholesalerDeliveryPay: 0,
+
+                        useCoins: true
+
+                    })
+                }
+            );
+
+            const coinData = await coinRes.json();
+
+            if (!coinData.success) {
+                alert(coinData.message);
+                return;
+            }
+
+            alert("✅ Order Placed Successfully");
+
+            localStorage.removeItem("checkoutProductId");
+
+            location.href = "orders.html";
+
+            return;
+        }
+
+        // ================= RAZORPAY =================
 
         const res = await fetch(
             `${API}/api/orders/pay-and-create`,
@@ -748,7 +804,6 @@ async function startPayment() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-
                 body: JSON.stringify({
 
                     amount: finalAmount,
@@ -765,30 +820,32 @@ async function startPayment() {
 
                         address,
 
-                        useCoins:
-                        document.getElementById("useCoins").checked,
+                        useCoins,
 
                         coinUsed,
 
                         deliveryCharge,
 
-                        retailerDeliveryPay:
-                        deliveryCharge,
+                        retailerDeliveryPay: deliveryCharge,
 
-                        wholesalerDeliveryPay: 0
+                        wholesalerDeliveryPay: 0,
+
+                        vehicleType: "two_wheeler"
 
                     }
 
                 })
-
             }
         );
 
         const data = await res.json();
 
         if (!data.success) {
+
             alert("Payment Order Failed");
+
             return;
+
         }
 
         const options = {
@@ -813,10 +870,7 @@ async function startPayment() {
 
         };
 
-        const rzp =
-        new Razorpay(options);
-
-        rzp.open();
+        new Razorpay(options).open();
 
     }
 
