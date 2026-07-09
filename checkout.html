@@ -329,8 +329,9 @@ font-size:17px;
     <label class="coin-check">
 
         <input
-            type="checkbox"
-            id="useCoins">
+    type="checkbox"
+    id="useCoins"
+    onchange="calculateTotal()">
 
         Use Coins
 
@@ -529,7 +530,8 @@ async function loadProfile(){
         document.getElementById("address").value =
         retailerProfile.address || "";
 
-        calculateDelivery();
+        await calculateDelivery();
+              calculateTotal();
 
     }
 
