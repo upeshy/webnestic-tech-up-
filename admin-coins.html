@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin Coin Panel</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:#f2f2f2;
+padding:20px;
+}
+
+.card{
+max-width:450px;
+margin:auto;
+background:#fff;
+padding:20px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+color:#009688;
+}
+
+input{
+width:100%;
+height:45px;
+padding:10px;
+margin-bottom:12px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+}
+
+button{
+width:100%;
+height:45px;
+border:none;
+background:#009688;
+color:#fff;
+font-size:16px;
+border-radius:8px;
+margin-bottom:10px;
+cursor:pointer;
+}
+
+.user-box{
+display:none;
+margin-top:20px;
+padding:15px;
+border-radius:10px;
+background:#f8f8f8;
+}
+
+.user-box p{
+margin:8px 0;
+font-size:15px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="card">
+
+<h2><i class="bi bi-coin"></i> Admin Coin Panel</h2>
+
+<input
+type="text"
+id="mobile"
+placeholder="Enter Mobile Number">
+
+<button onclick="searchUser()">
+<i class="bi bi-search"></i>
+Search User
+</button>
+
+<div class="user-box" id="userBox">
+
+<p><b>Name :</b> <span id="uName"></span></p>
+
+<p><b>Mobile :</b> <span id="uMobile"></span></p>
+
+<p><b>Role :</b> <span id="uRole"></span></p>
+
+<p><b>Coins :</b> 🪙 <span id="uCoins"></span></p>
+
+<input
+type="number"
+id="coins"
+placeholder="Enter Coins">
+
+<button onclick="addCoins()">
+<i class="bi bi-plus-circle"></i>
+Add Coins
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const API="https://local-dukan.onrender.com";
+
+let selectedUserId="";
+
+async function searchUser(){
+
+const mobile=document.getElementById("mobile").value.trim();
+
+if(!mobile){
+alert("Enter Mobile Number");
+return;
+}
+
+const res=await fetch(`${API}/api/admin/search-user`,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+mobile
+})
+
+});
+
+const data=await res.json();
+
+if(!data.success){
+
+alert(data.message);
+
+return;
+
+}
+
+selectedUserId=data.user.userId;
+
+document.getElementById("userBox").style.display="block";
+
+document.getElementById("uName").innerText=data.user.name;
+
+document.getElementById("uMobile").innerText=data.user.mobile;
+
+document.getElementById("uRole").innerText=data.user.role;
+
+document.getElementById("uCoins").innerText=data.user.coins;
+
+}
+
+async function addCoins(){
+
+const coins=Number(document.getElementById("coins").value);
+
+if(!coins){
+
+alert("Enter Coins");
+
+return;
+
+}
+
+const res=await fetch(`${API}/api/coins/add`,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+userId:selectedUserId,
+
+coins,
+
+reason:"Admin Added"
+
+})
+
+});
+
+const data=await res.json();
+
+if(data.success){
+
+alert("✅ Coins Added Successfully");
+
+document.getElementById("uCoins").innerText=data.totalCoins;
+
+document.getElementById("coins").value="";
+
+}else{
+
+alert(data.message||"Failed");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
