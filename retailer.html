@@ -2178,7 +2178,7 @@ function renderAllProducts(products){
         </div>`;
     }).join("");
 
-    container.insertAdjacentHTML("beforeend", html);
+   container.innerHTML = html;
 }
 function openProduct(id){
     window.location.href = `product.html?id=${id}`;
