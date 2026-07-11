@@ -285,7 +285,7 @@ async function requestNotificationPermission() {
 /* ================= UI ================= */
 
 
-window.showPanel = function(panelId, tab = 'signup') {
+window.showPanel = function(panelId) {
   document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
 
   const panel = document.getElementById(panelId);
@@ -293,30 +293,13 @@ window.showPanel = function(panelId, tab = 'signup') {
 
   panel.style.display = 'block';
   document.querySelector('.overlay').style.display = 'block';
-
-  window.switchTab(panelId, tab);
 };
-
 window.closePopup = function() {
   document.querySelectorAll('.panel').forEach(p => p.style.display = 'none');
   document.querySelector('.overlay').style.display = 'none';
 };
 
-window.switchTab = function(panel, tab) {
-  const signupForm = document.getElementById(panel + '-signup');
-  const loginForm  = document.getElementById(panel + '-login');
 
-  if (!signupForm || !loginForm) return;
-
-  signupForm.classList.toggle('active', tab === 'signup');
-  loginForm.classList.toggle('active', tab === 'login');
-
-  document
-    .querySelectorAll('#' + panel + ' .tab')
-    .forEach((t, i) =>
-      t.classList.toggle('active', i === (tab === 'signup' ? 0 : 1))
-    );
-};
 
 /* ================= FCM TOKEN ================= */
 async function getFCMToken(){
@@ -332,86 +315,76 @@ async function getFCMToken(){
   }
 }
 
-(function autoLoginCheck() {
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
 
-  if (token && role) {
-    // ✅ Already logged in → direct dashboard
-    window.location.href = role + ".html";
-  }
-})();
-    
 /* ================= SIGNUP ================= */
-async function signupUser(type,data){
-  try{
-    const res = await fetch(`${SERVER_URL}/api/signup`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({...data,role:type})
-    });
-    const json = await res.json();
-    if(json.success){
-      localStorage.setItem("token",json.token);
-      localStorage.setItem("userId",json.userId);
-      localStorage.setItem("role",type);
-      alert(type+" signup success");
-      window.location.href = type+".html";
-    }else alert(json.message);
-  }catch(err){ alert("Server error: "+err.message); }
+const loginBtn = document.querySelector("#wholesaler-login .submit");
+
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    const inputs = document.querySelectorAll("#wholesaler-login input");
+
+    const mobile = inputs[0].value.trim();
+    const password = inputs[1].value.trim();
+
+    if (!mobile || !password) {
+      alert("Please enter Mobile Number and Password");
+      return;
+    }
+
+    loginUser(mobile, password);
+  });
 }
 
 /* ================= LOGIN + FCM ================= */
-async function loginUser(type,mobile,password){
-  try{
-    const res = await fetch(`${SERVER_URL}/api/login`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({mobile,password,role:type})
+async function loginUser(mobile, password) {
+  try {
+    const res = await fetch(`${SERVER_URL}/api/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        mobile,
+        password,
+        role: "wholesaler"
+      })
     });
+
     const json = await res.json();
-    if(!json.success) return alert(json.message);
 
-    localStorage.setItem("token",json.token);
-    localStorage.setItem("userId",json.userId);
-    localStorage.setItem("role",type);
+    if (!json.success) {
+      alert(json.message);
+      return;
+    }
 
-    /* 🔥 FCM TOKEN SEND */
+    localStorage.setItem("token", json.token);
+    localStorage.setItem("userId", json.userId);
+    localStorage.setItem("role", "wholesaler");
+
     const fcmToken = await getFCMToken();
-    if(fcmToken){
-      await fetch(`${SERVER_URL}/api/notifications/saveToken`,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
+
+    if (fcmToken) {
+      await fetch(`${SERVER_URL}/api/notifications/saveToken`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
           userId: json.userId,
-          role: type,
+          role: "wholesaler",
           fcmToken
         })
       });
     }
 
-    window.location.href = type+".html";
-  }catch(err){ alert("Server error: "+err.message); }
+    window.location.href = "wholesaler.html";
+
+  } catch (err) {
+    alert("Server error: " + err.message);
+  }
 }
 
 /* ================= BUTTON HANDLERS ================= */
-['wholesaler','retailer','delivery'].forEach(type=>{
-  document.querySelector(`#${type}-signup .submit`).onclick=()=>{
-    let data={};
-    document.querySelectorAll(`#${type}-signup input, #${type}-signup select`).forEach(i=>{
-      let key=i.placeholder?i.placeholder.replace(/ /g,'_').toLowerCase():"vehicle";
-      data[key]=i.value;
-    });
-    if(data.password!==data.confirm_password){
-      alert('Password mismatch'); return;
-    }
-    signupUser(type,data);
-  };
 
-  document.querySelector(`#${type}-login .submit`).onclick=()=>{
-    let inputs=document.querySelectorAll(`#${type}-login input`);
-    loginUser(type,inputs[0].value,inputs[1].value);
-  };
-});
 </script>  </body>  
 </html>
