@@ -383,22 +383,35 @@ async function loginUser(type,mobile,password){
 
 /* ================= BUTTON HANDLERS ================= */
 ['wholesaler','retailer','delivery'].forEach(type=>{
-  document.querySelector(`#${type}-signup .submit`).onclick=()=>{
-    let data={};
-    document.querySelectorAll(`#${type}-signup input, #${type}-signup select`).forEach(i=>{
-      let key=i.placeholder?i.placeholder.replace(/ /g,'_').toLowerCase():"vehicle";
-      data[key]=i.value;
-    });
-    if(data.password!==data.confirm_password){
-      alert('Password mismatch'); return;
-    }
-    signupUser(type,data);
-  };
 
-  document.querySelector(`#${type}-login .submit`).onclick=()=>{
-    let inputs=document.querySelectorAll(`#${type}-login input`);
-    loginUser(type,inputs[0].value,inputs[1].value);
-  };
+  // Signup form हो तभी handler लगाओ
+  const signupBtn = document.querySelector(`#${type}-signup .submit`);
+  if (signupBtn) {
+    signupBtn.onclick = () => {
+      let data = {};
+      document.querySelectorAll(`#${type}-signup input, #${type}-signup select`).forEach(i => {
+        let key = i.placeholder ? i.placeholder.replace(/ /g,'_').toLowerCase() : "vehicle";
+        data[key] = i.value;
+      });
+
+      if (data.password !== data.confirm_password) {
+        alert("Password mismatch");
+        return;
+      }
+
+      signupUser(type, data);
+    };
+  }
+
+  // Login
+  const loginBtn = document.querySelector(`#${type}-login .submit`);
+  if (loginBtn) {
+    loginBtn.onclick = () => {
+      let inputs = document.querySelectorAll(`#${type}-login input`);
+      loginUser(type, inputs[0].value, inputs[1].value);
+    };
+  }
+
 });
 </script>  </body>  
 </html>
