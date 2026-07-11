@@ -376,8 +376,8 @@ async function getFCMToken(){
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
-  if (token && role) {
-    // ✅ Already logged in → direct dashboard
+  // Wholesaler के लिए auto login नहीं
+  if (token && role && role !== "wholesaler") {
     window.location.href = role + ".html";
   }
 })();
