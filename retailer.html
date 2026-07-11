@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Local Dukan</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://unpkg.com/swiper@10/swiper-bundle.min.css" rel="stylesheet">
@@ -29,24 +29,29 @@
         }
 
         html, body {
-            font-family: 'Rubik', sans-serif;
-            background: var(--bg-secondary);
-            color: var(--text-dark);
-            overflow-x: hidden;
-        }
+    margin: 0;
+    padding: 0;
+    font-family: 'Rubik', sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text-dark);
+    overflow-x: hidden;
+}
 
-        /* ==================== HEADER ==================== */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            padding: 10px 16px;
-        }
+.navbar {
+    position: fixed;
+    top: env(safe-area-inset-top);
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 10px 16px;
+}
+
+body {
+    padding-top: calc(70px + env(safe-area-inset-top));
+}
 
         .navbar-wrapper {
             max-width: 1400px;
