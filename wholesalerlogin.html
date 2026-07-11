@@ -302,7 +302,23 @@ async function getFCMToken(){
 }
 
 
-    
+  const loginBtn = document.querySelector("#wholesaler-login .submit");
+
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    const inputs = document.querySelectorAll("#wholesaler-login input");
+
+    const mobile = inputs[0].value.trim();
+    const password = inputs[1].value.trim();
+
+    if (!mobile || !password) {
+      alert("Please enter Mobile Number and Password");
+      return;
+    }
+
+    loginUser(mobile, password);
+  });
+}  
 
 /* ================= LOGIN + FCM ================= */
 async function loginUser(mobile, password) {
