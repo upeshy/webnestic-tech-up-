@@ -1284,7 +1284,13 @@ box-shadow:0 2px 8px rgba(0,0,0,.06);
 .menu-item:hover{
 background:#f2f2f2;
 }
-
+.category-photo{
+    width:60px;
+    height:60px;
+    object-fit:contain;
+    border-radius:50%;
+    margin-bottom:8px;
+}
     </style>
 </head>
 <body>
@@ -2008,7 +2014,14 @@ window.addEventListener("load",()=>{
     
 // ------------------- PRODUCTS -------------------
 
-
+const categoryImages = {
+  "Kids Wear": "images/categories/kids.png",
+  "Grocery": "images/categories/grocery.png",
+  "Finance": "images/categories/finance.png",
+  "Clothes": "images/categories/clothes.png",
+  "Cosmetics": "images/categories/cosmetics.png",
+  "Other": "images/categories/other.png"
+};
 async function loadProducts() {
 
   if (loading || !hasMore) return;
@@ -2053,15 +2066,17 @@ async function loadProducts() {
       });
 
       document.getElementById("categories").innerHTML =
-        Object.keys(categoryMap).map(cat => `
-          <div class="category-card"
-               onclick="openCategory('${encodeURIComponent(cat)}')">
-            <div class="category-icon">
-              <i class="bi bi-box-seam"></i>
-            </div>
-            <div class="category-name">${cat}</div>
-          </div>
-        `).join("");
+  Object.keys(categoryMap).map(cat => `
+    <div class="category-card"
+         onclick="openCategory('${encodeURIComponent(cat)}')">
+
+      <img src="${categoryImages[cat] || 'images/categories/other.png'}"
+           class="category-photo">
+
+      <div class="category-name">${cat}</div>
+
+    </div>
+  `).join("");
     }
 
     renderAllProducts(allProducts);
