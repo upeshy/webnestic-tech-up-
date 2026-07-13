@@ -3728,10 +3728,9 @@ async function openRetailerProfile() {
     }
 
   } catch (err) {
+  console.error("REAL ERROR 👉", err);
+  alert("❌ " + err);
 
-    console.error("REAL ERROR 👉", err);
-
-    alert("❌ Server error");
 
   }
 
