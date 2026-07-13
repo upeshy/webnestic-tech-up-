@@ -878,11 +878,13 @@ async function startPayment() {
 
     catch (err) {
 
-        console.log(err);
+    console.error("Payment Error:", err);
 
-        alert("Server Error");
+    alert(err.message || "Server Error");
 
-    }
+}
+
+    
 
 }
 /* ================= VERIFY PAYMENT ================= */
