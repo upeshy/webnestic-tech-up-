@@ -2018,12 +2018,12 @@ async function loadProducts() {
 
   // Category Images
   const categoryImages = {
-    "Kids Wear": "images/categories/kids.jpg",
-    "Grocery": "images/categories/grocery.jpg",
-    "Finance": "images/categories/finance.jpg",
-    "Clothes": "images/categories/clothes.jpg",
-    "Cosmetics": "images/categories/cosmetics.jpg",
-    "Other": "images/categories/other.jpg"
+    "kids wear": "images/categories/kids.jpg",
+    "grocery": "images/categories/grocery.jpg",
+    "finance": "images/categories/finance.jpg",
+    "clothes": "images/categories/clothes.jpg",
+    "cosmetics": "images/categories/cosmetics.jpg",
+    "other": "images/categories/other.jpg"
   };
 
   if (loading || !hasMore) return;
@@ -2048,17 +2048,21 @@ async function loadProducts() {
 
     const data = await res.json();
 
+    console.log(data);
+
     if (!data.success) return;
 
+    // New products add
     allProducts.push(...data.products);
     window.allProducts = allProducts;
 
+    // Categories only first time
     if (page === 1) {
 
       const categoryMap = {};
 
       allProducts.forEach(p => {
-        const cat = (p.category || "Other").trim();
+        const cat = (p.category || "other").toLowerCase().trim();
         categoryMap[cat] = true;
       });
 
@@ -2068,9 +2072,12 @@ async function loadProducts() {
                onclick="openCategory('${encodeURIComponent(cat)}')">
 
             <img src="${categoryImages[cat] || 'images/categories/other.jpg'}"
-                 class="category-photo">
+                 class="category-photo"
+                 loading="lazy">
 
-            <div class="category-name">${cat}</div>
+            <div class="category-name">
+              ${cat.replace(/\b\w/g, c => c.toUpperCase())}
+            </div>
 
           </div>
         `).join("");
@@ -2095,6 +2102,8 @@ async function loadProducts() {
 
 // First Load
 window.addEventListener("load", loadProducts);
+// First Load
+
 
 // Infinite Scroll
 window.addEventListener("scroll", () => {
