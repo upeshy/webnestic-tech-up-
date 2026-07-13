@@ -2014,15 +2014,17 @@ window.addEventListener("load",()=>{
     
 // ------------------- PRODUCTS -------------------
 
-const categoryImages = {
-  "Kids Wear": "images/categories/kids.jpg",
-  "Grocery": "images/categories/grocery.jpg",
-  "Finance": "images/categories/finance.jpg",
-  "Clothes": "images/categories/clothes.jpg",
-  "Cosmetics": "images/categories/cosmetics.jpg",
-  "Other": "images/categories/other.jpg"
-};
 async function loadProducts() {
+
+  // Category Images
+  const categoryImages = {
+    "Kids Wear": "images/categories/kids.jpg",
+    "Grocery": "images/categories/grocery.jpg",
+    "Finance": "images/categories/finance.jpg",
+    "Clothes": "images/categories/clothes.jpg",
+    "Cosmetics": "images/categories/cosmetics.jpg",
+    "Other": "images/categories/other.jpg"
+  };
 
   if (loading || !hasMore) return;
 
@@ -2046,16 +2048,11 @@ async function loadProducts() {
 
     const data = await res.json();
 
-    console.log(data);
-
     if (!data.success) return;
 
-    // New products add
     allProducts.push(...data.products);
-
     window.allProducts = allProducts;
 
-    // Categories only first time
     if (page === 1) {
 
       const categoryMap = {};
@@ -2066,17 +2063,17 @@ async function loadProducts() {
       });
 
       document.getElementById("categories").innerHTML =
-  Object.keys(categoryMap).map(cat => `
-    <div class="category-card"
-         onclick="openCategory('${encodeURIComponent(cat)}')">
+        Object.keys(categoryMap).map(cat => `
+          <div class="category-card"
+               onclick="openCategory('${encodeURIComponent(cat)}')">
 
-      <img src="${categoryImages[cat] || 'images/categories/other.png'}"
-           class="category-photo">
+            <img src="${categoryImages[cat] || 'images/categories/other.jpg'}"
+                 class="category-photo">
 
-      <div class="category-name">${cat}</div>
+            <div class="category-name">${cat}</div>
 
-    </div>
-  `).join("");
+          </div>
+        `).join("");
     }
 
     renderAllProducts(allProducts);
