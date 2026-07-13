@@ -600,106 +600,149 @@ async function loadOrders(){
  }  
 }  
  function groupOrdersByCart(orders){
+
   const map = {};
 
   orders.forEach(o=>{
-    // Agar cartOrder hai to cartGroupId ke under group karo, warna _id
+
     const key = o.cartGroupId || o._id;
 
     if(!map[key]){
-  map[key] = {
-    key,
-    status: o.status,
-    time: o.statusHistory?.[0]?.time || o.createdAt,
 
-    wholesalerName: o.wholesalerName,
-    wholesalerMobile: o.wholesalerMobile,
-    wholesalerLocation: o.wholesalerLocation,   // ✅ ADD
+      map[key] = {
 
-    retailerName: o.retailerName,
-    retailerMobile: o.retailerMobile,
-    retailerLocation: o.retailerLocation,       // ✅ ADD
+        key,
+        status: o.status,
+        time: o.statusHistory?.[0]?.time || o.createdAt,
 
-    vehicleType: o.vehicleType,
-    deliveryBoyId: o.deliveryBoyId,
-    products: []
-  };
-}
+        wholesalerName: o.wholesalerName,
+        wholesalerMobile: o.wholesalerMobile,
+        wholesalerLocation: o.wholesalerLocation,
+
+        retailerName: o.retailerName,
+        retailerMobile: o.retailerMobile,
+        retailerLocation: o.retailerLocation,
+        retailerAddress: o.deliveryAddress || "",
+
+        vehicleType: o.vehicleType,
+        deliveryBoyId: o.deliveryBoyId,
+
+        products: []
+
+      };
+
+    }
 
     map[key].products.push(o);
+
   });
 
   return Object.values(map);
+
 }
 /* RENDER ORDERS */  
 function renderOrders(list){
+
   if(!list.length){
+
     orders.innerHTML="<p style='text-align:center'>No Orders</p>";
+
     return;
+
   }
 
   const grouped = groupOrdersByCart(list);
 
-  orders.innerHTML = grouped.map(o => {
-    // ✅ Get main order _id from first product
+  orders.innerHTML = grouped.map(o=>{
+
     const orderId = o.products[0]._id;
 
     return `
+
     <div class="card order">
 
-      <!-- 🔥 COMPACT STATUS (WHOLESALER STYLE) -->
-      ${getStatusHTML(o.status, o.time, o.wholesalerLocation, o.retailerLocation)}
+      ${getStatusHTML(o.status,o.time,o.wholesalerLocation,o.retailerLocation)}
 
       <hr>
 
       <b>📦 Products:</b>
+
       <ul>
+
         ${o.products.map(p=>`<li>${p.productName}</li>`).join("")}
+
       </ul>
 
       <hr>
 
       🏪 <b>Wholesaler:</b> ${o.wholesalerName}<br>
+
       📞 ${o.wholesalerMobile || "N/A"}<br><br>
 
       🏬 <b>Retailer:</b> ${o.retailerName}<br>
-      📞 ${o.retailerMobile || "N/A"}<br><br>
+
+      📞 ${o.retailerMobile || "N/A"}<br>
+
+      📍 <b>Address:</b><br>
+
+      ${o.retailerAddress || "Address Not Available"}<br><br>
+
+      ${
+        o.retailerLocation
+        ? `
+        <button class="btn"
+        onclick="window.open('https://www.google.com/maps?q=${o.retailerLocation.lat},${o.retailerLocation.lng}','_blank')">
+        🗺️ Navigate
+        </button>
+        <br><br>
+        `
+        : ""
+      }
 
       🚗 <b>Vehicle:</b>
+
       ${
-        o.vehicleType==="two_wheeler"?"Two Wheeler":
-        o.vehicleType==="three_wheeler"?"Three Wheeler":
-        o.vehicleType==="four_wheeler"?"Four Wheeler":"N/A"
+        o.vehicleType==="two_wheeler"
+        ?"Two Wheeler"
+        :o.vehicleType==="three_wheeler"
+        ?"Three Wheeler"
+        :o.vehicleType==="four_wheeler"
+        ?"Four Wheeler"
+        :"N/A"
       }
+
       <br><br>
 
       ${
         o.status==="paid"
-          ? `<button class="btn accept" onclick="acceptOrder('${orderId}')">Accept</button>`
-          : ""
+        ?`<button class="btn accept" onclick="acceptOrder('${orderId}')">Accept</button>`
+        :""
       }
 
       ${
         o.status==="delivery_accepted"
-          ? `<button class="btn pickup" onclick="pickupOrder('${orderId}')">Pickup</button>`
-          : ""
+        ?`<button class="btn pickup" onclick="pickupOrder('${orderId}')">Pickup</button>`
+        :""
       }
 
       ${
         o.status==="picked_up"
-          ? `<button class="btn pickup" onclick="deliverFlow('${orderId}')">Generate Code</button>`
-          : ""
+        ?`<button class="btn pickup" onclick="deliverFlow('${orderId}')">Generate Code</button>`
+        :""
       }
 
       ${
         o.status==="delivery_code_generated"
-          ? `<button class="btn done" onclick="deliverFlow('${orderId}')">Delivered</button>`
-          : ""
+        ?`<button class="btn done" onclick="deliverFlow('${orderId}')">Delivered</button>`
+        :""
       }
 
     </div>
+
     `;
+
   }).join("");
+
 }
   function getStatusClass(status){
   if(status==="paid" || status==="pending"){
