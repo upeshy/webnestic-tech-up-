@@ -2221,17 +2221,20 @@ window.addEventListener("load", async () => {
     console.error("❌ Retailer load error", err);
   }
 });
-function openExternalProduct(url) {
+function openExternalProduct(text){
 
-    if (!url) {
-        alert("Link not available");
+    if(!text){
+        alert("Product link not available");
         return;
     }
 
-    window.location.href = url;
+    const match = text.match(/https?:\/\/\S+/);
 
-    // अगर नए टैब में खोलना हो:
-    // window.open(url, "_blank");
+    if(match){
+        window.open(match[0], "_blank");
+    }else{
+        alert("Invalid product link");
+    }
 }
 function searchProducts(){
 
