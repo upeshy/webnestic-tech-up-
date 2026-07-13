@@ -736,16 +736,14 @@ async function startPayment() {
         return;
     }
 
-    const address =
-        document.getElementById("address").value.trim();
+    const address = document.getElementById("address").value.trim();
 
     if (!address) {
         alert("Please enter delivery address");
         return;
     }
 
-    const useCoins =
-        document.getElementById("useCoins").checked;
+    const useCoins = document.getElementById("useCoins").checked;
 
     try {
 
@@ -763,19 +761,19 @@ async function startPayment() {
                     body: JSON.stringify({
 
                         retailerId,
-
                         wholesalerId: product.wholesalerId,
-
                         productId: product._id,
 
                         address,
+                        deliveryAddress: address,
+
+                        retailerLocation,
+                        wholesalerLocation,
 
                         vehicleType: "two_wheeler",
 
                         deliveryCharge,
-
                         retailerDeliveryPay: deliveryCharge,
-
                         wholesalerDeliveryPay: 0,
 
                         useCoins: true
@@ -820,19 +818,19 @@ async function startPayment() {
                         productId: product._id,
 
                         retailerId,
-
                         wholesalerId: product.wholesalerId,
 
                         address,
+                        deliveryAddress: address,
+
+                        retailerLocation,
+                        wholesalerLocation,
 
                         useCoins,
-
                         coinUsed,
 
                         deliveryCharge,
-
                         retailerDeliveryPay: deliveryCharge,
-
                         wholesalerDeliveryPay: 0,
 
                         vehicleType: "two_wheeler"
@@ -848,7 +846,6 @@ async function startPayment() {
         if (!data.success) {
 
             alert("Payment Order Failed");
-
             return;
 
         }
@@ -888,7 +885,6 @@ async function startPayment() {
     }
 
 }
-
 /* ================= VERIFY PAYMENT ================= */
 
 
