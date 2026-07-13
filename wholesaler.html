@@ -174,6 +174,38 @@ button.success{background:#16a34a;color:#fff;border:none;padding:8px 12px;border
   background:#ecfdf5; /* 🟢 light green */
   border-left:4px solid #22c55e;
 }
+ .category-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.cat-card{
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:10px;
+    text-align:center;
+    cursor:pointer;
+    background:#fff;
+}
+
+.cat-card img{
+    width:60px;
+    height:60px;
+    object-fit:contain;
+}
+
+.cat-card span{
+    display:block;
+    margin-top:8px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.cat-card.active{
+    border:2px solid #ff3f6c;
+    background:#fff5f7;
+}
 </style>  </head>  <body>    
 <div class="main">    <div class="icon-bar">    
     <button class="icon-btn" onclick="openProfile()"><i class="bi bi-shop"></i></button>    
@@ -228,9 +260,8 @@ button.success{background:#16a34a;color:#fff;border:none;padding:8px 12px;border
     <input id="pname" placeholder="Product Name">
 
     <!-- Fixed Category Dropdown -->
-    <select id="pcategorySelect">
-      <option value="">Select Category</option>
-    </select>
+    <input type="hidden" id="pcategorySelect">
+<div id="categoryGrid"></div>
 
     <input id="pprice" type="number" placeholder="Price">
 
@@ -825,37 +856,35 @@ async function updateProduct() {
  
 function loadCategoriesSelect() {
 
-    
+    const categories = [
+        {name:"Kids Wear",img:"images/categories/kids.png"},
+        {name:"Grocery",img:"images/categories/grocery.png"},
+        {name:"Finance",img:"images/categories/finance.png"},
+        {name:"Clothes",img:"images/categories/clothes.png"},
+        {name:"Cosmetics",img:"images/categories/cosmetics.png"},
+        {name:"Other",img:"images/categories/other.png"}
+    ];
 
-    const select = document.getElementById("pcategorySelect");
+    const grid = document.getElementById("categoryGrid");
 
-    if (!select) {
-        alert("Select Not Found");
-        return;
-    }
+    grid.innerHTML = categories.map(c => `
+        <div class="cat-card"
+             onclick="selectCategory('${c.name}',this)">
+            <img src="${c.img}">
+            <span>${c.name}</span>
+        </div>
+    `).join("");
 
-    
+}
 
-    try {
-        
+function selectCategory(name, el){
 
-        select.innerHTML = `
-            <option value="">Select Category</option>
-            
-            <option value="Kids Wear">Kids Wear</option>
-            <option value="Grocery">Grocery</option>
-            <option value="Finance">Finance</option>
-            <option value="Clothes">Clothes</option>
-            <option value="Cosmetics">Cosmetics</option>
-            
-            <option value="Other">Other</option>
-        `;
+    document.getElementById("pcategorySelect").value = name;
 
-        
+    document.querySelectorAll(".cat-card")
+        .forEach(x=>x.classList.remove("active"));
 
-    } catch (e) {
-        alert(e.message);
-    }
+    el.classList.add("active");
 }
   function openProduct() {
     loadCategoriesSelect();
