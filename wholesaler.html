@@ -237,7 +237,10 @@ button.success{background:#16a34a;color:#fff;border:none;padding:8px 12px;border
     <textarea id="pdetail" placeholder="Product Detail"></textarea>
 
     <input id="pimg" type="file" accept="image/*" multiple>
-
+    <input
+  type="url"
+  id="purl"
+  placeholder="Amazon / Flipkart / Meesho Product Link (Optional)">
     <button class="primary" onclick="addProduct()">Save Product</button>
 
     <button onclick="closeAll()">Cancel</button>
@@ -864,14 +867,13 @@ async function addProduct(){
 
   console.log("ADD PRODUCT CLICKED");
 
-  // DOM elements
   const pname = document.getElementById("pname");
   const pprice = document.getElementById("pprice");
   const pdetail = document.getElementById("pdetail");
   const pimg = document.getElementById("pimg");
+  const purl = document.getElementById("purl");
   const categorySelect = document.getElementById("pcategorySelect");
 
-  // Safety checks
   if(!pname || !pprice || !pdetail || !pimg || !categorySelect){
     alert("Form elements missing");
     return;
@@ -889,7 +891,6 @@ async function addProduct(){
     return;
   }
 
-  // Convert images to base64
   const images = [];
 
   for(const file of pimg.files){
@@ -901,55 +902,65 @@ async function addProduct(){
     images.push(base64);
   }
 
-  // Wholesaler profile
   const prof = JSON.parse(
     localStorage.getItem("wholesalerProfile_" + WID) || "{}"
   );
 
-  try {
+  try{
 
-  const res = await fetch(API + "/api/products", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + TOKEN
-    },
-    body: JSON.stringify({
-      wholesalerId: WID,
-      productName: pname.value,
-      price: pprice.value,
-      detail: pdetail.value,
-      images: images,
-      category: category,
-      shopName: prof.shopName || "",
-      mobile: prof.mobile || "",
-      address: prof.address || "",
-      wholesalerLocation: prof.location || null
-    })
-  });
+    const res = await fetch(API + "/api/products",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer "+TOKEN
+      },
+      body:JSON.stringify({
 
-  console.log("HTTP Status:", res.status);
+        wholesalerId:WID,
+        productName:pname.value.trim(),
+        price:pprice.value,
+        detail:pdetail.value,
+        images:images,
+        category:category,
 
-  const text = await res.text();
-  console.log("Server Response:", text);
+        // 👇 Other Platform Link
+        productUrl:purl ? purl.value.trim() : "",
 
-  const d = JSON.parse(text);
+        shopName:prof.shopName || "",
+        mobile:prof.mobile || "",
+        address:prof.address || "",
+        wholesalerLocation:prof.location || null
 
-  if (d.success) {
-    alert("✅ Product Added Successfully");
+      })
+    });
 
-    if (typeof closeAll === "function") closeAll();
-    if (typeof loadProducts === "function") loadProducts();
-    if (typeof loadCategoriesSelect === "function") loadCategoriesSelect();
+    const d = await res.json();
 
-  } else {
-    alert(d.message || "Failed to add product");
+    if(d.success){
+
+      alert("✅ Product Added Successfully");
+
+      pname.value="";
+      pprice.value="";
+      pdetail.value="";
+      pimg.value="";
+      if(purl) purl.value="";
+
+      if(typeof closeAll==="function") closeAll();
+      if(typeof loadProducts==="function") loadProducts();
+      if(typeof loadCategoriesSelect==="function") loadCategoriesSelect();
+
+    }else{
+      alert(d.message || "Failed to add product");
+    }
+
+  }catch(err){
+
+    console.error(err);
+    alert("Server Error: "+err.message);
+
   }
 
-} catch (err) {
-  console.error("ADD PRODUCT ERROR:", err);
-  alert("Server Error: " + err.message);
-}
 }
 // Call initially
 
