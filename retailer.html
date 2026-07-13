@@ -2149,22 +2149,26 @@ function renderAllProducts(products){
 
                 <div class="product-buttons">
 
-    <button class="btn-small btn-cart"
-        onclick="openProduct('${p._id}')">
-        <i class="bi bi-eye-fill"></i>
-    </button>
-
-    <button class="btn-small btn-buy"
-        onclick='addToCart(${JSON.stringify(p)})'>
-        <i class="bi bi-cart-fill"></i>
-    </button>
-
     ${p.productUrl ? `
-    <button class="btn-small btn-buy"
-        onclick="openExternalProduct('${p.productUrl}')">
-        🌐 Buy
-    </button>
-    ` : ""}
+
+        <button class="btn-small btn-buy"
+            onclick="openExternalProduct('${p.productUrl}')">
+            <i class="bi bi-bag-check-fill"></i>
+        </button>
+
+    ` : `
+
+        <button class="btn-small btn-cart"
+            onclick="openProduct('${p._id}')">
+            <i class="bi bi-eye-fill"></i>
+        </button>
+
+        <button class="btn-small btn-buy"
+            onclick='addToCart(${JSON.stringify(p)})'>
+            <i class="bi bi-cart-fill"></i>
+        </button>
+
+    `}
 
 </div>
 
