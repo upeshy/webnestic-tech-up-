@@ -3257,14 +3257,25 @@ async function loadCart() {
           </div>
         </div>
 
-        <div class="cart-actions">
-          <button
-            onclick="removeFromCart('${item.productId}')"
-            style="border:none;background:#fee2e2;color:#991b1b;
-                   border-radius:6px;padding:4px 8px;cursor:pointer">
-            ❌
-          </button>
-        </div>
+        <div class="cart-actions" style="display:flex;flex-direction:column;gap:6px;">
+
+  <button
+    onclick="removeFromCart('${item.productId}')"
+    style="border:none;background:#fee2e2;color:#991b1b;
+           border-radius:6px;padding:4px 8px;cursor:pointer">
+    ❌ Remove
+  </button>
+
+  ${item.productUrl ? `
+    <button
+      onclick="window.open('${item.productUrl}','_blank')"
+      style="border:none;background:#2563eb;color:#fff;
+             border-radius:6px;padding:4px 8px;cursor:pointer">
+      🛒 Buy Other
+    </button>
+  ` : ""}
+
+</div>
 
       </div>
     `).join("");
