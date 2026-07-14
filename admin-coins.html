@@ -70,7 +70,45 @@ background:#f8f8f8;
 margin:8px 0;
 font-size:15px;
 }
+#retailerList{
 
+margin-top:20px;
+
+max-height:450px;
+
+overflow:auto;
+
+}
+
+.retailer-card{
+
+background:#fafafa;
+
+padding:12px;
+
+margin-bottom:10px;
+
+border-radius:10px;
+
+border:1px solid #ddd;
+
+}
+
+.retailer-card h4{
+
+margin-bottom:5px;
+
+color:#009688;
+
+}
+
+.retailer-card p{
+
+margin:4px 0;
+
+font-size:14px;
+
+}
 </style>
 </head>
 <body>
@@ -108,8 +146,16 @@ placeholder="Enter Coins">
 <i class="bi bi-plus-circle"></i>
 Add Coins
 </button>
-
 </div>
+<hr style="margin:20px 0">
+
+<button onclick="loadRetailers()">
+    <i class="bi bi-people-fill"></i>
+    Show All Retailers
+</button>
+
+<div id="retailerList"></div>
+
 
 </div>
 
@@ -165,7 +211,39 @@ document.getElementById("uRole").innerText=data.user.role;
 document.getElementById("uCoins").innerText=data.user.coins;
 
 }
+async function loadRetailers(){
 
+    const res = await fetch(`${API}/api/admin/retailers`);
+
+    const data = await res.json();
+
+    if(!data.success){
+
+        alert("Failed");
+
+        return;
+
+    }
+
+    document.getElementById("retailerList").innerHTML =
+
+    data.users.map(u=>`
+
+        <div class="retailer-card">
+
+            <h4>${u.name}</h4>
+
+            <p>📱 ${u.mobile}</p>
+
+            <p>🪙 Coins : ${u.coins || 0}</p>
+
+            <p>🆔 ${u.userId}</p>
+
+        </div>
+
+    `).join("");
+
+}
 async function addCoins(){
 
 const coins=Number(document.getElementById("coins").value);
