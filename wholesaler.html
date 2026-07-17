@@ -679,10 +679,11 @@ function updateLocationTimer(setAt, lockedFromServer = false) {
     clearInterval(locationTimerInterval);
     locationTimerInterval = null;
   }
-
-  function tick() {
-  // Always editable
-  if (locInput) locInput.disabled = false;
+function tick() {
+  // Location always editable
+  if (locInput) {
+    locInput.disabled = false;
+  }
 
   if (locBtn) {
     locBtn.disabled = false;
@@ -695,11 +696,19 @@ function updateLocationTimer(setAt, lockedFromServer = false) {
   }
 
   if (timerEl) {
-    timerEl.innerText = "";
+    timerEl.style.display = "none";
   }
 }
 
+// Run once only
 tick();
+
+// Stop old timer if running
+if (locationTimerInterval) {
+  clearInterval(locationTimerInterval);
+  locationTimerInterval = null;
+  }
+  
   
 async function loadCategories() {
   try {
