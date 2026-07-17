@@ -681,44 +681,25 @@ function updateLocationTimer(setAt, lockedFromServer = false) {
   }
 
   function tick() {
-    const diff = LOCATION_EDIT_LIMIT - (Date.now() - setAt);
+  // Always editable
+  if (locInput) locInput.disabled = false;
 
-    if (diff <= 0) {
-      timerEl.innerText = "🔒 Location locked";
-
-      // 🔐 LOCK EVERYTHING
-      if (adminBtn) adminBtn.style.display = "block";
-      if (locInput) locInput.disabled = true;
-      if (locBtn) {
-        locBtn.disabled = true;
-        locBtn.style.opacity = "0.6";
-        locBtn.style.cursor = "not-allowed";
-      }
-
-      clearInterval(locationTimerInterval);
-      locationTimerInterval = null;
-      return;
-    }
-
-    // ⏳ STILL EDITABLE
-    if (locInput) locInput.disabled = false;
-    if (locBtn) {
-      locBtn.disabled = false;
-      locBtn.style.opacity = "1";
-      locBtn.style.cursor = "pointer";
-    }
-
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-
-    timerEl.innerText =
-      `⏳ Location edit available: ${h}h ${m}m ${s}s`;
+  if (locBtn) {
+    locBtn.disabled = false;
+    locBtn.style.opacity = "1";
+    locBtn.style.cursor = "pointer";
   }
 
-  tick();
-  locationTimerInterval = setInterval(tick, 1000);
+  if (adminBtn) {
+    adminBtn.style.display = "none";
+  }
+
+  if (timerEl) {
+    timerEl.innerText = "";
+  }
 }
+
+tick();
   
 async function loadCategories() {
   try {
