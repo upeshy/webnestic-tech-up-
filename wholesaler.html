@@ -642,45 +642,28 @@ function checkLocationLock(meta) {
   }
   return { locked:false };
   }
+// Page load hone par check karo
+const TEN_HOURS = 10 * 60 * 60 * 1000;
+
+function checkLocationLock(meta) {
+  return { locked: false };
+}
+
 let locationTimerInterval = null;
 
 function updateLocationTimer(setAt, lockedFromServer = false) {
   const timerEl = document.getElementById("locationTimer");
   const adminBtn = document.getElementById("adminHelpBtn");
   const locInput = document.getElementById("locationText");
-  const locBtn   = document.getElementById("locationBtn");
+  const locBtn = document.getElementById("locationBtn");
 
-  if (!timerEl) return;
-
-  // Default state
-  if (adminBtn) adminBtn.style.display = "none";
-
-  // 🔒 FORCE LOCK (server says locked)
-  if (lockedFromServer === true) {
-    timerEl.innerText = "🔒 Location locked";
-
-    if (adminBtn) adminBtn.style.display = "block";
-    if (locInput) locInput.disabled = true;
-    if (locBtn) {
-      locBtn.disabled = true;
-      locBtn.style.opacity = "0.6";
-      locBtn.style.cursor = "not-allowed";
-    }
-    return;
-  }
-
-  setAt = Number(setAt);
-  if (!setAt || isNaN(setAt)) {
-    timerEl.innerText = "";
-    return;
-  }
-
+  // Stop any previous timer
   if (locationTimerInterval) {
     clearInterval(locationTimerInterval);
     locationTimerInterval = null;
   }
-function tick() {
-  // Location always editable
+
+  // Always editable
   if (locInput) {
     locInput.disabled = false;
   }
@@ -691,23 +674,20 @@ function tick() {
     locBtn.style.cursor = "pointer";
   }
 
+  // Hide admin help button
   if (adminBtn) {
     adminBtn.style.display = "none";
   }
 
+  // Hide timer
   if (timerEl) {
+    timerEl.innerText = "";
     timerEl.style.display = "none";
   }
 }
 
-// Run once only
-tick();
+// Run once o
 
-// Stop old timer if running
-if (locationTimerInterval) {
-  clearInterval(locationTimerInterval);
-  locationTimerInterval = null;
-  }
   
   
 async function loadCategories() {
