@@ -1,0 +1,1293 @@
+ <!DOCTYPE html>  <html lang="en">    <head>    
+<meta charset="UTF-8">    
+<title>Wholesaler Dashboard</title>    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">    
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">  <style>    
+*{box-sizing:border-box;font-family:Poppins,sans-serif}    
+body{margin:0;background:#f3f6fb}    
+.main{
+    padding:20px;
+    padding-top:40px;
+    max-width:900px;
+    margin:auto;
+}    
+.icon-bar{display:flex;justify-content:center;gap:20px;background:#0f172a;padding:12px;border-radius:14px;max-width:650px;margin:auto}    
+.icon-btn{background:#2563eb;color:#fff;border:none;width:55px;height:55px;border-radius:50%;font-size:22px;cursor:pointer}    
+.header{margin-top:15px;background:#fff;padding:15px;border-radius:12px;text-align:center;box-shadow:0 5px 15px rgba(0,0,0,.1)}    
+.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}    
+.product-card{background:#fff;padding:5px;border-radius:10px;text-align:center;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.08)}    
+.product-card img{width:100%;height:80px;object-fit:cover;border-radius:8px}    
+.product-card h4{font-size:12px;margin:5px 0}    
+.price{color:#2563eb;font-weight:600;font-size:12px}    
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:20}    
+.modal-content{background:#fff;padding:20px;width:90%;max-width:500px;border-radius:15px;max-height:85vh;overflow:auto}    
+input,textarea,select{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #ccc}    
+button.primary{background:#2563eb;color:#fff;border:none;padding:10px 15px;border-radius:10px;cursor:pointer}    
+button.success{background:#16a34a;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;margin-top:6px}    
+.card{background:#f8fafc;padding:12px;border-radius:10px;margin-bottom:12px}    
+.status{font-size:12px;margin-top:4px}  
+.slider{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  gap:10px;
+}
+.slider img{
+  width:100%;
+  border-radius:10px;
+  scroll-snap-align:center;
+  flex-shrink:0;
+}
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin:8px 0;
+}
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#cbd5e1;
+}
+.dot.active{
+  background:#2563eb;
+}
+.category-grid{
+  max-width:650px;          /* dashboard ke barabar */
+  margin:20px auto;
+
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);  /* 👈 ek line me 2 */
+  gap:16px;                               /* 👈 gap */
+}
+
+.category-card{
+  background:#ffffff;
+  border-radius:16px;
+  padding:22px 10px;
+  text-align:center;
+  cursor:pointer;
+
+  box-shadow:0 6px 14px rgba(0,0,0,.08);
+  transition:.2s ease;
+}
+
+.category-card:hover{
+  transform:translateY(-3px);
+}
+
+.category-card i{
+  font-size:30px;
+  color:#2563eb;
+  display:block;
+  margin-bottom:6px;
+}
+
+.category-card h4{
+  font-size:15px;
+  font-weight:600;
+  margin:0;
+}
+ .location-box{
+  background:#f8fafc;
+  padding:12px;
+  border-radius:12px;
+  margin-top:10px;
+}
+
+.location-box label{
+  font-size:13px;
+  font-weight:600;
+  color:#334155;
+}
+
+.loc-btn{
+  margin-top:6px;
+  width:100%;
+  border:none;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  color:#fff;
+  padding:8px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:13px;
+ }
+ .modal-content {
+  position: relative;
+}
+
+.modal-content .fixed-close {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  padding-top: 10px;
+}
+ .badge{
+  display:inline-block;
+  padding:3px 8px;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:600;
+}
+
+.badge.cart{
+  background:#ede9fe;
+  color:#5b21b6;
+}
+
+.badge.paid{
+  background:#dbeafe;
+  color:#1d4ed8;
+}
+
+.badge.assigned{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.badge.delivered{
+  background:#f0fdf4;
+  color:#15803d;
+}
+ /* ===== ORDER TYPE COLORS ===== */
+
+/* ⚪ Direct Order — soft cool gray */
+.card.direct-order{
+  background:#eef2f7;          /* visible light gray-blue */
+  border-left:4px solid #94a3b8;
+}
+
+/* 🟠 Cart Order — warm cream / light amber */
+.card.cart-order{
+  background:#fff1e6;          /* soft peach */
+  border-left:4px solid #fb923c;
+}
+/* Status: Assigned */
+.card.assigned{
+  background:#eff6ff; /* 🔵 light blue */
+  border-left:4px solid #3b82f6;
+}
+
+/* Status: Delivered */
+.card.delivered{
+  background:#ecfdf5; /* 🟢 light green */
+  border-left:4px solid #22c55e;
+}
+ .category-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.cat-card{
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:10px;
+    text-align:center;
+    cursor:pointer;
+    background:#fff;
+}
+
+.cat-card img{
+    width:60px;
+    height:60px;
+    object-fit:contain;
+}
+
+.cat-card span{
+    display:block;
+    margin-top:8px;
+    font-size:14px;
+    font-weight:600;
+}
+
+.cat-card.active{
+    border:2px solid #ff3f6c;
+    background:#fff5f7;
+}
+</style>  </head>  <body>    
+<div class="main">    <div class="icon-bar">    
+    <button class="icon-btn" onclick="openProfile()"><i class="bi bi-shop"></i></button>    
+    <button class="icon-btn" onclick="openProduct()"><i class="bi bi-plus"></i></button>    
+    <button class="icon-btn" onclick="openOrders()"><i class="bi bi-bag-check"></i></button>    
+  </div>  <div class="header">    
+    <h3>Wholesaler Dashboard</h3>    
+    <small>ID: <b id="widText"></b></small>    
+  </div>    <div id="categories" class="category-grid"></div>    
+</div> <!-- PROFILE -->
+<div class="modal" id="profileModal">
+  <div class="modal-content">
+    <h3>Shop Profile</h3>
+
+    <input id="shopName" placeholder="Shop Name (Short address)">
+    <input id="shopMobile" placeholder="UPI / Mobile Number">
+    <input id="shopAddress" placeholder="Shop Address">
+
+    <!-- 📍 LOCATION (INSIDE PROFILE) -->
+    <div class="location-box">
+      <label>📍 Location</label>
+
+      <input id="locationText"
+             placeholder="Latitude, Longitude"
+             readonly>
+
+      <button
+        class="loc-btn"
+       id="locationBtn"
+       onclick="getCurrentLocation()">
+      📡 Use Current Location
+     </button>
+     <small id="locationTimer" style="color:#475569;font-size:12px"></small>
+     <button
+  id="adminHelpBtn"
+  style="display:none; background:#dc2626; color:#fff; padding:10px 16px; border-radius:8px;"
+  onclick="contactAdminForLocation()"
+>
+  🆘 Admin Help (Location Correction)
+     </button>
+    </div>
+
+    <button class="primary" onclick="saveWholesalerProfileToServer()">Save</button>
+    <button onclick="closeAll()">Cancel</button>
+  </div>
+</div> <!-- PRODUCT MODAL -->
+<div class="modal" id="productModal">
+  <div class="modal-content">
+
+    <h3>Add Product</h3>
+
+    <input id="pname" placeholder="Product Name">
+
+    <!-- Fixed Category Dropdown -->
+    <input type="hidden" id="pcategorySelect">
+<div id="categoryGrid"></div>
+
+    <input id="pprice" type="number" placeholder="Price">
+
+    <textarea id="pdetail" placeholder="Product Detail"></textarea>
+
+    <input id="pimg" type="file" accept="image/*" multiple>
+    <input
+  type="url"
+  id="purl"
+  placeholder="Amazon / Flipkart / Meesho Product Link (Optional)">
+    <button class="primary" onclick="addProduct()">Save Product</button>
+
+    <button onclick="closeAll()">Cancel</button>
+
+  </div>
+</div>  <!-- ORDERS -->  <div class="modal" id="orderModal">    
+ <div class="modal-content">    
+  <h3>Orders</h3>    
+  <div id="orders"></div>    
+  <div class="fixed-close">
+  <button onclick="closeAll()" style="
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:#fff;
+    font-size:14px;
+    cursor:pointer;
+  ">
+    Close
+  </button>
+</div>    
+ </div>    
+</div>  
+ <!-- PRODUCT DETAIL -->
+<div class="modal" id="productDetailModal">
+  <div class="modal-content">
+    <h3 id="d_name"></h3>
+
+    <div class="slider" id="d_images"></div>
+<div class="dots" id="d_dots"></div>
+
+    <p id="d_price"></p>
+    <p id="d_detail"></p>
+
+    <button onclick="closeAll()">Close</button>
+  </div>
+</div>
+<!-- EDIT PRODUCT MODAL -->
+<div class="modal" id="editProductModal">
+  <div class="modal-content">
+    <h3>Edit Product</h3>
+
+    <input id="edit_name" placeholder="Product Name">
+    <input id="edit_price" type="number" placeholder="Price">
+    <textarea id="edit_detail" placeholder="Detail"></textarea>
+
+    <input type="file" id="edit_images" multiple>
+
+    <div id="edit_images_preview"
+         style="display:flex;gap:6px;flex-wrap:wrap"></div>
+
+    <button class="primary" onclick="updateProduct()">Update</button>
+    <button onclick="closeAll()">Cancel</button>
+  </div>
+</div>
+ <div class="modal" id="chargeInfoModal">
+  <div class="modal-content" style="max-width:400px; padding:20px; border-radius:12px; background:#000; color:#fff;">
+    <h3 style="margin-top:0; text-align:center;">Delivery Charge Info</h3>
+    <ul id="chargeList" style="list-style:none; padding:0; margin:10px 0;"></ul>
+    <button onclick="closeChargeModal()" style="
+      display:block;
+      margin:10px auto 0 auto;
+      padding:8px 16px;
+      border:none;
+      border-radius:8px;
+      background:#fff;
+      color:#000;
+      cursor:pointer;
+    ">Close</button>
+  </div>
+ </div>
+<script src="https://local-dukan.onrender.com/socket.io/socket.io.js"></script>
+ <script>
+  const API = "https://local-dukan.onrender.com";
+ </script>
+ <script>    
+const LOCATION_EDIT_LIMIT = 10 * 60 * 60 * 1000; // 10 hours
+const TOKEN=localStorage.getItem("token");    
+const WID=localStorage.getItem("userId");    
+const ROLE=localStorage.getItem("role");    
+ 
+ 
+ if(!TOKEN||!WID||ROLE!=="wholesaler"){
+alert("Login again"); location.href="wholesalerlogin.html";
+}
+widText.innerText=WID.substring(0,8).toUpperCase();
+
+/* SOCKET.IO */
+let socket = null;
+
+if (typeof io !== "undefined") {
+
+    socket = io(API);
+
+    socket.on("connect", () => {
+        console.log("✅ Socket Connected");
+
+        socket.emit("joinWholesaler", WID);
+    });
+
+    socket.on("orderAssigned", ({ orderId, deliveryBoyId }) => {
+        console.log("Order assigned:", orderId, deliveryBoyId);
+        loadOrders();
+    });
+
+    socket.on("connect_error", (err) => {
+        console.log("❌ Socket Error:", err.message);
+    });
+
+} else {
+    console.warn("⚠️ Socket.IO library not loaded");
+}
+
+function openOrders(){orderModal.style.display="flex";loadOrders();}
+function formatDateTime(ts) {
+  const d = new Date(ts);
+  return d.toLocaleDateString("en-IN") + " " +
+         d.toLocaleTimeString("en-IN", {
+           hour: "2-digit",
+           minute: "2-digit"
+         });
+}
+  async function ensureWholesalerLocation() {
+  const key = "wholesalerProfile_" + WID;
+
+  try {
+    const res = await fetch(`${API}/api/wholesalers/profile/${WID}`, {
+      headers: { "Authorization": "Bearer " + TOKEN }
+    });
+
+    const data = await res.json();
+    if (data.success && data.profile) {
+      localStorage.setItem(key, JSON.stringify(data.profile));
+    }
+  } catch (e) {
+    console.warn("Location sync skipped");
+  }
+}
+  function groupOrdersByCart(orders){
+  const map = {};
+
+  orders.forEach(o=>{
+    const key = o.cartGroupId || o._id;
+
+    if(!map[key]){
+      map[key] = {
+        key,
+        isCart: !!o.cartGroupId,
+        status: o.status,
+        time: o.statusHistory?.[0]?.time || o.createdAt,
+        retailerName: o.retailerName,
+        retailerMobile: o.retailerMobile,
+        vehicleType: o.vehicleType,
+        deliveryBoyId: o.deliveryBoyId,
+        products: []
+      };
+    }
+
+    map[key].products.push(o);
+  });
+
+  return Object.values(map);
+  }
+  function getStatusHTML(status){
+  if(status==="pending")  return `<span style="color:#dc2626">PENDING</span>`;
+  if(status==="paid")     return `<span style="color:#2563eb">PAID</span>`;
+  if(status==="assigned") return `<span style="color:#16a34a">ASSIGNED</span>`;
+  if(status==="delivered")return `<span style="color:#15803d">DELIVERED</span>`;
+  return `<span>${status}</span>`;
+  }
+  
+  async function openProfile() {
+  const profileModal = document.getElementById("profileModal");
+  profileModal.style.display = "flex";
+
+  const key = "wholesalerProfile_" + WID;
+
+  try {
+    const res = await fetch(`${API}/api/wholesalers/profile/${WID}`, {
+      headers: { "Authorization": "Bearer " + TOKEN }
+    });
+
+    const data = await res.json();
+
+    if (data.success && data.profile) {
+      const profile = data.profile;
+
+      /* ===== BASIC PROFILE ===== */
+      shopName.value    = profile.shopName || "";
+      shopMobile.value  = profile.mobile || "";
+      shopAddress.value = profile.address || "";
+
+      /* ===== LOCATION ===== */
+      if (profile.location?.lat && profile.location?.lng) {
+        locationText.value =
+          `${profile.location.lat}, ${profile.location.lng}`;
+      } else {
+        locationText.value = "";
+      }
+
+      /* ===== SAVE PROFILE (NO TIMER DATA LOCALLY) ===== */
+      localStorage.setItem(key, JSON.stringify(profile));
+
+      /* ===== LOCATION TIMER (SERVER BASED ONLY) ===== */
+      const meta = profile.locationMeta;
+
+   if (meta?.locked) {
+     updateLocationTimer(meta.firstSetAt, true);
+   }
+   else if (meta?.firstSetAt) {
+  updateLocationTimer(meta.firstSetAt, false);
+   }
+   else {
+     locationTimer.innerText = "";
+   }
+
+    } else {
+      resetProfileUI();
+    }
+
+  } catch (err) {
+    console.error("Load profile error:", err);
+
+    /* ===== FALLBACK (READ-ONLY) ===== */
+    const p = JSON.parse(localStorage.getItem(key) || "{}");
+
+    shopName.value    = p.shopName || "";
+    shopMobile.value  = p.mobile || "";
+    shopAddress.value = p.address || "";
+
+    if (p.location?.lat && p.location?.lng) {
+      locationText.value =
+        `${p.location.lat}, ${p.location.lng}`;
+    } else {
+      locationText.value = "";
+    }
+
+    if (p.locationMeta?.locked) {
+      locationTimer.innerText = "🔒 Location locked";
+    } else if (p.locationMeta?.firstSetAt) {
+      updateLocationTimer(p.locationMeta.firstSetAt, false);
+    } else {
+      locationTimer.innerText = "";
+    }
+  }
+}
+
+/* ===== HELPER ===== */
+function resetProfileUI() {
+  shopName.value = "";
+  shopMobile.value = "";
+  shopAddress.value = "";
+  locationText.value = "";
+  locationTimer.innerText = "";
+}
+function closeAll(){document.querySelectorAll(".modal").forEach(m=>m.style.display="none");}
+
+async function saveWholesalerProfileToServer() {
+
+  if (!shopMobile.value.trim()) {
+    alert("📱 Mobile number required");
+    return;
+  }
+
+  /* ===== LOCATION READ (ONLY lat/lng) ===== */
+  let location = null;
+  const locText = locationText.value || "";
+
+  if (locText.includes(",")) {
+    const [latStr, lngStr] = locText.split(",");
+    const lat = parseFloat(latStr.trim());
+    const lng = parseFloat(lngStr.trim());
+
+    if (Number.isFinite(lat) && Number.isFinite(lng)) {
+      location = { lat, lng };
+    }
+  }
+
+  /* ===== PAYLOAD ===== */
+  const payload = {
+    wholesalerId: WID,
+    shopName: shopName.value.trim(),
+    mobile: shopMobile.value.trim(),
+    address: shopAddress.value.trim(),
+    location // ❌ no setAt / locked from frontend
+  };
+
+  try {
+    const res = await fetch(`${API}/api/wholesalers/saveProfile`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + TOKEN
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      alert(data.message || "❌ Server save failed");
+      return;
+    }
+
+    /* ===== SERVER IS SOURCE OF TRUTH ===== */
+    const profile = data.profile;
+    const key = "wholesalerProfile_" + WID;
+
+    localStorage.setItem(key, JSON.stringify(profile));
+
+    /* ===== TIMER (🔥 FIXED) ===== */
+    const meta = profile.locationMeta;
+
+    if (meta?.firstSetAt) {
+      updateLocationTimer(
+        new Date(meta.firstSetAt).getTime(),
+        meta.locked === true
+      );
+    }
+
+    alert("✅ Profile successfully saved");
+    closeAll();
+
+  } catch (err) {
+    console.error("Save wholesaler profile error:", err);
+    alert("❌ Server error");
+  }
+}
+
+ function getCurrentLocation() {
+
+  if (!navigator.geolocation) {
+    alert("❌ Location not supported");
+    return;
+  }
+
+  const locInput = document.getElementById("locationText");
+  locInput.value = "📍 Fetching location...";
+
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+
+      locInput.value =
+        `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+
+      alert("✅ Location selected (Timer server handle karega)");
+
+    },
+    () => {
+      alert("❌ Permission denied");
+      locInput.value = "";
+    },
+    { enableHighAccuracy: true }
+  );
+}
+// Page load hone par check karo
+const TEN_HOURS = 10 * 60 * 60 * 1000;
+
+function checkLocationLock(meta) {
+  if (!meta?.firstSetAt) return { locked:false };
+
+  const diff = Date.now() - new Date(meta.firstSetAt).getTime();
+
+  if (diff >= TEN_HOURS) {
+    return { locked:true };
+  }
+  return { locked:false };
+  }
+let locationTimerInterval = null;
+
+function updateLocationTimer(setAt, lockedFromServer = false) {
+  const timerEl = document.getElementById("locationTimer");
+  const adminBtn = document.getElementById("adminHelpBtn");
+  const locInput = document.getElementById("locationText");
+  const locBtn   = document.getElementById("locationBtn");
+
+  if (!timerEl) return;
+
+  // Default state
+  if (adminBtn) adminBtn.style.display = "none";
+
+  // 🔒 FORCE LOCK (server says locked)
+  if (lockedFromServer === true) {
+    timerEl.innerText = "🔒 Location locked";
+
+    if (adminBtn) adminBtn.style.display = "block";
+    if (locInput) locInput.disabled = true;
+    if (locBtn) {
+      locBtn.disabled = true;
+      locBtn.style.opacity = "0.6";
+      locBtn.style.cursor = "not-allowed";
+    }
+    return;
+  }
+
+  setAt = Number(setAt);
+  if (!setAt || isNaN(setAt)) {
+    timerEl.innerText = "";
+    return;
+  }
+
+  if (locationTimerInterval) {
+    clearInterval(locationTimerInterval);
+    locationTimerInterval = null;
+  }
+
+  function tick() {
+    const diff = LOCATION_EDIT_LIMIT - (Date.now() - setAt);
+
+    if (diff <= 0) {
+      timerEl.innerText = "🔒 Location locked";
+
+      // 🔐 LOCK EVERYTHING
+      if (adminBtn) adminBtn.style.display = "block";
+      if (locInput) locInput.disabled = true;
+      if (locBtn) {
+        locBtn.disabled = true;
+        locBtn.style.opacity = "0.6";
+        locBtn.style.cursor = "not-allowed";
+      }
+
+      clearInterval(locationTimerInterval);
+      locationTimerInterval = null;
+      return;
+    }
+
+    // ⏳ STILL EDITABLE
+    if (locInput) locInput.disabled = false;
+    if (locBtn) {
+      locBtn.disabled = false;
+      locBtn.style.opacity = "1";
+      locBtn.style.cursor = "pointer";
+    }
+
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+
+    timerEl.innerText =
+      `⏳ Location edit available: ${h}h ${m}m ${s}s`;
+  }
+
+  tick();
+  locationTimerInterval = setInterval(tick, 1000);
+}
+  
+async function loadCategories() {
+  try {
+    const res = await fetch(`${API}/api/products/wholesaler/${WID}`);
+    const data = await res.json();
+
+    console.log("RAW RESPONSE:", data);
+
+    // ✅ SAFE PRODUCT EXTRACTION
+    const products =
+      Array.isArray(data?.products) ? data.products :
+      Array.isArray(data?.data?.products) ? data.data.products :
+      Array.isArray(data?.data) ? data.data :
+      [];
+
+    if (!products.length) {
+      document.getElementById("categories").innerHTML =
+        "<p style='text-align:center'>No products found</p>";
+      return;
+    }
+
+    console.log("PRODUCTS:", products);
+
+    const map = {};
+
+    products.forEach(p => {
+      if (!p) return;
+
+      // ✅ CATEGORY FIX (MOST IMPORTANT)
+      let cat =
+        p.category ||
+        p.categoryName ||
+        p.cat ||
+        "other";
+
+      cat = String(cat).toLowerCase().trim();
+
+      if (!cat || cat === "undefined") cat = "other";
+
+      map[cat] = (map[cat] || 0) + 1;
+    });
+
+    const cats = Object.keys(map);
+
+    document.getElementById("categories").innerHTML =
+      cats.length
+        ? cats.map(cat => `
+            <div class="category-card" onclick="openCategory('${cat}')">
+              <i class="bi bi-box-seam"></i>
+              <h4>${cat} (${map[cat]})</h4>
+            </div>
+          `).join("")
+        : "<p style='text-align:center'>No categories found</p>";
+
+  } catch (err) {
+    console.log("Category Error:", err);
+    document.getElementById("categories").innerHTML =
+      "<p>Error loading categories</p>";
+  }
+}
+  function openCategory(cat){
+  location.href =
+    "category.html?cat=" + encodeURIComponent(cat)
+    + "&wid=" + WID;
+  }
+  
+ async function loadWholesalerProfileFromServer(){
+
+  try{
+    const res = await fetch(
+      `${API}/api/wholesalers/profile/${WID}`,
+      {
+        headers:{
+          "Authorization":"Bearer "+TOKEN
+        }
+      }
+    );
+
+    const data = await res.json();
+    if(!data.profile) return;
+
+    shopName.value   = data.profile.shopName || "";
+    shopMobile.value = data.profile.mobile || "";
+    shopAddress.value= data.profile.address || "";
+
+    // local sync
+    localStorage.setItem(
+      "wholesalerProfile_"+WID,
+      JSON.stringify(data.profile)
+    );
+
+  }catch(err){
+    console.error(err);
+  }
+ }
+
+async function updateProduct() {
+  if (!editProductId) return alert("No product selected");
+
+  const files = [...edit_images.files];
+  let images = [];
+
+  for (const file of files) {
+    const base64 = await new Promise(res => {
+      const r = new FileReader();
+      r.onload = () => res(r.result);
+      r.readAsDataURL(file);
+    });
+    images.push(base64);
+  }
+
+  const res = await fetch(API + "/api/products/" + editProductId, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + TOKEN
+    },
+    body: JSON.stringify({
+      productName: edit_name.value,
+      price: edit_price.value,
+      detail: edit_detail.value,
+      ...(images.length && { images })
+    })
+  });
+
+  const d = await res.json();
+  if (d.success) {
+    alert("✅ Product updated");
+    editProductId = null;
+    closeAll();
+    loadProducts();
+  }
+}
+  
+ 
+function loadCategoriesSelect() {
+
+    const categories = [
+        {name:"Kids Wear",img:"images/categories/kids.jpg"},
+        {name:"Grocery",img:"images/categories/grocery.jpg"},
+        {name:"Finance",img:"images/categories/finance.jpg"},
+        {name:"Clothes",img:"images/categories/clothes.jpg"},
+        {name:"Cosmetics",img:"images/categories/cosmetics.jpg"},
+        {name:"Other",img:"images/categories/other.jpg"}
+    ];
+
+    const grid = document.getElementById("categoryGrid");
+
+    grid.innerHTML = categories.map(c => `
+        <div class="cat-card"
+             onclick="selectCategory('${c.name}',this)">
+            <img src="${c.img}">
+            <span>${c.name}</span>
+        </div>
+    `).join("");
+
+}
+
+function selectCategory(name, el){
+
+    document.getElementById("pcategorySelect").value = name;
+
+    document.querySelectorAll(".cat-card")
+        .forEach(x=>x.classList.remove("active"));
+
+    el.classList.add("active");
+}
+  function openProduct() {
+    loadCategoriesSelect();
+    document.getElementById("productModal").style.display = "flex";
+  }
+// ==========================
+// Add Product (FINAL FIXED)
+// ==========================
+async function addProduct(){
+
+  console.log("ADD PRODUCT CLICKED");
+
+  const pname = document.getElementById("pname");
+  const pprice = document.getElementById("pprice");
+  const pdetail = document.getElementById("pdetail");
+  const pimg = document.getElementById("pimg");
+  const purl = document.getElementById("purl");
+  const categorySelect = document.getElementById("pcategorySelect");
+
+  if(!pname || !pprice || !pdetail || !pimg || !categorySelect){
+    alert("Form elements missing");
+    return;
+  }
+
+  const category = categorySelect.value;
+
+  if(!category){
+    alert("Please Select Category");
+    return;
+  }
+
+  if(!pimg.files.length){
+    alert("Images required");
+    return;
+  }
+
+  const images = [];
+
+  for(const file of pimg.files){
+    const base64 = await new Promise(resolve=>{
+      const reader = new FileReader();
+      reader.onload = ()=>resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+    images.push(base64);
+  }
+
+  const prof = JSON.parse(
+    localStorage.getItem("wholesalerProfile_" + WID) || "{}"
+  );
+
+  try{
+
+    const res = await fetch(API + "/api/products",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer "+TOKEN
+      },
+      body:JSON.stringify({
+
+        wholesalerId:WID,
+        productName:pname.value.trim(),
+        price:pprice.value,
+        detail:pdetail.value,
+        images:images,
+        category:category,
+
+        // 👇 Other Platform Link
+        productUrl:purl ? purl.value.trim() : "",
+
+        shopName:prof.shopName || "",
+        mobile:prof.mobile || "",
+        address:prof.address || "",
+        wholesalerLocation:prof.location || null
+
+      })
+    });
+
+    const d = await res.json();
+
+    if(d.success){
+
+      alert("✅ Product Added Successfully");
+
+      pname.value="";
+      pprice.value="";
+      pdetail.value="";
+      pimg.value="";
+      if(purl) purl.value="";
+
+      if(typeof closeAll==="function") closeAll();
+      if(typeof loadProducts==="function") loadProducts();
+      if(typeof loadCategoriesSelect==="function") loadCategoriesSelect();
+
+    }else{
+      alert(d.message || "Failed to add product");
+    }
+
+  }catch(err){
+
+    console.error(err);
+    alert("Server Error: "+err.message);
+
+  }
+
+}
+// Call initially
+
+
+  async function openProductDetail(id){
+  productDetailModal.style.display = "flex";
+
+  const res = await fetch(API + "/api/products/" + id);
+  const data = await res.json();
+  if(!data.success) return;
+
+  const p = data.product;
+
+  d_name.innerText = p.productName;
+  d_price.innerText = "₹" + p.price;
+  d_detail.innerText = p.detail || "";
+
+  d_images.innerHTML = p.images.map(img =>
+    `<img src="${img}">`
+  ).join("");
+
+  d_dots.innerHTML = p.images.map((_,i)=>
+    `<div class="dot ${i===0?'active':''}"></div>`
+  ).join("");
+
+  d_images.onscroll = () => {
+    const index = Math.round(
+      d_images.scrollLeft / d_images.clientWidth
+    );
+    [...d_dots.children].forEach((d,i)=>
+      d.classList.toggle("active", i===index)
+    );
+  };
+}
+ 
+let editProductId = null;
+
+async function openEditProduct(id) {
+  editProductId = id;
+
+  const res = await fetch(API + "/api/products/" + id);
+  const data = await res.json();
+
+  if (!data.success) {
+    alert("Product load failed");
+    return;
+  }
+
+  const p = data.product;
+
+  // 📝 old data fill
+  edit_name.value   = p.productName || "";
+  edit_price.value  = p.price || "";
+  edit_detail.value = p.detail || "";
+
+  // 🖼️ old images preview
+  const box = edit_images_preview;
+  box.innerHTML = "";
+
+  (p.images || []).forEach(img => {
+    const i = document.createElement("img");
+    i.src = img;
+    i.style.width = "70px";
+    i.style.borderRadius = "6px";
+    box.appendChild(i);
+  });
+
+  // ✅ OPEN EDIT MODAL
+  document.getElementById("editProductModal").style.display = "flex";
+}
+
+ async function deleteProduct(id){
+  if (!confirm("Delete this product?")) return;
+
+  const res = await fetch(API + "/api/products/" + id, {
+    method: "DELETE",
+    headers: {
+      "Authorization": "Bearer " + TOKEN
+    }
+  });
+
+  const d = await res.json();
+  if (d.success) {
+    alert("🗑️ Product deleted");
+    loadProducts();
+  }
+ }
+ function showChargeInfo(orderAmount = 0) {
+  const slabs = [
+    {min:100, max:500, percent:30},
+    {min:501, max:3000, percent:50},
+    {min:3001, max:5000, percent:70},
+    {min:5001, max:Infinity, percent:100} // Free delivery
+  ];
+
+  const list = document.getElementById("chargeList");
+  list.innerHTML = "";
+
+  slabs.forEach(slab => {
+    const li = document.createElement("li");
+
+    if(slab.percent === 0){
+      li.innerText = `₹${slab.min}+ का order → डिलीवरी चार्ज पे होलसेलर  ✅`;
+    } else {
+      li.innerText = `₹${slab.min} - ${slab.max} का order → ${slab.percent}% delivery charge`;
+    }
+
+    // Highlight slab based on current order amount
+    if(orderAmount >= slab.min && orderAmount <= slab.max){
+      li.classList.add("highlight");
+    }
+
+    list.appendChild(li);
+  });
+
+  document.getElementById("chargeInfoModal").style.display = "flex";
+}
+
+function closeChargeModal() {
+  document.getElementById("chargeInfoModal").style.display = "none";
+     }
+ 
+                    /* CONFIRM ORDER WITH VEHICLE TYPE */
+async function confirmOrder(id) {
+  const vehicle = prompt("Enter Vehicle Type: two_wheeler / three_wheeler / four_wheeler");
+  if (!vehicle) return alert("Vehicle type required");
+
+  const res = await fetch(API + "/api/orders/" + id + "/confirm", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + TOKEN
+    },
+    body: JSON.stringify({ vehicle })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert("Order confirmed ✅");
+    loadOrders();
+
+    if (socket) {
+      socket.emit("newOrder", { orderId: id, vehicle });
+    }
+  }
+}  
+
+/* LOAD ORDERS */
+/* LOAD ORDERS (UPDATED LOGIC) */
+async function loadOrders(){
+  const r = await fetch(API + "/api/orders/wholesaler/" + WID);
+  const d = await r.json();
+
+  if(!d.orders || !d.orders.length){
+    orders.innerHTML = "No orders";
+    return;
+  }
+
+  const grouped = groupOrdersByCart(d.orders);
+
+  orders.innerHTML = grouped.map(g=>`
+    <div class="card 
+      ${g.isCart ? "cart-order" : "direct-order"} 
+      ${g.status === "assigned" ? "assigned" : ""} 
+      ${g.status === "delivered" ? "delivered" : ""}
+    ">
+
+      <b>
+        ${g.isCart ? "🛒 Cart Order" : "📦 Order"}
+      </b><br>
+
+      <div class="status">
+        Status: <b>${getStatusHTML(g.status)}</b><br>
+        🕒 ${new Date(g.time).toLocaleString()}
+      </div>
+
+      <hr>
+
+      <b>📦 Products:</b>
+      <ul>
+        ${g.products.map(p=>`
+          <li>${p.productName} — ₹${p.price}</li>
+        `).join("")}
+      </ul>
+
+      <hr>
+
+      🏬 <b>Retailer:</b> ${g.retailerName}<br>
+      📞 ${g.retailerMobile}<br><br>
+
+      🚚 <b>Vehicle:</b> ${g.vehicleType || "Not assigned"}<br>
+
+      ${
+        g.status==="pending"
+        ? `<button class="success"
+             onclick="confirmOrder('${g.key}')">
+             Confirm Order
+           </button>`
+        : g.status==="assigned"
+        ? `<div style="color:#2563eb;font-size:13px">
+            🚚 Assigned to Delivery Boy<br>
+            👤 Delivery ID: ${g.deliveryBoyId || "N/A"}
+           </div>`
+        : `<div style="color:#16a34a;font-size:13px">
+            📦 ${g.status}
+           </div>`
+      }
+
+    </div>
+  `).join("");
+}
+
+
+window.addEventListener("load", async () => {
+   
+  // 1️⃣ Profile server se lao
+  await ensureWholesalerLocation();
+
+  // 2️⃣ Local se read karo (server sync ke baad)
+  const key = "wholesalerProfile_" + WID;
+  const profile = JSON.parse(localStorage.getItem(key) || "{}");
+  const meta = profile.locationMeta;
+
+  const timerEl = document.getElementById("locationTimer");
+  if (!timerEl) return;
+
+  // 3️⃣ TIMER LOGIC (single source of truth)
+  if (meta?.firstSetAt) {
+    updateLocationTimer(
+      new Date(meta.firstSetAt).getTime(),
+      meta.locked === true
+    );
+  } else {
+    timerEl.innerText = "";
+  }
+});
+ </script> 
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
+
+/* 🔥 Firebase Config */
+const firebaseConfig = {
+  apiKey: "AIzaSyBioiLSE3HyZh49yJv93MwnQFrmAm6wJ5g",
+  authDomain: "shop-ab586.firebaseapp.com",
+  projectId: "shop-ab586",
+  messagingSenderId: "603669325846",
+  appId: "1:603669325846:web:00f3ccff7fa977bf542d37"
+};
+
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+/* 🧠 Register Service Worker */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/firebase-messaging-sw.js")
+    .then(() => console.log("✅ SW Registered"))
+    .catch(err => console.error("❌ SW Error", err));
+}
+
+/* 🔔 Init FCM */
+async function initFCM() {
+
+  if (!localStorage.getItem("userId")) return;
+
+  const permission = await Notification.requestPermission();
+  if (permission !== "granted") return;
+
+  const token = await getToken(messaging, {
+    vapidKey: "BFcKfbosO2sXWogZ5fBBt31vEkw_1iwgQWVrZjAJ90pXdhdFBSbXM_Oppuoxm-QIidekMzIQdcl3XrJy0ltkC8s"
+  });
+
+  if (!token) return;
+
+  console.log("🔥 FCM TOKEN:", token);
+
+  await fetch("https://local-dukan.onrender.com/api/notifications/saveToken", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId: localStorage.getItem("userId"),
+      role: "wholesaler",
+      fcmToken: token
+    })
+  });
+
+  console.log("✅ Token saved");
+}
+
+window.addEventListener("load", initFCM);
+ // ------------------- INIT -------------------
+
+loadCategories();
+</script>
+
+</body>
+
+</html>
