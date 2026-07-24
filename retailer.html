@@ -1320,51 +1320,113 @@ box-shadow:0 8px 18px rgba(255,107,0,.45);
 transform:scale(.97);
 
 }
-        .logout-btn{
+     /* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    position:sticky;
+    top:0;
+    left:0;
     width:100%;
-    padding:14px;
-    margin-top:20px;
-    border:none;
-    border-radius:12px;
-    background:#e53935;
-    color:#fff;
-    font-size:16px;
-    font-weight:600;
-    cursor:pointer;
+    background:#fff;
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+    z-index:999;
+    padding:8px 14px;
 }
 
-.logout-btn:hover{
-    background:#c62828;
+.navbar-wrapper{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
-        .navbar-brand{
+
+/* Logo */
+
+.navbar-brand{
     display:flex;
     align-items:center;
     text-decoration:none;
+    flex-shrink:0;
 }
 
 .logo{
-    width:160px;   /* apne hisaab se 140-180px kar sakte ho */
-    height:auto;
+    width:180px;
+    height:55px;
     object-fit:contain;
+    display:block;
 }
 
-.navbar-brand span{
-    font-size:24px;
-    font-weight:800;
-    color:#0D47A1;
-    letter-spacing:0.5px;
+/* Right Icons */
+
+.navbar-icons{
+    display:flex;
+    align-items:center;
+    gap:10px;
 }
 
-@media (max-width:768px){
-    .logo{
-        width:140px;
-        height:80px;
+.nav-btn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:#f5f5f5;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:.25s;
+    position:relative;
+}
+
+.nav-btn:hover{
+    background:#0D47A1;
+    color:#fff;
+}
+
+.nav-btn i{
+    font-size:20px;
+}
+
+.badge{
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#ff1744;
+    color:#fff;
+    font-size:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .navbar{
+        padding:8px 10px;
     }
 
-    .navbar-brand span{
+    .logo{
+        width:145px;
+        height:45px;
+    }
+
+    .nav-btn{
+        width:38px;
+        height:38px;
+    }
+
+    .nav-btn i{
         font-size:18px;
     }
-}
+
+}   
     </style>
 </head>
 <body>
