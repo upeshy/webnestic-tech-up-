@@ -1320,6 +1320,22 @@ box-shadow:0 8px 18px rgba(255,107,0,.45);
 transform:scale(.97);
 
 }
+        .logout-btn{
+    width:100%;
+    padding:14px;
+    margin-top:20px;
+    border:none;
+    border-radius:12px;
+    background:#e53935;
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.logout-btn:hover{
+    background:#c62828;
+}
     </style>
 </head>
 <body>
@@ -1643,14 +1659,16 @@ transform:scale(.97);
       </div>
 
     </div>
-
+     
     <button class="btn-primary"
             onclick="saveProfile()">
 
       Save Profile
 
     </button>
-
+    <button class="logout-btn" onclick="logoutUser()">
+    🚪 Logout
+    </button>
   </div>
 
 </div>
@@ -1821,7 +1839,20 @@ async function ensureRetailerLocation() {
 /* ===========================
    COIN + REFER SYSTEM
 =========================== */
+function logoutUser(){
 
+    if(!confirm("Are you sure you want to logout?")){
+        return;
+    }
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("role");
+    localStorage.removeItem("retailerProfile");
+
+    window.location.replace("index.html");
+
+}
 // Signup bonus
 const SIGNUP_BONUS = 0;
 
