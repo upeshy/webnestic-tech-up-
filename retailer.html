@@ -1928,38 +1928,87 @@ https://webnestic-tech-up.vercel.app`;
   }
 
 }
-
-    async function openAddMoney() {
+async function openAddMoney() {
 
   const amount = prompt("Enter Amount");
 
-  if (!amount || Number(amount) <= 0) return;
+  if (!amount || Number(amount) <= 0) {
+    return;
+  }
 
   try {
 
     const retailerId = localStorage.getItem("userId");
 
     const res = await fetch(`${API}/api/wallet/create-order`, {
+
       method: "POST",
+
       headers: {
         "Content-Type": "application/json"
       },
+
       body: JSON.stringify({
+
         retailerId,
+
         amount: Number(amount)
+
       })
+
     });
 
     const data = await res.json();
 
-    console.log(data);
-
     if (!data.success) {
-      alert(data.message || "API Failed");
+
+      alert(data.message || "Failed");
+
       return;
+
     }
 
-    alert("API Success");
+    const options = {
+
+      key: data.key,
+
+      amount: data.amount,
+
+      currency: data.currency,
+
+      name: "Local Dukan",
+
+      description: "Wallet Recharge",
+
+      order_id: data.orderId,
+
+      handler: async function (response) {
+
+        alert("Payment Successful");
+
+        await refreshCoins();
+
+      },
+
+      prefill: {
+
+        name: localStorage.getItem("name") || "",
+
+        contact: localStorage.getItem("mobile") || ""
+
+      },
+
+      theme: {
+
+        color: "#FF6B00"
+
+      }
+
+    };
+
+    const rzp = new Razorpay(options);
+
+    rzp.open();
 
   } catch (err) {
 
