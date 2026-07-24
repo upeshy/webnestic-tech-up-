@@ -1336,6 +1336,36 @@ transform:scale(.97);
 .logout-btn:hover{
     background:#c62828;
 }
+        .navbar-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+}
+
+.logo{
+    width:42px;
+    height:42px;
+    object-fit:contain;
+}
+
+.navbar-brand span{
+    font-size:24px;
+    font-weight:800;
+    color:#0D47A1;
+    letter-spacing:0.5px;
+}
+
+@media (max-width:768px){
+    .logo{
+        width:36px;
+        height:36px;
+    }
+
+    .navbar-brand span{
+        font-size:18px;
+    }
+}
     </style>
 </head>
 <body>
@@ -1346,7 +1376,8 @@ transform:scale(.97);
     <div class="navbar-wrapper">
 
         <a href="/" class="navbar-brand">
-            📦 Local Dukan
+            <img src="images/logo.webp" alt="Local Dukan Logo" class="logo">
+            <span>LOCAL DUKAN</span>
         </a>
 
         <div class="navbar-icons">
@@ -1372,7 +1403,6 @@ transform:scale(.97);
 
     </div>
 </nav>
-
     <!-- ==================== MAIN CONTENT ==================== -->
     <div class="main-container">
         
