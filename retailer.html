@@ -1501,31 +1501,35 @@ background:#f2f2f2;
 
     <!-- COIN WALLET -->
 
-    <div class="wallet-card">
+<div class="wallet-card">
 
-      <div class="wallet-left">
+    <div class="wallet-left">
+
         <div class="wallet-title">
-          💰 Local Wallet
+            💰 Wallet
         </div>
 
         <div class="wallet-sub">
-          
+            Add money securely to your wallet
         </div>
-      </div>
-
-      <div class="wallet-right">
-
-        <div class="coin-value">
-          🪙
-          <span id="coinBalance">
-            100
-          </span>
-        </div>
-
-      </div>
 
     </div>
 
+    <div class="wallet-right">
+
+        <div class="coin-value">
+            🪙
+            <span id="coinBalance">100</span>
+        </div>
+
+        <button class="add-money-btn"
+        onclick="openAddMoney()">
+            ➕ Add Money
+        </button>
+
+    </div>
+
+</div>
     <!-- REFER -->
 
     
@@ -1896,7 +1900,48 @@ https://webnestic-tech-up.vercel.app`;
   }
 
 }
+function openAddMoney(){
 
+const amount = prompt("Enter Amount");
+
+if(!amount || amount<=0) return;
+
+createWalletOrder(Number(amount));
+
+    }
+    async function walletPaymentSuccess(paymentId, amount){
+
+const retailerId = localStorage.getItem("userId");
+
+const res = await fetch(`${API}/api/wallet/add`,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+retailerId,
+paymentId,
+amount
+
+})
+
+});
+
+const data = await res.json();
+
+if(data.success){
+
+alert("Money Added Successfully");
+
+refreshCoins();
+
+}
+
+    }
 /* ===========================
    COIN HISTORY
 =========================== */
