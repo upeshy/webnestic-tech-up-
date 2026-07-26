@@ -2619,13 +2619,18 @@ function updateLocationTimer(setAt, locked) {
 
   function contactAdminForLocation() {
 
-  const retailerId = localStorage.getItem("userId");
+    const phone = "918979451432";
 
-  alert(
-    "📩 Admin ko request bhej di gayi hai.\n" +
-    "Retailer ID: " + retailerId + "\n" +
-    "Admin aapse contact karega."
-  );
+    const message = encodeURIComponent(
+        "Hello PRINTiZY Team,\n\nI need help regarding my order."
+    );
+
+    window.open(
+        `https://wa.me/${phone}?text=${message}`,
+        "_blank"
+    );
+
+}
 
   // OPTIONAL: API call yahan laga sakte ho
   }
