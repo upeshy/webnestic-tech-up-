@@ -1684,7 +1684,30 @@ transform:scale(.97);
     </div>
 
     <!-- MENU -->
+<div class="location-group" style="display:none;">
 
+      <label>
+        📍 Current Location
+      </label>
+
+      <input id="profileLocation"
+             class="location-read"
+             readonly>
+
+      <small id="locationTimer"
+             class="location-timer">
+      </small>
+
+      <button class="location-btn"
+              onclick="getRetailerLocation()">
+
+        <i class="bi bi-geo-alt"></i>
+
+        Set Location
+
+      </button>
+
+</div>
     <div class="profile-menu">
      
       <div class="menu-item"
