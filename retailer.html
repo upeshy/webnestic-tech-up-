@@ -1684,6 +1684,15 @@ transform:scale(.97);
     </div>
 
     <!-- MENU -->
+      <div class="menu-item" onclick="toggleBankDetails()">
+
+    <i class="bi bi-bank2"></i>
+
+    Bank Account Details
+
+    <i class="bi bi-chevron-right"></i>
+
+      </div>
 <div class="location-group" style="display:none;">
 
       <label>
@@ -1824,7 +1833,33 @@ onclick="closeCoinHistory()">
 </div>
 
 </div>
+<div id="bankDetailsBox" style="display:none; margin-top:15px;">
 
+    <div class="form-group">
+        <label>Account Holder Name</label>
+        <input type="text" id="accountHolder">
+    </div>
+
+    <div class="form-group">
+        <label>Bank Name</label>
+        <input type="text" id="bankName">
+    </div>
+
+    <div class="form-group">
+        <label>Account Number</label>
+        <input type="text" id="accountNumber">
+    </div>
+
+    <div class="form-group">
+        <label>IFSC Code</label>
+        <input type="text" id="ifscCode">
+    </div>
+
+    <button class="save-btn">
+        Save Bank Details
+    </button>
+
+</div>
      
     <!-- Charge Info Modal -->
     <div class="modal" id="chargeInfoModal">
@@ -1901,7 +1936,21 @@ function normalizeLocation(loc) {
 
   return null;
 }
+function toggleBankDetails(){
 
+    const box = document.getElementById("bankDetailsBox");
+
+    if(box.style.display === "none"){
+
+        box.style.display = "block";
+
+    }else{
+
+        box.style.display = "none";
+
+    }
+
+    }
 // ================= RETAILER LOCATION ENSURE =================
 async function ensureRetailerLocation() {
   const profile = JSON.parse(localStorage.getItem("retailerProfile") || "{}");
