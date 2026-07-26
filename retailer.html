@@ -1684,7 +1684,8 @@ transform:scale(.97);
     </div>
 
     <!-- MENU -->
-      <div class="menu-item" onclick="toggleBankDetails()">
+<!-- MENU -->
+<div class="menu-item" onclick="toggleBankDetails()">
 
     <i class="bi bi-bank2"></i>
 
@@ -1692,7 +1693,54 @@ transform:scale(.97);
 
     <i class="bi bi-chevron-right"></i>
 
-      </div>
+</div>
+
+<!-- BANK DETAILS -->
+<div id="bankDetailsBox" class="location-group" style="display:none;">
+
+    <label>👤 Account Holder Name</label>
+
+    <input
+        type="text"
+        id="accountHolder"
+        class="profile-input"
+        placeholder="Enter Account Holder Name">
+
+    <label>🏦 Bank Name</label>
+
+    <input
+        type="text"
+        id="bankName"
+        class="profile-input"
+        placeholder="Enter Bank Name">
+
+    <label>💳 Account Number</label>
+
+    <input
+        type="text"
+        id="accountNumber"
+        class="profile-input"
+        placeholder="Enter Account Number">
+
+    <label>🏛 IFSC Code</label>
+
+    <input
+        type="text"
+        id="ifscCode"
+        class="profile-input"
+        placeholder="Enter IFSC Code">
+
+    <button
+        class="btn-primary"
+        onclick="saveBankDetails()">
+
+        💾 Save Bank Details
+
+    </button>
+
+</div>
+
+
 <div class="location-group" style="display:none;">
 
       <label>
@@ -1770,33 +1818,7 @@ transform:scale(.97);
       </div>
 
     </div>
-     <div id="bankDetailsBox" style="display:none; margin-top:15px;">
 
-    <div class="form-group">
-        <label>Account Holder Name</label>
-        <input type="text" id="accountHolder">
-    </div>
-
-    <div class="form-group">
-        <label>Bank Name</label>
-        <input type="text" id="bankName">
-    </div>
-
-    <div class="form-group">
-        <label>Account Number</label>
-        <input type="text" id="accountNumber">
-    </div>
-
-    <div class="form-group">
-        <label>IFSC Code</label>
-        <input type="text" id="ifscCode">
-    </div>
-
-    <button class="save-btn">
-        Save Bank Details
-    </button>
-
-</div>
      
     <button class="btn-primary"
             onclick="saveProfile()">
@@ -2552,7 +2574,7 @@ function openExternalProduct(text){
 
     const box = document.getElementById("bankDetailsBox");
 
-    if(box.style.display === "none"){
+    if(box.style.display === "none" || box.style.display === ""){
 
         box.style.display = "block";
 
@@ -2562,7 +2584,13 @@ function openExternalProduct(text){
 
     }
 
-    }
+}
+
+function saveBankDetails(){
+
+    alert("Bank Details Saved Successfully");
+
+}
 function searchProducts(){
 
     const keyword = document.getElementById("searchInput")
