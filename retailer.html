@@ -2321,7 +2321,7 @@ async function refreshCoins(){
 window.addEventListener("load",()=>{
 
   loadCoinProfile();
-
+  loadBankDetails();
 });
     
 // ------------------- PRODUCTS -------------------
@@ -2591,6 +2591,62 @@ function saveBankDetails(){
     alert("Bank Details Saved Successfully");
 
 }
+    async function saveBankDetails(){
+
+    const userId = localStorage.getItem("userId");
+
+    await fetch(API + "/api/bank/save",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            userId,
+
+            accountHolder:
+            document.getElementById("accountHolder").value,
+
+            bankName:
+            document.getElementById("bankName").value,
+
+            accountNumber:
+            document.getElementById("accountNumber").value,
+
+            ifscCode:
+            document.getElementById("ifscCode").value
+
+        })
+
+    });
+
+    alert("Bank Details Saved");
+
+    }
+    async function loadBankDetails(){
+
+    const userId = localStorage.getItem("userId");
+
+    const res = await fetch(API + "/api/bank/" + userId);
+
+    const data = await res.json();
+
+    if(data.data){
+
+        accountHolder.value=data.data.accountHolder||"";
+
+        bankName.value=data.data.bankName||"";
+
+        accountNumber.value=data.data.accountNumber||"";
+
+        ifscCode.value=data.data.ifscCode||"";
+
+    }
+
+    }
 function searchProducts(){
 
     const keyword = document.getElementById("searchInput")
