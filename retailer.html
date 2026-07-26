@@ -2570,13 +2570,15 @@ function openExternalProduct(text){
     }
 }
 
-    function toggleBankDetails(){
+async function toggleBankDetails(){
 
     const box = document.getElementById("bankDetailsBox");
 
     if(box.style.display === "none" || box.style.display === ""){
 
         box.style.display = "block";
+
+        await loadBankDetails();
 
     }else{
 
@@ -2585,7 +2587,6 @@ function openExternalProduct(text){
     }
 
 }
-
 function saveBankDetails(){
 
     alert("Bank Details Saved Successfully");
