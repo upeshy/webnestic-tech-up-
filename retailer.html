@@ -1936,21 +1936,7 @@ function normalizeLocation(loc) {
 
   return null;
 }
-function toggleBankDetails(){
 
-    const box = document.getElementById("bankDetailsBox");
-
-    if(box.style.display === "none"){
-
-        box.style.display = "block";
-
-    }else{
-
-        box.style.display = "none";
-
-    }
-
-    }
 // ================= RETAILER LOCATION ENSURE =================
 async function ensureRetailerLocation() {
   const profile = JSON.parse(localStorage.getItem("retailerProfile") || "{}");
@@ -2561,6 +2547,22 @@ function openExternalProduct(text){
         alert("Invalid product link");
     }
 }
+
+    function toggleBankDetails(){
+
+    const box = document.getElementById("bankDetailsBox");
+
+    if(box.style.display === "none"){
+
+        box.style.display = "block";
+
+    }else{
+
+        box.style.display = "none";
+
+    }
+
+    }
 function searchProducts(){
 
     const keyword = document.getElementById("searchInput")
