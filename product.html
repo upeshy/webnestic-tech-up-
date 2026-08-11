@@ -768,28 +768,27 @@ background-position:-100% 0;
 
 <!-- ================= SHARE & WISHLIST ================= -->
 
-<div class="card">
+<div class="bottomBar">
 
-    <div class="actionRow">
+    <button class="cartBtn"
+            onclick="addCurrentToCart()">
 
-        <button class="shareBtn"
-                onclick="shareProduct()">
+        <i class="bi bi-cart-plus"></i>
 
-            <i class="bi bi-share-fill"></i>
-            Share
+        Add to Cart
 
-        </button>
+    </button>
 
-        <button class="wishBtn"
-                onclick="toggleWishlist()">
+    <button class="buyBtn"
+            onclick="buyCurrentProduct()">
 
-            <i class="bi bi-heart-fill"></i>
-            Wishlist
+        <i class="bi bi-lightning-fill"></i>
 
-        </button>
+        Buy Now
 
-    </div>
+    </button>
 
+</div>
 </div>
     <!-- ================= RATINGS ================= -->
 
@@ -882,27 +881,7 @@ background-position:-100% 0;
 
 <!-- ================= BOTTOM BAR ================= -->
 
-<div class="bottomBar">
 
-    <button class="cartBtn"
-            onclick="addCurrentToCart()">
-
-        <i class="bi bi-cart-plus"></i>
-
-        Add to Cart
-
-    </button>
-
-    <button class="buyBtn"
-            onclick="buyCurrentProduct()">
-
-        <i class="bi bi-lightning-fill"></i>
-
-        Buy Now
-
-    </button>
-
-</div>
 
 <!-- ================= LOADING ================= -->
 
