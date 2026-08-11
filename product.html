@@ -594,7 +594,63 @@ background-position:-100% 0;
 }
 
 }
-    
+   /* ================= FIXED BOTTOM BAR ================= */
+
+.bottomBar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    padding: 12px 16px;
+
+    background: #fff;
+
+    display: flex;
+    gap: 10px;
+
+    box-shadow: 0 -3px 15px rgba(0,0,0,0.12);
+
+    z-index: 9999;
+}
+
+/* Buttons */
+
+.bottomBar button {
+    flex: 1;
+    height: 52px;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+/* Add to Cart */
+
+.cartBtn {
+    background: #fff;
+    color: #f83e7f;
+    border: 2px solid #f83e7f !important;
+}
+
+/* Buy Now */
+
+.buyBtn {
+    background: #f83e7f;
+    color: #fff;
+}
+
+/* Prevent bottom content from hiding */
+
+body {
+    padding-bottom: 85px;
+}
+        
 </style>
 </head>
 <body>
@@ -742,55 +798,45 @@ background-position:-100% 0;
 
 <!-- ================= PRODUCT FEATURES ================= -->
 
+<!-- ================= PRODUCT FEATURES ================= -->
+
 <div class="descCard fade">
 
     <div class="descTitle">
-
         ✔ Highlights
-
     </div>
 
     <ul style="line-height:2;color:#555;padding-left:18px;">
-
         <li>Premium Quality Product</li>
-
         <li>Easy Return Policy</li>
-
         <li>Fast Delivery Available</li>
-
         <li>Cashless Secure Payment</li>
-
         <li>100% Genuine Product</li>
-
     </ul>
 
 </div>
 
-<!-- ================= SHARE & WISHLIST ================= -->
+
+<!-- ================= FIXED BOTTOM BAR ================= -->
 
 <div class="bottomBar">
 
     <button class="cartBtn"
             onclick="addCurrentToCart()">
-
         <i class="bi bi-cart-plus"></i>
-
         Add to Cart
-
     </button>
 
     <button class="buyBtn"
             onclick="buyCurrentProduct()">
-
         <i class="bi bi-lightning-fill"></i>
-
         Buy Now
-
     </button>
 
 </div>
-</div>
-    <!-- ================= RATINGS ================= -->
+
+
+<!-- ================= RATINGS ================= -->
 
 <div class="section fade">
 
@@ -805,7 +851,6 @@ background-position:-100% 0;
         </div>
 
         <div>
-
             <div style="color:#0f9d58;">
                 ★★★★★
             </div>
@@ -813,12 +858,13 @@ background-position:-100% 0;
             <small id="reviewCount">
                 245 Ratings • 86 Reviews
             </small>
-
         </div>
 
     </div>
 
 </div>
+
+
 
 <!-- ================= CUSTOMER REVIEWS ================= -->
 
@@ -1009,6 +1055,9 @@ font-size:14px;">
 ❤️Local Dukan
 
 </div>
+
+
+
 
 <script>
 
